@@ -1,0 +1,13 @@
+{
+  "name": "slow-cli",
+  "version": "2.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "npm test"
+  },
+  "author": "ec.huyinghuan@gmail.com",
+  "license": "MIT"
+}
