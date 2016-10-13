@@ -4,9 +4,14 @@
   "description": "",
   "main": "lib/index.js",
   "dependencies": {
+    "colors": "^1.1.2",
     "express": "^4.14.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/colors": "^0.6.33",
+    "@types/express": "^4.0.33",
+    "@types/node": "^6.0.45"
+  },
   "scripts": {
     "test": "node lib/app.js --harmony"
   },
