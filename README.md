@@ -7,7 +7,7 @@
 ```js
 //hooks定义如下
 
-module.export = (cli, cb)=>{
+export.plugin = (cli, cb)=>{
   //router: express.IRouter
   //cb: function(stop){} //stop false时 启动静态服务器， 为true时，不启用
   cli.registerHook('route:initial', (router, cb)=>{
@@ -15,5 +15,7 @@ module.export = (cli, cb)=>{
 
   })
 }
+
+export.priority = 1  //权重，默认为1， 越大排越前，可以忽略
 
 ```

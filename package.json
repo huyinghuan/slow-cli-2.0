@@ -6,12 +6,15 @@
   "dependencies": {
     "colors": "^1.1.2",
     "commander": "^2.9.0",
-    "express": "^4.14.0"
+    "express": "^4.14.0",
+    "fs-extra": "^0.30.0"
   },
   "devDependencies": {
     "@types/colors": "^0.6.33",
     "@types/commander": "^2.3.30",
     "@types/express": "^4.0.33",
+    "@types/fs-extra": "^0.0.33",
+    "@types/lodash": "^4.14.37",
     "@types/node": "^6.0.45"
   },
   "scripts": {

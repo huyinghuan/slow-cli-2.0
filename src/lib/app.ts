@@ -4,9 +4,10 @@ import * as _colors from 'colors';
 import * as _hooks from './hooks/index';
 import _hooksMap from './hooks/map';
 
+
 const startServer = function(cli:any){
   let app = _express();
-  let router = app.route
+  let router = app.route;
 
   let _server = _http.createServer(app)
 
@@ -27,7 +28,7 @@ const startServer = function(cli:any){
 export = (cli:any)=>{
   let app = _express();
   let router = _express.Router();
-
+  
   //启动服务器之前
   //_hooksMap.route.initial
   _hooks.triggerRouterHook(router, (stop)=>{

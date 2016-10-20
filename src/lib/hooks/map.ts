@@ -5,7 +5,7 @@ export default {
   route: {
     notFound: 'route:notFound',
     initial: 'route:initial', //静态服务启动之前
-    didRequest: 'route:didRequest',
+    didRequest: 'route:didRequest',      
     willPrepareDirectory: 'route:willPrepareDirectory',
     didPrepareDirectory: 'route:didPrepareDirectory',
     willResponse: 'route:willResponse'
