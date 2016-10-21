@@ -5,3 +5,5 @@ import * as _commander from 'commander';
 const init = function(){
   
 }
+
+_commander.command('init')
