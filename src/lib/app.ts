@@ -25,7 +25,7 @@ const startServer = function(cli:any){
 /**
  * 启动静态服务
  */
-export = (cli:any)=>{
+export default (cli:any)=>{
   let app = _express();
   let router = _express.Router();
   

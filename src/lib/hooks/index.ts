@@ -2,6 +2,7 @@ import * as _cb from '../all'
 import * as _express from 'express';
 import * as _colors from 'colors';
 import * as _ from 'lodash';
+import { loadPlugins } from '../init';
 
 var HookQueue = {}
 
@@ -38,4 +39,16 @@ export function sortHook(){
 */
 export function scanPlugins(){
   
-} 
+}
+
+/**从源文件加载hooks */
+export function loadPluginFromSource(pluginName:string, soucre:string){
+
+}
+
+/**
+ * 从 ~/.xxx/node_modules
+ */
+export function loadPluginFromNodeModules(pluginName:string){
+  
+}
