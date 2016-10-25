@@ -1,10 +1,11 @@
-#!/bin/sh
+#!/usr/bin/env node
 ':'; //; exec node --harmony "$0" "$@";
 "use strict";
 const _commander = require('commander');
 const _init = require('../lib/init');
 const app_1 = require('../lib/app');
 var __CLI = global.__CLI = {};
+const versionDesc = require('../package').version;
 const init = function () {
 };
 _commander.command('start')
@@ -17,5 +18,6 @@ _commander.command('start')
     if (program.port) {
         __CLI.port = program.port;
     }
-    app_1.default();
+    app_1.default(__CLI);
 });
+_commander.version(versionDesc).parse(process.argv);

@@ -12,7 +12,7 @@ export function triggerHook(hookName:string, callback:_cb.CallBack){}
   触发RouterHook, 可用于自定义路由操作
 */
 export function triggerRouterHook(router:_express.Router, callback: _cb.RouterCallBack){
-
+  callback && callback(null, false)
 }
 
 /**
@@ -50,5 +50,5 @@ export function loadPluginFromSource(pluginName:string, soucre:string){
  * 从 ~/.xxx/node_modules
  */
 export function loadPluginFromNodeModules(pluginName:string){
-  
+
 }

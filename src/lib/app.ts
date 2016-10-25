@@ -18,7 +18,7 @@ const startServer = function(cli:any){
     }
     console.log(error)
   })
-  _server.listen(app.listen(3000));
+  _server.listen(app.listen(cli.port));
 }
 
 
@@ -38,11 +38,3 @@ export default (cli:any)=>{
       startServer(cli)
   })
 }
-
-
-
-
-
-
-
-

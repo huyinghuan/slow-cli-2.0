@@ -1,9 +1,11 @@
-#!/bin/sh
+#!/usr/bin/env node
 ':' //; exec node --harmony "$0" "$@";
 import * as _commander from 'commander';
 import * as _init from '../lib/init'
 import _app from '../lib/app'
 var __CLI:any = (global as any).__CLI = {};
+
+const versionDesc = require('../package').version;
 
 const init = function(){
 
@@ -19,6 +21,7 @@ _commander.command('start')
     if(program.port){
       __CLI.port = program.port
     }
-    _app()
-
+    _app(__CLI)
   })
+
+  _commander.version(versionDesc).parse(process.argv)
