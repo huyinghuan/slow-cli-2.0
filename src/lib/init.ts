@@ -29,17 +29,6 @@ export function prepareUserEnv(){
  * 加载插件
  */
 export function loadPlugins(){
-  //读取package.json配置
-  let packageJSON = require(_path.join(process.cwd(), 'package.json'))
-  let pluginsConfig = packageJSON[_config.pluginInfo.name]
-  let plugins = Object.keys(pluginsConfig)
-  for(let i = 0, len = plugins.length; i < len; i++){
-    let pluginName = plugins[i];
-    if(pluginsConfig[pluginName].source){
-      _hooks.loadPluginFromSource(pluginName, pluginsConfig[pluginName].source)
-    }else{
-      _hooks.loadPluginFromNodeModules(pluginName)
-    }
-  }
+  _hooks.scanPlugins()
 }
 

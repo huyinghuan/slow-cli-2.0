@@ -1,5 +1,18 @@
 {
   "silky":{
     "port": 14422
+  },
+  "silky-plugin":{
+    "hbs": {
+      "source": "/Users/hyh/workspace/silky-plugins/new/hbs"
+    },
+    "proxy": {
+      "source": "/Users/hyh/workspace/silky-plugins/new/proxy",
+      "setting": [{
+        "from": ["^/p"],
+        "attribute": "i",
+        "to": "http://10.200.8.234:9810/"
+      }]
+    }
   }
 }
