@@ -1,4 +1,5 @@
 'use strict';
+const _colors = require('colors')
 const _http_proxy = require('http-proxy').createProxyServer({});
 
 exports.registerPlugin = (cli, options)=>{
@@ -11,7 +12,7 @@ exports.registerPlugin = (cli, options)=>{
         let reg = new RegExp(proxyPathArray[j], regExpAttr)
         if(reg.test(path)){
           if(setting[i].to){
-            return { forward: setting[i].to}
+            return { target: setting[i].to}
           }else{
             return setting[i].options
           }
@@ -21,13 +22,16 @@ exports.registerPlugin = (cli, options)=>{
     return null;
   }
   cli.registerHook('route:initial', (router)=>{
-    router.get('/', function(req, res, next){
+    router.get('*', function(req, res, next){
       let setting = getProxySetting(req.path);
       if(!setting){
         return next()
       }
-      console.log(`proxy ${req.url} -> ${setting.forward || setting.target}`.green)
-      _http_proxy.web(req, res, setting)
+      console.log(`proxy ${req.url} -> ${setting.forward || setting.target}`.yellow)
+      _http_proxy.web(req, res, setting, (e)=>{
+        console.error(e)
+        res.sendStatus(500)
+      })
     });
   }, 1)
 }

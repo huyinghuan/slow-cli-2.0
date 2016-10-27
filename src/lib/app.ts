@@ -42,7 +42,7 @@ export default ()=>{
       
       switch(resp.statusCode){
         case 200:
-        case 304 : console.log(msg); break;
+        case 304 : console.log(msg.grey); break;
         case 401:
         case 403:
         case 404:
@@ -59,6 +59,18 @@ export default ()=>{
   if(_hooks.triggerRouterHook(router)){
     return;
   }
-  //需要出发其他
+
+  //加载编译其他hooks
+  router.all('*', function(req, resp, next){
+    let queue = [];
+    queue.push((cb)=>{
+      _hooks.triggerHook(_hooksMap.route.didRequest, cb)
+    })
+    
+    queue.push((respsoneContent)=>{})
+
+  })
+  
+  //需要发其他
   startServer(app, cli, router)
 }
