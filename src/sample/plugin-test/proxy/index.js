@@ -20,16 +20,14 @@ exports.registerPlugin = (cli, options)=>{
     }
     return null;
   }
-
-  cli.registerHook('route:initial', (router, cb)=>{
+  cli.registerHook('route:initial', (router)=>{
     router.get('/', function(req, res, next){
-      let setting = getProxySetting(req.path)
+      let setting = getProxySetting(req.path);
       if(!setting){
         return next()
       }
       console.log(`proxy ${req.url} -> ${setting.forward || setting.target}`.green)
       _http_proxy.web(req, res, setting)
     });
-    cb(null, false)
-  })
+  }, 1)
 }
