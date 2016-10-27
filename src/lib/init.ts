@@ -28,7 +28,5 @@ export function prepareUserEnv(){
 /**
  * 加载插件
  */
-export function loadPlugins(){
-  _hooks.scanPlugins()
-}
+export  function loadPlugins(cb){_hooks.scanPlugins(cb)}
 

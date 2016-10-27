@@ -11,6 +11,8 @@ export interface CallBack{
   (error:Object, data):void
 }
 
+
+
 export interface HookCallBack{
   (router: _express.Router)
 }

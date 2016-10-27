@@ -12,28 +12,28 @@
 
 ```js
 //hooks定义如下
+const priority = 1;
 
-export.plugin = (hooks, cb)=>{
+export.registerPlugin = (cli, options)=>{
   //router: express.IRouter
-  //cb: function(stop){}
-  /*stop true 启动静态服务器，完全接管silky，弃用其他插件。  为false时，作为中间件存在*/
-  hooks('route:initial', (router, cb)=>{
+  //return stop[boolean].  true 启动静态服务器，完全接管silky，弃用其他插件。  为false时，作为中间件存在, 默认为false
+
+  cli.registerHook('route:initial', (router)=>{
     // 完全接管
     router.get('/toAnotherServer', function(req, resp, next){
-
+        //resp.send(..)
     });
     router.get('/xxx', function(xx,xxx,xx){})
-    cb(true)
+    return true
 
     //只是対该路径进行拦截，作为中间件存在。
     route.get('/a.hbs', function(req, resp, next){
         //xxx
         next()
     })
-    cb(false)
-  })
+    return false
+  }, priority) //权重，默认为1， 越大排越前，可以忽略
 }
 
-export.priority = 1  //权重，默认为1， 越大排越前，可以忽略
 
 ```
