@@ -13,6 +13,11 @@ var HookQueue = {}
 
 export function triggerHook(hookName:string, callback:_allDefined.CallBack){}
 
+export function triggerHttpCompilerHook(req, callback: _allDefined.CompilerCallBack){
+  let queue = HookQueue[_hookMap.route.didRequest];
+  
+}
+
 /**
 *触发RouterHook, 可用于自定义路由操作
 * 返回 true 停止其他hook，

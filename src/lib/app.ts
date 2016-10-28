@@ -3,6 +3,8 @@ import * as _http from 'http';
 import * as _colors from 'colors';
 import * as _hooks from './hooks/index';
 import _hooksMap from './hooks/map';
+import { CompilerCallBack } from './all';
+import * as _async from 'async';
 
 
 const startServer = function(app:any, cli:any, router:_express.Router){
@@ -63,14 +65,28 @@ export default ()=>{
   //加载编译其他hooks
   router.all('*', function(req, resp, next){
     let queue = [];
-    queue.push((cb)=>{
-      _hooks.triggerHook(_hooksMap.route.didRequest, cb)
-    })
+    let url = req.url
+    queue.push((cb:CompilerCallBack)=>{
+      _hooks.triggerHttpCompilerHook(req, cb)
+    });
+
+    queue.push((status, respsoneContent, cb)=>{
+      if(status == 404){
+       // _hooks.triggerHook(_hooksMap.route.notFound, {} cb)
+      }
+    });
     
-    queue.push((respsoneContent)=>{})
+    queue.push((respsoneContent, cb)=>{
+  //    _hooks.triggerHook(_hooksMap.route.willResponse, )
+    });
+
+  _async.waterfall(queue, (error, respsoneContent)=>{
+    
+  })
+
 
   })
   
-  //需要发其他
+  //启动静态服务器
   startServer(app, cli, router)
 }

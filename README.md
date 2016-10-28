@@ -40,5 +40,18 @@ export.registerPlugin = (cli, options)=>{
   }, priority) //权重，默认为1， 越大排越前，可以忽略
 }
 
+```
 
+
+### router: route:didRequest
+
+
+```js
+const priority = 1;
+
+export.registerPlugin = (cli, options)=>{
+  cli.registerHook('route:didRequest', (req, cb)=>{
+    
+  }, priority)
+}
 ```
