@@ -62,29 +62,32 @@ export default ()=>{
     return;
   }
 
-  //加载编译其他hooks
-  router.all('*', function(req, resp, next){
+  //拦截GET请求，并且加载编译其他hooks 
+  router.get('*', function(req, resp, next){
     let queue = [];
-    let url = req.url
     queue.push((cb:CompilerCallBack)=>{
       _hooks.triggerHttpCompilerHook(req, cb)
     });
 
-    queue.push((status, respsoneContent, cb)=>{
-      if(status == 404){
-       // _hooks.triggerHook(_hooksMap.route.notFound, {} cb)
+    queue.push((data, respsoneContent, cb)=>{
+      switch(data.status){
+        case 404: _hooks.triggerHook(_hooksMap.route.notFound, req, cb); break;
+        case 200: cb(null, respsoneContent); break;
       }
     });
     
-    queue.push((respsoneContent, cb)=>{
+  //  queue.push((respsoneContent, cb)=>{
   //    _hooks.triggerHook(_hooksMap.route.willResponse, )
-    });
+  //  });
 
-  _async.waterfall(queue, (error, respsoneContent)=>{
-    
-  })
-
-
+    _async.waterfall(queue, (error, respsoneContent)=>{
+      if(error){
+        console.log(error)
+        resp.sendStatus(500)
+      }else{
+        resp.send(respsoneContent)
+      }
+    })
   })
   
   //启动静态服务器

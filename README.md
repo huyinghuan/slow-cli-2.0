@@ -50,8 +50,15 @@ export.registerPlugin = (cli, options)=>{
 const priority = 1;
 
 export.registerPlugin = (cli, options)=>{
-  cli.registerHook('route:didRequest', (req, cb)=>{
-    
+  /**
+  *req:   http request
+  *data: {status: int}  200 正常，404，未找到文件，编译器向下一个编译传递的数据可以存在这个里面
+  *content: 上一个编译器过来的内容
+  * cb:  回调函数。 必须传递三个参数，分别是 error, data, content
+  */
+  cli.registerHook('route:didRequest', (req, data, content, cb)=>{
+
+    //cb(error, data, responseContent)
   }, priority)
 }
 ```

@@ -9,13 +9,23 @@ import _hookMap from './map';
 //坑 import * as _colors from 'colors';
 require('colors');
 
-var HookQueue = {}
+var _HookQueue = {}
 
-export function triggerHook(hookName:string, callback:_allDefined.CallBack){}
+export function triggerHook(hookName:string, req, callback:_allDefined.CallBack){}
 
 export function triggerHttpCompilerHook(req, callback: _allDefined.CompilerCallBack){
-  let queue = HookQueue[_hookMap.route.didRequest];
-  
+  let queue = _HookQueue[_hookMap.route.didRequest];
+  let contentFactoryList = [];
+  _.forEach(queue, (hook)=>{contentFactoryList.push(hook.fn)});
+  let next = (error, data, responseContent)=>{
+    let compiler = contentFactoryList.shift();
+    if(!compiler){
+      return callback(error, data, responseContent)
+    }
+    compiler(req, data, responseContent, next)
+  }
+
+  next(null, {status:404}, null)
 }
 
 /**
@@ -24,7 +34,7 @@ export function triggerHttpCompilerHook(req, callback: _allDefined.CompilerCallB
 * 返回 false 使用其他hook
 */
 export function triggerRouterHook(router:_express.Router):boolean{
-  let queue = HookQueue[_hookMap.route.initial];
+  let queue = _HookQueue[_hookMap.route.initial];
   for(let i = 0, length = queue.length; i < length; i++){
     if(queue[i].fn(router)){
       return true;
@@ -39,11 +49,11 @@ export function triggerRouterHook(router:_express.Router):boolean{
  */
 export function registerHook(hookName:string, callback:_allDefined.CallBack, priority?:number){
   priority = ~~priority ? ~~priority : 1
-  if(!HookQueue[hookName]){
-    HookQueue[hookName] = [];
+  if(!_HookQueue[hookName]){
+    _HookQueue[hookName] = [];
   }
   //加入hook队列
-  HookQueue[hookName].push({fn:callback, priority: priority})
+  _HookQueue[hookName].push({fn:callback, priority: priority})
   
   //排序
   sortHook(hookName)
@@ -51,7 +61,7 @@ export function registerHook(hookName:string, callback:_allDefined.CallBack, pri
 
 //排序
 function sortHook(hookName){
-  HookQueue[hookName] = _.orderBy(HookQueue[hookName], 'priority', 'desc')
+  _HookQueue[hookName] = _.orderBy(_HookQueue[hookName], 'priority', 'desc')
 }
 
 
@@ -65,6 +75,9 @@ export function scanPlugins(cb){
   let plugins = Object.keys(pluginsConfig)
 
   _async.map(plugins, (pluginName, next)=>{
+    if(!pluginsConfig[pluginName]){
+      console.log(`插件 ${pluginName} 已被禁用`.red)
+    }
     //从自定义路径或插件目录获取插件路径
     let pluginPath = pluginsConfig[pluginName].source || _path.join(_config.pluginDir, pluginName); 
     loadPlugin(pluginName, pluginPath, pluginsConfig[pluginName], next)

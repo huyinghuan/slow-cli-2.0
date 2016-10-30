@@ -4,10 +4,13 @@
   },
   "silky-plugin":{
     "hbs": {
-      "source": "/Users/hyh/workspace/silky-plugins/new/hbs"
+      "source": "/Users/huyinghuan/workspace/slow-cli-2.0/src/sample/plugin-test/hbs",
+      "setting": {
+        "root": "/"
+      }
     },
     "proxy": {
-      "source": "/Users/hyh/workspace/silky-plugins/new/proxy",
+      "source": "/Users/huyinghuan/workspace/slow-cli-2.0/src/sample/plugin-test/proxy",
       "setting": [{
         "from": ["^/p"],
         "attribute": "i",
