@@ -1,9 +1,11 @@
 "use strict";
 const triggerHttpCompilerHook_1 = require('./triggerHttpCompilerHook');
 exports.triggerHttpCompilerHook = triggerHttpCompilerHook_1.default;
-const triggerRouterHook_1 = require('./triggerRouterHook');
-exports.triggerRouterHook = triggerRouterHook_1.default;
+const triggerHttpRouterHook_1 = require('./triggerHttpRouterHook');
+exports.triggerRouterHook = triggerHttpRouterHook_1.default;
 const scanPlugins_1 = require('./scanPlugins');
 exports.scanPlugins = scanPlugins_1.scanPlugins;
-function triggerHook(hookName, req, callback) { }
-exports.triggerHook = triggerHook;
+const triggerHttpResponseHook_1 = require('./triggerHttpResponseHook');
+exports.triggerHttpResponseHook = triggerHttpResponseHook_1.default;
+const triggerHttpNoFoundHook_1 = require('./triggerHttpNoFoundHook');
+exports.triggerHttpNoFoundHook = triggerHttpNoFoundHook_1.default;

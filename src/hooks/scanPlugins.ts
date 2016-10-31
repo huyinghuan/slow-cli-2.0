@@ -2,7 +2,6 @@ import * as _ from 'lodash';
 import * as _path from 'path';
 import * as _async from 'async';
 import * as _allDefined from '../all';
-import * as _hookMap from './map';
 import _config from '../config';
 import _registerHook from './registerHook';
 

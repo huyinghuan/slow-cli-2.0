@@ -1,11 +1,10 @@
-import * as _allDefined from '../all';
 import _triggerHttpCompilerHook from './triggerHttpCompilerHook';
-import _triggerRouterHook from './triggerRouterHook';
+import _triggerHttpRouterHook from './triggerHttpRouterHook';
 import {scanPlugins} from './scanPlugins';
-
-
-export function triggerHook(hookName:string, req, callback:_allDefined.CallBack){}
-
+import _triggerHttpResponseHook from './triggerHttpResponseHook';
+import _triggerHttpNoFoundHook from './triggerHttpNoFoundHook';
 export {_triggerHttpCompilerHook as triggerHttpCompilerHook} 
-export {_triggerRouterHook as triggerRouterHook}
+export {_triggerHttpRouterHook as triggerRouterHook}
 export {scanPlugins as scanPlugins}
+export {_triggerHttpResponseHook as triggerHttpResponseHook}
+export {_triggerHttpNoFoundHook as triggerHttpNoFoundHook}

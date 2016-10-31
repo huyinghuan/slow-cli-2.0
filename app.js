@@ -1,9 +1,12 @@
 "use strict";
 const _express = require('express');
 const _http = require('http');
-const _hooks = require('./hooks/index');
-const _hooksMap = require('./hooks/map');
 const _async = require('async');
+const _fs = require('fs');
+const _path = require('path');
+const _ = require('lodash');
+const _hooks = require('./hooks/index');
+const getMime_1 = require('./lib/getMime');
 const startServer = function (app, cli, router) {
     app.use(router);
     let _server = _http.createServer(app);
@@ -59,27 +62,51 @@ exports.default = () => {
         queue.push((cb) => {
             _hooks.triggerHttpCompilerHook(req, cb);
         });
-        queue.push((data, respsoneContent, cb) => {
-            switch (data.status) {
-                case 404:
-                    _hooks.triggerHook(_hooksMap.route.notFound, req, cb);
-                    break;
-                case 200:
-                    cb(null, respsoneContent);
-                    break;
-            }
+        //TODO  min js,css, html
+        queue.push((data, responseContent, cb) => {
+            // _hooks.triggerHttpResponseHook(req, responseContent, ()=>{
+            // })
+            cb(null, data, responseContent);
         });
-        // TODO  min js,css,html   static
-        //  queue.push((respsoneContent, cb)=>{
-        //    _hooks.triggerHook(_hooksMap.route.willResponse, )
-        //  });
-        _async.waterfall(queue, (error, respsoneContent) => {
+        // outout mime and 
+        queue.push((data, responseContent, cb) => {
+            //文件没有经过任何处理。
+            if (data.status == 404) {
+                return cb(null);
+            }
+            let mime = getMime_1.default(req.path);
+            let responseMimeType = data.ContentType || mime;
+            resp.set('Content-Type', responseMimeType);
+            resp.send(responseContent);
+            cb(null, true);
+        });
+        _async.waterfall(queue, (error, hasProcess) => {
             if (error) {
                 console.log(error);
                 resp.sendStatus(500);
             }
             else {
-                resp.send(respsoneContent);
+                //交给自带的静态文件处理
+                if (!hasProcess) {
+                    next();
+                }
+            }
+        });
+    });
+    //如果其他编译hook没有完成编译，那么则使用默认文件发送
+    router.get('*', function (req, resp, next) {
+        let path = req.path;
+        if (path == '/') {
+            path = `/${global.__CLI.index}`;
+        }
+        let responseFilePath = _path.join(process.cwd(), _.compact(path.split('/')).join(_path.sep));
+        if (_fs.existsSync(responseFilePath)) {
+            resp.sendFile(responseFilePath);
+            return;
+        }
+        _hooks.triggerHttpNoFoundHook(req, resp, (hasProcess) => {
+            if (!hasProcess) {
+                resp.sendStatus(404);
             }
         });
     });
