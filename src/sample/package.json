@@ -1,6 +1,7 @@
 {
   "silky":{
-    "port": 14422
+    "port": 14422,
+    "index": "index.html"
   },
   "silky-plugin": {
     "hbs": {
@@ -16,6 +17,9 @@
         "attribute": "i",
         "to": "http://10.200.8.234:9810/"
       }]
+    },
+    "nofound":{
+      "source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/nofound"
     }
   }
 }

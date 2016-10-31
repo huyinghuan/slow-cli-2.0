@@ -22,19 +22,22 @@ const isNeedCompile = (pathname)=>{
 }
 
 //根据实际路径获取文件内容
-const getCompileContent = (realFilePath, cb)=>{
+const getCompileContent = (realFilePath, data, cb)=>{
   if(!_fs.existsSync(realFilePath)){
-    return cb(null, data, content)
+    data.status = 404
+    return cb(null, data, null)
   }
 
   let fileContent = _fs.readFileSync(realFilePath, {encoding: 'utf8'})
   
   try{
     let template = _handlebars.compile(fileContent);
+    //编译成功，标记状态码
+    data.status = 200;
     //这里可以添加数据获取逻辑 TODO
-    cb(null, template({}))
+    cb(null, data, template({}))
   }catch(e){
-    cb(error)
+    cb(e)
   }
 } 
 
@@ -46,17 +49,13 @@ exports.registerPlugin = function(cli, options){
     //如果不需要编译
     if(!isNeedCompile(req.path)){
       return cb(null, data, content)
-    }
-    
+    }  
     let fakeFilePath = _path.join(process.cwd(), _DefaultSetting.root, req.path);
-
     //替换路径为hbs
     let realFilePath = fakeFilePath.replace(/(html)$/,'hbs')
 
-    getCompileContent(realFilePath, (error, content)=>{
+    getCompileContent(realFilePath, data, (error, data, content)=>{
       if(error){return cb(error)};
-      //编译成功，标记状态码
-      data.status = 200;
       //交给下一个处理器
       cb(null, data, content)
     })
