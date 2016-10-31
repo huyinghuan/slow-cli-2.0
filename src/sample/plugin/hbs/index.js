@@ -14,11 +14,29 @@ var _DefaultSetting = {
   "regexp": "(\.hbs|\.html)$"
 }
 
+
+//判断该文件是否需要处理
 const isNeedCompile = (pathname)=>{
   let reg = new RegExp(_DefaultSetting.regexp)
   return reg.test(pathname)
 }
 
+//根据实际路径获取文件内容
+const getCompileContent = (realFilePath, cb)=>{
+  if(!_fs.existsSync(realFilePath)){
+    return cb(null, data, content)
+  }
+
+  let fileContent = _fs.readFileSync(realFilePath, {encoding: 'utf8'})
+  
+  try{
+    let template = _handlebars.compile(fileContent);
+    //这里可以添加数据获取逻辑 TODO
+    cb(null, template({}))
+  }catch(e){
+    cb(error)
+  }
+} 
 
 exports.registerPlugin = function(cli, options){
   //继承定义
@@ -35,21 +53,12 @@ exports.registerPlugin = function(cli, options){
     //替换路径为hbs
     let realFilePath = fakeFilePath.replace(/(html)$/,'hbs')
 
-    //如果访问的文件不存在,则跳到下一步
-    if(!_fs.existsSync(realFilePath)){
-      return cb(null, data, content)
-    }
-
-    let fileContent = _fs.readFileSync(realFilePath, {encoding: 'utf8'})
-    
-    try{
-      let template = _handlebars.compile(fileContent);
-      //这里可以添加数据获取逻辑 TODO
+    getCompileContent(realFilePath, (error, content)=>{
+      if(error){return cb(error)};
+      //编译成功，标记状态码
       data.status = 200;
-      cb(null, data, template({}))
-    }catch(e){
-      cb(error)
-    }
-    
+      //交给下一个处理器
+      cb(null, data, content)
+    })
   })
 }

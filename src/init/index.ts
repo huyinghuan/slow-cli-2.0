@@ -1,9 +1,6 @@
-
-import _config from './config';
+import _config from '../config';
 import * as _fs from 'fs-extra';
 import * as _path from 'path';
-import * as _colors from 'colors';
-import * as _hooks from './hooks/index';
 
 //准备plugin环境
 export function prepareBaseEnv(){
@@ -24,9 +21,3 @@ export function prepareUserEnv(){
   let packageJSON = require(_path.join(process.cwd(), 'package.json'));
   (global as any).__CLI = packageJSON[_config.infinity];
 }
-
-/**
- * 加载插件
- */
-export  function loadPlugins(cb){_hooks.scanPlugins(cb)}
-

@@ -1,16 +1,13 @@
-export default {
-  plugin: {
-    run: 'plugin:run'
-  },
-  route: {
+"use strict";
+exports.route = {
     notFound: 'route:notFound',
-    initial: 'route:initial', //静态服务启动之前
-    didRequest: 'route:didRequest', //接收到请求后
+    initial: 'route:initial',
+    didRequest: 'route:didRequest',
     willPrepareDirectory: 'route:willPrepareDirectory',
     didPrepareDirectory: 'route:didPrepareDirectory',
     willResponse: 'route:willResponse'
-  },
-  build: {
+};
+exports.build = {
     initial: 'build:initial',
     willCompress: 'build:willCompress',
     didCompress: 'build:didCompress',
@@ -22,6 +19,9 @@ export default {
     didProcess: 'build:didProcess',
     willMake: 'build:willMake',
     didMake: 'build:didMake'
-  },
-  error: "error",
 };
+exports.plugin = {
+    run: 'plugin:run'
+};
+exports.error = "error";
+exports.HookQueue = [];

@@ -1,8 +1,7 @@
 "use strict";
-const config_1 = require('./config');
+const config_1 = require('../config');
 const _fs = require('fs-extra');
 const _path = require('path');
-const _hooks = require('./hooks/index');
 //准备plugin环境
 function prepareBaseEnv() {
     //确保根目录存在
@@ -23,8 +22,3 @@ function prepareUserEnv() {
     global.__CLI = packageJSON[config_1.default.infinity];
 }
 exports.prepareUserEnv = prepareUserEnv;
-/**
- * 加载插件
- */
-function loadPlugins(cb) { _hooks.scanPlugins(cb); }
-exports.loadPlugins = loadPlugins;

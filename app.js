@@ -2,10 +2,9 @@
 const _express = require('express');
 const _http = require('http');
 const _hooks = require('./hooks/index');
-const map_1 = require('./hooks/map');
+const _hooksMap = require('./hooks/map');
 const _async = require('async');
 const startServer = function (app, cli, router) {
-    //let app = _express();
     app.use(router);
     let _server = _http.createServer(app);
     _server.on('error', (error) => {
@@ -63,13 +62,14 @@ exports.default = () => {
         queue.push((data, respsoneContent, cb) => {
             switch (data.status) {
                 case 404:
-                    _hooks.triggerHook(map_1.default.route.notFound, req, cb);
+                    _hooks.triggerHook(_hooksMap.route.notFound, req, cb);
                     break;
                 case 200:
                     cb(null, respsoneContent);
                     break;
             }
         });
+        // TODO  min js,css,html   static
         //  queue.push((respsoneContent, cb)=>{
         //    _hooks.triggerHook(_hooksMap.route.willResponse, )
         //  });

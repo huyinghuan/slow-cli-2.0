@@ -45,6 +45,11 @@ export.registerPlugin = (cli, options)=>{
 
 ### router: route:didRequest
 
+server接收到http服务后的处理流程。
+主要用于： 
+1. 编译 hbs， less, sass等。
+2. 压缩编译后文件内容， min js， min css 等。
+3. 响应内容到浏览器
 
 ```js
 const priority = 1;
@@ -52,7 +57,7 @@ const priority = 1;
 export.registerPlugin = (cli, options)=>{
   /**
   *req:   http request
-  *data: {status: int}  200 正常，404，未找到文件，编译器向下一个编译传递的数据可以存在这个里面
+  *data: {status: int} status:  200 正常，404，未找到文件. 另外该编译器向下一个编译传递的数据可以存在这个里面
   *content: 上一个编译器过来的内容
   * cb:  回调函数。 必须传递三个参数，分别是 error, data, content
   */

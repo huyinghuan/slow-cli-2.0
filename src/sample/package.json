@@ -2,15 +2,15 @@
   "silky":{
     "port": 14422
   },
-  "silky-plugin":{
+  "silky-plugin": {
     "hbs": {
-      "source": "/Users/huyinghuan/workspace/slow-cli-2.0/src/sample/plugin-test/hbs",
+      "source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/hbs",
       "setting": {
         "root": "/"
       }
     },
     "proxy": {
-      "source": "/Users/huyinghuan/workspace/slow-cli-2.0/src/sample/plugin-test/proxy",
+      "source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/proxy",
       "setting": [{
         "from": ["^/p"],
         "attribute": "i",
