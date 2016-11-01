@@ -7,9 +7,12 @@ export default function(req, callback: _allDefined.CompilerCallBack){
   let contentFactoryList = [];
   _.forEach(queue, (hook)=>{contentFactoryList.push(hook.fn)});
   let next = (error, data, responseContent)=>{
+    if(error){
+      return callback(error, data, responseContent)
+    }
     let compiler = contentFactoryList.shift();
     if(!compiler){
-      return callback(error, data, responseContent)
+      return callback(null, data, responseContent)
     }
     compiler(req, data, responseContent, next)
   }

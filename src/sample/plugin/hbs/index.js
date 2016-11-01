@@ -18,7 +18,7 @@ var _DefaultSetting = {
 //判断该文件是否需要处理
 const isNeedCompile = (pathname)=>{
   let reg = new RegExp(_DefaultSetting.regexp)
-  return reg.test(pathname)
+  return reg.test(pathname.toLowerCase())
 }
 
 //根据实际路径获取文件内容

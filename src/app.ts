@@ -9,6 +9,7 @@ import { CompilerCallBack } from './all';
 import * as _hooks from './hooks/index';
 import * as _hooksMap from './hooks/map';
 import _getMime from './lib/getMime';
+import { error } from './hooks/map';
 
 const startServer = function(app:any, cli:any, router:_express.Router){
   app.use(router)
@@ -71,12 +72,16 @@ export default ()=>{
       _hooks.triggerHttpCompilerHook(req, cb)
     });
   
-    //TODO  min js,css, html
+    //TODO  min js,css, html, autoprefix 
+    //编译内容的加工处理
     queue.push((data, responseContent, cb)=>{
-      // _hooks.triggerHttpResponseHook(req, responseContent, ()=>{
-
-      // })
-      cb(null, data, responseContent)
+      if(data.status !== 200){
+        return cb(null, data, responseContent)
+      }
+      _hooks.triggerHttpResponseHook(req, responseContent, (error, processContent)=>{
+        cb(error, data, processContent)
+      })
+      
     });
 
     // outout mime and 

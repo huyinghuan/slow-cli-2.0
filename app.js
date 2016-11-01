@@ -62,11 +62,15 @@ exports.default = () => {
         queue.push((cb) => {
             _hooks.triggerHttpCompilerHook(req, cb);
         });
-        //TODO  min js,css, html
+        //TODO  min js,css, html, autoprefix 
+        //编译内容的加工处理
         queue.push((data, responseContent, cb) => {
-            // _hooks.triggerHttpResponseHook(req, responseContent, ()=>{
-            // })
-            cb(null, data, responseContent);
+            if (data.status !== 200) {
+                return cb(null, data, responseContent);
+            }
+            _hooks.triggerHttpResponseHook(req, responseContent, (error, processContent) => {
+                cb(error, data, processContent);
+            });
         });
         // outout mime and 
         queue.push((data, responseContent, cb) => {

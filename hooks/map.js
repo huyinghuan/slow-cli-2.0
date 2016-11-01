@@ -5,7 +5,7 @@ exports.route = {
     didRequest: 'route:didRequest',
     willPrepareDirectory: 'route:willPrepareDirectory',
     didPrepareDirectory: 'route:didPrepareDirectory',
-    willResponse: 'route:willResponse'
+    willResponse: 'route:willResponse' //编译内容的加工处理
 };
 exports.build = {
     initial: 'build:initial',

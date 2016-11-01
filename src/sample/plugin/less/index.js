@@ -7,14 +7,16 @@ const _ = require('lodash');
 
 
 var _DefaultSetting = {
-  "regexp": "(\.css|\.less)$",
-  "options":{}
+  "regexp": "(\.css)$",
+  "options":{
+    paths: ['.', _path.join(process.cwd(), 'css')]
+  }
 }
 
 //判断该文件是否需要处理
 const isNeedCompile = (pathname)=>{
   let reg = new RegExp(_DefaultSetting.regexp)
-  return reg.test(pathname)
+  return reg.test(pathname.toLowerCase())
 }
 
 //根据实际路径获取文件内容
@@ -25,16 +27,14 @@ const getCompileContent = (realFilePath, data, cb)=>{
   }
 
   let fileContent = _fs.readFileSync(realFilePath, {encoding: 'utf8'})
-  
-  try{
-    
+
+  _less.render(fileContent, _DefaultSetting.options, (e, result)=>{
+    if(e){return cb(e)}
     //编译成功，标记状态码
     data.status = 200;
     //这里可以添加数据获取逻辑 TODO
-    cb(null, data, template({}))
-  }catch(e){
-    cb(e)
-  }
+    cb(null, data, result.css)
+  })
 } 
 
 exports.registerPlugin = function(cli, options){
@@ -46,9 +46,9 @@ exports.registerPlugin = function(cli, options){
     if(!isNeedCompile(req.path)){
       return cb(null, data, content)
     }  
-    let fakeFilePath = _path.join(process.cwd(), _DefaultSetting.root, req.path);
+    let fakeFilePath = _path.join(process.cwd(), req.path);
     //替换路径为hbs
-    let realFilePath = fakeFilePath.replace(/(html)$/,'hbs')
+    let realFilePath = fakeFilePath.replace(/(css)$/,'less')
 
     getCompileContent(realFilePath, data, (error, data, content)=>{
       if(error){return cb(error)};
