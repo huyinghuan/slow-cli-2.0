@@ -12,7 +12,7 @@ function loadPlugin(pluginName, pluginPath, options, cb) {
         if (_.isFunction(plugin.registerPlugin)) {
             plugin.registerPlugin({
                 registerHook: registerHook_1.default,
-                __CLI: global.__CLI
+                options: global.__CLI
             }, options);
         }
         console.log(`加载插件${pluginName}成功`.blue);

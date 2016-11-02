@@ -18,15 +18,15 @@ exports.registerPlugin = function(cli, options){
   _.extend(_DefaultSetting, options.setting)
   let setting = _DefaultSetting.options || {};
   let cleaner = _postcss([_autoprefixer(setting)])
-  cli.registerHook('route:willResponse', (req, responseContent, cb)=>{
-    if(!isNeedCompile(req.path)){
+  cli.registerHook('route:willResponse', (req, data, responseContent, cb)=>{
+    if(!isNeedCompile(data.realPath)){
       return cb(null, responseContent)
     }
     cleaner.process(responseContent)
       .then((result)=>{
-        result.warnings().forEach((warn)=>
+        result.warnings().forEach((warn)=>{
           console.warn(warn.toString())
-        );
+        });
         cb(null, result.css)
       })
       .catch((error)=>{cb(error);})

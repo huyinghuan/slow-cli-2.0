@@ -2,7 +2,7 @@ import * as _allDefined from '../all';
 import * as _ from 'lodash';
 import * as _hookMap from './map';
 
-export default function(req, callback: _allDefined.CompilerCallBack){
+export default function(req, data, callback: _allDefined.CompilerCallBack){
   let queue = _hookMap.HookQueue[_hookMap.route.didRequest];
   let contentFactoryList = [];
   _.forEach(queue, (hook)=>{contentFactoryList.push(hook.fn)});
@@ -16,5 +16,5 @@ export default function(req, callback: _allDefined.CompilerCallBack){
     }
     compiler(req, data, responseContent, next)
   }
-  next(null, {status:404}, null)
+  next(null, data, null)
 }

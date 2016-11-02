@@ -7,7 +7,7 @@
     "hbs": {
       "source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/hbs",
       "setting": {
-        "root": "/"
+        "root": "/template"
       }
     },
     "proxy": {
@@ -26,6 +26,9 @@
     },
     "autoprefix": {
       "source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/autoprefixer"
+    },
+    "hbs-autoprefix": {
+      "source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/hbs-autoprefixer"
     }
   }
 }

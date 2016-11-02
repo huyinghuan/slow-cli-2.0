@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import * as _hookMap from './map';
 import { route } from './map';
 
-export default function(req, responseContent, callback: _allDefined.WillResponseCallBack){
+export default function(req, data, responseContent, callback: _allDefined.WillResponseCallBack){
   let queue = _hookMap.HookQueue[_hookMap.route.willResponse];
   let contentFactoryList = [];
   _.forEach(queue, (hook)=>{contentFactoryList.push(hook.fn)});
@@ -17,7 +17,7 @@ export default function(req, responseContent, callback: _allDefined.WillResponse
     if(!contentProcess){
       return callback(error, responseContent)
     }
-    contentProcess(req, responseContent, next)
+    contentProcess(req, data, responseContent, next)
   }
   
   next(null, responseContent)

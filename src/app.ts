@@ -20,7 +20,8 @@ const startServer = function(app:any, cli:any, router:_express.Router){
       console.log("端口冲突，请使用其它端口".red);
       return process.exit(1)
     }
-    console.log(error)
+    console.log(error);
+    return process.exit(1)
   });
   console.log(`server listen at port ${cli.port}`.green)
   _server.listen(app.listen(cli.port));
@@ -68,29 +69,34 @@ export default ()=>{
   //拦截GET请求，并且加载编译其他hooks 
   router.get('*', function(req, resp, next){
     let queue = [];
+    let realPath = req.path;
+    if(realPath == '/'){
+      realPath = (global as any).__CLI.index || "index.html"
+    }
+    let data = {
+      status: 404,
+      realPath: realPath
+    }
     queue.push((cb:CompilerCallBack)=>{
-      _hooks.triggerHttpCompilerHook(req, cb)
+      _hooks.triggerHttpCompilerHook(req, data, cb)
     });
   
     //TODO  min js,css, html, autoprefix 
-    //编译内容的加工处理
+    //対编译后内容的加工处理
     queue.push((data, responseContent, cb)=>{
-      if(data.status !== 200){
-        return cb(null, data, responseContent)
-      }
-      _hooks.triggerHttpResponseHook(req, responseContent, (error, processContent)=>{
+      _hooks.triggerHttpResponseHook(req, data, responseContent, (error, processContent)=>{
         cb(error, data, processContent)
       })
       
     });
 
-    // outout mime and 
+    // outout mime and responseContent
     queue.push((data, responseContent, cb)=>{
-      //文件没有经过任何处理。
+      //文件没有经过任何编译工具处理。
       if(data.status == 404){
         return cb(null)
       }
-      let mime = _getMime(req.path);
+      let mime = _getMime(data.realPath);
       let responseMimeType = data.ContentType || mime;
       resp.set('Content-Type', responseMimeType);
       resp.send(responseContent)

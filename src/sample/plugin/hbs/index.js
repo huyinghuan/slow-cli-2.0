@@ -11,7 +11,7 @@ _helper(_handlebars);
 
 var _DefaultSetting = {
   "root": ".",
-  "regexp": "(\.hbs|\.html)$"
+  "regexp": "(\.html)$"
 }
 
 
@@ -46,11 +46,12 @@ exports.registerPlugin = function(cli, options){
   _.extend(_DefaultSetting, options.setting);
   
   cli.registerHook('route:didRequest', (req, data, content, cb)=>{
+    let pathname = data.realPath;
     //如果不需要编译
-    if(!isNeedCompile(req.path)){
+    if(!isNeedCompile(pathname)){
       return cb(null, data, content)
     }  
-    let fakeFilePath = _path.join(process.cwd(), _DefaultSetting.root, req.path);
+    let fakeFilePath = _path.join(process.cwd(), _DefaultSetting.root, pathname);
     //替换路径为hbs
     let realFilePath = fakeFilePath.replace(/(html)$/,'hbs')
 
@@ -59,5 +60,5 @@ exports.registerPlugin = function(cli, options){
       //交给下一个处理器
       cb(null, data, content)
     })
-  })
+  },999)
 }

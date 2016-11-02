@@ -1,7 +1,7 @@
 "use strict";
 const _ = require('lodash');
 const _hookMap = require('./map');
-function default_1(req, responseContent, callback) {
+function default_1(req, data, responseContent, callback) {
     let queue = _hookMap.HookQueue[_hookMap.route.willResponse];
     let contentFactoryList = [];
     _.forEach(queue, (hook) => { contentFactoryList.push(hook.fn); });
@@ -13,7 +13,7 @@ function default_1(req, responseContent, callback) {
         if (!contentProcess) {
             return callback(error, responseContent);
         }
-        contentProcess(req, responseContent, next);
+        contentProcess(req, data, responseContent, next);
     };
     next(null, responseContent);
 }

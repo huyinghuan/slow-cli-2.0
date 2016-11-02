@@ -13,7 +13,7 @@ export function loadPlugin(pluginName:string, pluginPath, options:any, cb){
     if(_.isFunction(plugin.registerPlugin)){
       plugin.registerPlugin({
         registerHook: _registerHook,
-        __CLI: (global as any).__CLI
+        options: (global as any).__CLI
       }, options)
     }
     console.log(`加载插件${pluginName}成功`.blue)
