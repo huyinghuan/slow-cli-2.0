@@ -1,4 +1,6 @@
 {
+  "name": "sample",
+  "version": "1.0",
   "silky":{
     "port": 14422,
     "index": "index.html"

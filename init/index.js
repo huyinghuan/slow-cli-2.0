@@ -1,24 +1,25 @@
 "use strict";
-const config_1 = require('../config');
+const file_config_1 = require('../file-config');
 const _fs = require('fs-extra');
-const _path = require('path');
+const _globalConfig = {
+    port: 14422,
+    index: 'index.html',
+    pluginConfig: {}
+};
 //准备plugin环境
 function prepareBaseEnv() {
-    //确保根目录存在
-    _fs.ensureDirSync(config_1.default.cliRootDir);
-    //确保package.json存在 //输出默认配置到  ~/.xxx/packageJSON
-    if (!_fs.existsSync(config_1.default.plguinPackageJSON)) {
-        _fs.outputJSONSync(config_1.default.plguinPackageJSON, config_1.default.pluginInfo);
-    }
 }
 exports.prepareBaseEnv = prepareBaseEnv;
 /**
  * 准备用户环境，配置等
  */
 function prepareUserEnv() {
+    if (!_fs.existsSync(file_config_1.default.CLIConfigFile)) {
+        console.log(`非 ${file_config_1.default.infinity} 项目， 仅启用静态服务器功能`);
+    }
     //读取项目目录下的package.json
     //读取package.json下用户自定义配置
-    let packageJSON = require(_path.join(process.cwd(), 'package.json'));
-    global.__CLI = packageJSON[config_1.default.infinity];
+    let packageJSON = require(file_config_1.default.CLIConfigFile);
+    global.__CLI = packageJSON[file_config_1.default.infinity];
 }
 exports.prepareUserEnv = prepareUserEnv;
