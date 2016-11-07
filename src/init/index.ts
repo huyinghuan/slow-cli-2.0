@@ -2,6 +2,10 @@ import _config from '../file-config';
 import * as _fs from 'fs-extra';
 import * as _path from 'path';
 
+import generatorDefaultConfig from './generatorDefaultConfig';
+import getRemoteServerProjectPluginConfig from './getRemoteServerProjectPluginConfig';
+import setPluginConfig from './setPluginConfig';
+
 const _globalConfig = {
   port: 14422,
   index: 'index.html',
@@ -12,6 +16,14 @@ const _globalConfig = {
 //准备plugin环境
 export function prepareBaseEnv(){
   
+}
+
+//返回packageJson内容
+export function getProjectPackageJSON(){
+  if(!_fs.existsSync(_config.CLIConfigFile)){
+    return {}
+  }
+  return require(_config.CLIConfigFile)
 }
 
 /**
@@ -26,6 +38,10 @@ export function prepareUserEnv(){
 
   //读取项目目录下的package.json
   //读取package.json下用户自定义配置
-  let packageJSON = require(_config.CLIConfigFile);
+  let packageJSON = getProjectPackageJSON();
   (global as any).__CLI = packageJSON[_config.infinity];
 }
+
+export {generatorDefaultConfig as generatorDefaultConfig}
+export {getRemoteServerProjectPluginConfig as getRemoteServerProjectPluginConfig}
+export {setPluginConfig as setPluginConfig}

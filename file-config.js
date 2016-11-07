@@ -9,6 +9,8 @@ const _infinity = 'silky';
 const _root = process.cwd();
 const config = {
     infinity: _infinity,
+    pluginConfigField: `${_infinity}-plugin`,
+    pluginVersionField: `${_infinity}-version`,
     pluginDir: _path.join(_root, 'node_modules'),
     CLIConfigFile: _path.join(_root, 'package.json'),
 };

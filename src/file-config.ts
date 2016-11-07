@@ -13,6 +13,8 @@ const _root = process.cwd();
 
 const config = {
   infinity: _infinity,
+  pluginConfigField: `${_infinity}-plugin`,
+  pluginVersionField: `${_infinity}-version`,
   pluginDir: _path.join(_root, 'node_modules'), //插件目录
   CLIConfigFile: _path.join(_root, 'package.json'), //插件配置文件
 }

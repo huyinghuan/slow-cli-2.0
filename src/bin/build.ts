@@ -1,4 +1,4 @@
-import * as _init from '../init'
+import * as _init from '../init/index'
 import * as _hook from '../hooks/index';
 
 export default function(_commander){

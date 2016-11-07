@@ -1,21 +1,52 @@
 import * as _path from 'path';
 import * as _ from 'lodash';
-
-//查询项目插件配置
-const getProjectConfig = (projectName, cb):void=>{
-  //TODO: 从服务器获取项目插件配置配置
-  let pluginConfig = {};
-  cb(null, pluginConfig)
-}
-
+import * as _fs from 'fs-extra';
+import * as _async from 'async';
+import * as _initUtils from '../init/index';
+import _fileConfig from '../file-config';
 export default function(_commander){
   _commander.command('init')
     .description('初始化')
-    .option('-p, --pluginList <value>', '根据插件列表名称获取插件列表')
+    .option('-p, --pluginListName <value>', '根据插件列表名称获取插件列表')
     .action((program)=>{
       
-
+      let queue = []
+      //生成默认配置文件
+      queue.push((cb)=>{
+        cb(null, _initUtils.generatorDefaultConfig())
+      })
       
+      //从服务器拉去配置指定插件配置文件
+      if(program.pluginListName){
+        queue.push((defaultConfig, cb)=>{
+          _initUtils.getRemoteServerProjectPluginConfig(program.pluginListName, (error, pluginConfig)=>{
+            cb(error, _initUtils.setPluginConfig(defaultConfig, pluginConfig))
+          })
+        })
+      }
 
+      //如果已经存在package.json文件，那么读取内容，覆盖配置
+      queue.push((defaultConfig, cb)=>{
+        let packageJSON = _initUtils.getProjectPackageJSON()
+        // (default-config.plugin-config) [extend] (remote project plugin config)
+        // (default-config) [extend] (package json)
+        if(program.pluginListName){
+          delete packageJSON[_fileConfig.pluginConfigField]
+        }
+        _.extend(defaultConfig, packageJSON)
+        cb(null, defaultConfig)
+      })
+
+      //生产配置文件
+      _async.waterfall(queue, (error, config)=>{
+        if(error){
+          console.log('初始化失败。。。'.red)
+          console.log(error);
+          process.exit(1);
+        }
+        _fs.writeJSONSync(_fileConfig.CLIConfigFile, config)
+        console.log('初始化成功！ 安装插件请运行命令 silky install'.green);
+        process.exit(0);
+      })
     })
 }

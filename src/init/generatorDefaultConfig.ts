@@ -1,25 +1,20 @@
 import * as _projectUtils from '../lib/project';
-
+import _fileConfig from '../file-config';
 /**
+ * 用户写入到项目目录下的package.json文件中。
  * 必须包含的信息
  * 项目名：   name      default: 文件夹名称
  * 项目版本： version   default: 1.0 项目版本
- * silky-version：     defalut： 依赖于初始化silky版本
- * silky-plugin：      default: {} //插件配置，和插件启用状态
- * silky:              default: silky默认配置
- * 
+ * cli-version：     defalut： 依赖于初始化 cli 版本
+ * cli-plugin：      default: {} //插件配置，和插件启用状态
+ * cli:              default: cli 默认配置
  */
 export default function(){
-  const projectName = _projectUtils.getProjectDirectoryName();
-  const projectVersion = '1.0';
-  const silkyVersion = _projectUtils.getCLIVersion();
-  const silkyPlugin = {};
-  const silky = {};
-  return {
-    name: projectName,
-    version: projectVersion,
-    "silky-version": silkyVersion,
-    "silky-plugin": silkyPlugin,
-    silky: silky
-  }
+  let result:any = {};
+  result.projectName = _projectUtils.getProjectDirectoryName();
+  result.projectVersion = '1.0';
+  result[_fileConfig.pluginVersionField] = _projectUtils.getCLIVersion();
+  result[_fileConfig.pluginConfigField] = {};
+  result[_fileConfig.infinity] = {};
+  return result;
 }

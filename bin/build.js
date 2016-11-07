@@ -1,5 +1,5 @@
 "use strict";
-const _init = require('../init');
+const _init = require('../init/index');
 const _hook = require('../hooks/index');
 function default_1(_commander) {
     _commander.command('build')

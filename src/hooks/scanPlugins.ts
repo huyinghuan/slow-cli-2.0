@@ -30,6 +30,7 @@ export function scanPlugins(cb){
   //读取工程目录下package.json配置
 //  let packageJSON = require(_path.join(process.cwd(), 'package.json'))
 //  let pluginsConfig = packageJSON[_config.pluginInfo.name];
+// TODO: 完成plugin配置获取
   if(!pluginsConfig){
     console.log(`没有配置任何插件`.red)
     return cb(null)
