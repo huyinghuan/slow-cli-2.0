@@ -1,14 +1,7 @@
 {
-  "projectName": "sample",
-  "projectVersion": "1.0",
+  "name": "sample",
+  "version": "1.0",
   "silky-version": "2.0.0",
-  "silky-plugin": {
-    "hbs": {
-      "source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/hbs",
-      "setting": {
-        "root": "/template"
-      }
-    }
-  },
+  "silky-plugin": {},
   "silky": {}
 }

@@ -9,6 +9,8 @@ export default function(_commander){
     .action((program)=>{
       //读取用户自定义配置
       _init.prepareUserEnv();
+      //TODO: 检查cli 版本
+      //TODO: 检查插件版本
       //加载插件
       _hook.scanPlugins((error)=>{
         if(error){return}

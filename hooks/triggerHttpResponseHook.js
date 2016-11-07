@@ -2,7 +2,7 @@
 const _ = require('lodash');
 const _hookMap = require('./map');
 function default_1(req, data, responseContent, callback) {
-    let queue = _hookMap.HookQueue[_hookMap.route.willResponse];
+    let queue = _hookMap.HookQueue[_hookMap.route.willResponse] || [];
     let contentFactoryList = [];
     _.forEach(queue, (hook) => { contentFactoryList.push(hook.fn); });
     let next = (error, responseContent) => {

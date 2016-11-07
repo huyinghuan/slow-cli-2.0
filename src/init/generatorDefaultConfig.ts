@@ -11,8 +11,8 @@ import _fileConfig from '../file-config';
  */
 export default function(){
   let result:any = {};
-  result.projectName = _projectUtils.getProjectDirectoryName();
-  result.projectVersion = '1.0';
+  result.name = _projectUtils.getProjectDirectoryName();
+  result.version = '1.0';
   result[_fileConfig.pluginVersionField] = _projectUtils.getCLIVersion();
   result[_fileConfig.pluginConfigField] = {};
   result[_fileConfig.infinity] = {};

@@ -5,7 +5,7 @@ import * as _hookMap from './map';
 import { route } from './map';
 
 export default function(req, data, responseContent, callback: _allDefined.WillResponseCallBack){
-  let queue = _hookMap.HookQueue[_hookMap.route.willResponse];
+  let queue = _hookMap.HookQueue[_hookMap.route.willResponse] || [];
   let contentFactoryList = [];
   _.forEach(queue, (hook)=>{contentFactoryList.push(hook.fn)});
   

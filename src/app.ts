@@ -23,9 +23,9 @@ const startServer = function(app:any, cli:any, router:_express.Router){
     console.log(error);
     return process.exit(1)
   });
-  console.log(`server listen at port ${cli.port}`.green)
-  _server.listen(app.listen(cli.port));
-  
+  let port = cli.port || 14422;
+  console.log(`server listen at port ${port}`.green)
+  _server.listen(app.listen(port));
 }
 
 

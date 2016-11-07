@@ -30,6 +30,10 @@ exports.getProjectPackageJSON = getProjectPackageJSON;
 function prepareUserEnv() {
     if (!_fs.existsSync(file_config_1.default.CLIConfigFile)) {
         console.log(`非 ${file_config_1.default.infinity} 项目， 仅启用静态服务器功能`);
+        let defaultConfig = generatorDefaultConfig_1.default();
+        global.__CLI = defaultConfig[file_config_1.default.infinity];
+        global.__CLI.pluginsConfig = defaultConfig[file_config_1.default.pluginConfigField];
+        return;
     }
     //读取项目目录下的package.json
     //读取package.json下用户自定义配置

@@ -12,8 +12,8 @@ const file_config_1 = require('../file-config');
  */
 function default_1() {
     let result = {};
-    result.projectName = _projectUtils.getProjectDirectoryName();
-    result.projectVersion = '1.0';
+    result.name = _projectUtils.getProjectDirectoryName();
+    result.version = '1.0';
     result[file_config_1.default.pluginVersionField] = _projectUtils.getCLIVersion();
     result[file_config_1.default.pluginConfigField] = {};
     result[file_config_1.default.infinity] = {};

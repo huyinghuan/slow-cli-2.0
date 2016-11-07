@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 import * as _path from 'path';
 import * as _async from 'async';
 import * as _allDefined from '../all';
+import _config from '../file-config';
 import _registerHook from './registerHook';
 
 /**加载hooks */
@@ -23,14 +24,17 @@ export function loadPlugin(pluginName:string, pluginPath, options:any, cb){
     cb(error)
   }
 }
+
+//获取插件完成名称
+function getPluginFullName(pluginName){
+  return pluginName;
+}
+
 /**
  * 扫描Hooks插件
 */
 export function scanPlugins(cb){
-  //读取工程目录下package.json配置
-//  let packageJSON = require(_path.join(process.cwd(), 'package.json'))
-//  let pluginsConfig = packageJSON[_config.pluginInfo.name];
-// TODO: 完成plugin配置获取
+  let pluginsConfig = (global as any).__CLI.pluginConfig;
   if(!pluginsConfig){
     console.log(`没有配置任何插件`.red)
     return cb(null)

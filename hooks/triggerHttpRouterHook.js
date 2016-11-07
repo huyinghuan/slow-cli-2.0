@@ -7,6 +7,9 @@ const _hookMap = require('./map');
 */
 function default_1(router) {
     let queue = _hookMap.HookQueue[_hookMap.route.initial];
+    if (!queue) {
+        return false;
+    }
     for (let i = 0, length = queue.length; i < length; i++) {
         if (queue[i].fn(router)) {
             return true;

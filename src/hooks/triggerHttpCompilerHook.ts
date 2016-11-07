@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import * as _hookMap from './map';
 
 export default function(req, data, callback: _allDefined.CompilerCallBack){
-  let queue = _hookMap.HookQueue[_hookMap.route.didRequest];
+  let queue = _hookMap.HookQueue[_hookMap.route.didRequest] || [];
   let contentFactoryList = [];
   _.forEach(queue, (hook)=>{contentFactoryList.push(hook.fn)});
   let next = (error, data, responseContent)=>{

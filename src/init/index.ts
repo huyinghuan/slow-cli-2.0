@@ -33,9 +33,11 @@ export function prepareUserEnv(){
 
   if(!_fs.existsSync(_config.CLIConfigFile)){
     console.log(`非 ${_config.infinity} 项目， 仅启用静态服务器功能`);
-
+    let defaultConfig =  generatorDefaultConfig();
+    (global as any).__CLI = defaultConfig[_config.infinity];
+    (global as any).__CLI .pluginsConfig = defaultConfig[_config.pluginConfigField];
+    return;
   }
-
   //读取项目目录下的package.json
   //读取package.json下用户自定义配置
   let packageJSON = getProjectPackageJSON();
