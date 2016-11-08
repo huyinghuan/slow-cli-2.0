@@ -25,15 +25,11 @@ function loadPlugin(pluginName, pluginPath, options, cb) {
     }
 }
 exports.loadPlugin = loadPlugin;
-//获取插件完成名称
-function getPluginFullName(pluginName) {
-    return pluginName;
-}
 /**
  * 扫描Hooks插件
 */
 function scanPlugins(cb) {
-    let pluginsConfig = global.__CLI.pluginConfig;
+    let pluginsConfig = global.__CLI.pluginsConfig;
     if (!pluginsConfig) {
         console.log(`没有配置任何插件`.red);
         return cb(null);

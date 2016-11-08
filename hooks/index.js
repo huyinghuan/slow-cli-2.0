@@ -9,3 +9,5 @@ const triggerHttpResponseHook_1 = require('./triggerHttpResponseHook');
 exports.triggerHttpResponseHook = triggerHttpResponseHook_1.default;
 const triggerHttpNoFoundHook_1 = require('./triggerHttpNoFoundHook');
 exports.triggerHttpNoFoundHook = triggerHttpNoFoundHook_1.default;
+const getFullPluginName_1 = require('./getFullPluginName');
+exports.getFullPluginName = getFullPluginName_1.default;

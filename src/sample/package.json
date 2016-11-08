@@ -2,6 +2,33 @@
   "name": "sample",
   "version": "1.0",
   "silky-version": "2.0.0",
-  "silky-plugin": {},
-  "silky": {}
+  "silky": {},
+  "silky-plugin": {
+    "hbs": {
+      "source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/hbs",
+      "setting": {
+        "root": "/template"
+      }
+    },
+    "proxy": {
+      "source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/proxy",
+      "setting": [{
+        "from": ["^/p"],
+        "attribute": "i",
+        "to": "http://10.200.8.234:9810/"
+      }]
+    },
+    "nofound":{
+      "source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/nofound"
+    },
+    "less":{
+      "source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/less"
+    },
+    "autoprefix": {
+      "source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/autoprefixer"
+    },
+    "hbs-autoprefix": {
+      "source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/hbs-autoprefixer"
+    }
+  }
 }

@@ -39,5 +39,6 @@ function prepareUserEnv() {
     //读取package.json下用户自定义配置
     let packageJSON = getProjectPackageJSON();
     global.__CLI = packageJSON[file_config_1.default.infinity];
+    global.__CLI.pluginsConfig = packageJSON[file_config_1.default.pluginConfigField];
 }
 exports.prepareUserEnv = prepareUserEnv;

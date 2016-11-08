@@ -1,3 +1,15 @@
+## global.__CLI
+
+```js
+{
+  index: 'index.html', //start server 默认首页
+  port: '14422'
+  pluginConfig:{
+
+  }
+}
+```
+
 ## HOOKS
 
 ### route:initial
@@ -30,7 +42,7 @@ export.registerPlugin = (cli, options)=>{
     });
     router.get('/xxx', function(xx,xxx,xx){})
     return true
-
+    //====================== OR =====================//
     //只是対该路径进行拦截，作为中间件存在。
     route.get('/a.hbs', function(req, resp, next){
         //xxx
@@ -88,7 +100,7 @@ export.registerPlugin(cli, options)=>{
   cli.registerHook('route:willResponse', (req, data, responseContent, cb)=>{
     //如果没有经过编译器处理则不处理条请求
     if(data.status != 200){
-      cb(null, responseContent)
+      return cb(null, responseContent)
     }
     //该处举例不够严谨，仅用于表达意思
     if(req.path.indexOf('.css') == -1){

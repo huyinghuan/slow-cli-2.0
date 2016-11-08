@@ -42,6 +42,7 @@ export function prepareUserEnv(){
   //读取package.json下用户自定义配置
   let packageJSON = getProjectPackageJSON();
   (global as any).__CLI = packageJSON[_config.infinity];
+  (global as any).__CLI.pluginsConfig = packageJSON[_config.pluginConfigField];
 }
 
 export {generatorDefaultConfig as generatorDefaultConfig}
