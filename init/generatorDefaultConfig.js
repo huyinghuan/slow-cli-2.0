@@ -9,6 +9,7 @@ const file_config_1 = require('../file-config');
  * cli-version：     defalut： 依赖于初始化 cli 版本
  * cli-plugin：      default: {} //插件配置，和插件启用状态
  * cli:              default: cli 默认配置
+ * cli-build:       default:{} build配置
  */
 function default_1() {
     let result = {};
@@ -16,7 +17,12 @@ function default_1() {
     result.version = '1.0';
     result[file_config_1.default.pluginVersionField] = _projectUtils.getCLIVersion();
     result[file_config_1.default.pluginConfigField] = {};
-    result[file_config_1.default.infinity] = {};
+    result[file_config_1.default.infinity] = {
+        port: 14422
+    };
+    result[file_config_1.default.buildField] = {
+        outdir: './build'
+    };
     return result;
 }
 Object.defineProperty(exports, "__esModule", { value: true });

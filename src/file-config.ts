@@ -17,6 +17,7 @@ const config = {
   pluginVersionField: `${_infinity}-version`,
   pluginDir: _path.join(_root, 'node_modules'), //插件目录
   CLIConfigFile: _path.join(_root, 'package.json'), //插件配置文件
+  buildField: `${_infinity}-build` //build 相关配置
 }
 
 export default config;

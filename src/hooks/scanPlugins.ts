@@ -4,7 +4,7 @@ import * as _async from 'async';
 import * as _allDefined from '../all';
 import _config from '../file-config';
 import _registerHook from './registerHook';
-
+import _getFullPluginName from './getFullPluginName';
 /**加载hooks */
 export function loadPlugin(pluginName:string, pluginPath, options:any, cb){
   try {
@@ -44,7 +44,7 @@ export function scanPlugins(cb){
       console.log(`警告！！ ${pluginName} 加载方式为 开发者模式`.red)
     }
     //从自定义路径或插件目录获取插件路径
-    let pluginPath = pluginsConfig[pluginName].source || _path.join(_config.pluginDir, pluginName); 
+    let pluginPath = pluginsConfig[pluginName].source || _path.join(_config.pluginDir, _getFullPluginName(pluginName)); 
     loadPlugin(pluginName, pluginPath, pluginsConfig[pluginName], next)
   }, (error)=>{
     cb(error)

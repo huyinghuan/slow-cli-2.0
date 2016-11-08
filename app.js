@@ -18,7 +18,7 @@ const startServer = function (app, cli, router) {
         console.log(error);
         return process.exit(1);
     });
-    let port = cli.port || 14422;
+    let port = cli.port;
     console.log(`server listen at port ${port}`.green);
     _server.listen(app.listen(port));
 };

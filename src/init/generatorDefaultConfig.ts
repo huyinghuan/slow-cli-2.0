@@ -8,6 +8,7 @@ import _fileConfig from '../file-config';
  * cli-version：     defalut： 依赖于初始化 cli 版本
  * cli-plugin：      default: {} //插件配置，和插件启用状态
  * cli:              default: cli 默认配置
+ * cli-build:       default:{} build配置
  */
 export default function(){
   let result:any = {};
@@ -15,6 +16,11 @@ export default function(){
   result.version = '1.0';
   result[_fileConfig.pluginVersionField] = _projectUtils.getCLIVersion();
   result[_fileConfig.pluginConfigField] = {};
-  result[_fileConfig.infinity] = {};
+  result[_fileConfig.infinity] = {
+    port: 14422
+  };
+  result[_fileConfig.buildField] = {
+    outdir: './build'
+  };
   return result;
 }

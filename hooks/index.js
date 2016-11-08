@@ -11,3 +11,7 @@ const triggerHttpNoFoundHook_1 = require('./triggerHttpNoFoundHook');
 exports.triggerHttpNoFoundHook = triggerHttpNoFoundHook_1.default;
 const getFullPluginName_1 = require('./getFullPluginName');
 exports.getFullPluginName = getFullPluginName_1.default;
+const triggerBuildInitHook_1 = require('./triggerBuildInitHook');
+exports.triggerBuildInitHook = triggerBuildInitHook_1.default;
+const triggerBuildErrorHooks_1 = require('./triggerBuildErrorHooks');
+exports.triggerBuildErrorHooks = triggerBuildErrorHooks_1.default;

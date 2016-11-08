@@ -13,6 +13,7 @@ const config = {
     pluginVersionField: `${_infinity}-version`,
     pluginDir: _path.join(_root, 'node_modules'),
     CLIConfigFile: _path.join(_root, 'package.json'),
+    buildField: `${_infinity}-build` //build 相关配置
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = config;

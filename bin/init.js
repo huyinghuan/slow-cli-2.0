@@ -30,7 +30,14 @@ function default_1(_commander) {
             if (program.pluginListName) {
                 delete packageJSON[file_config_1.default.pluginConfigField];
             }
-            _.extend(defaultConfig, packageJSON);
+            Object.keys(packageJSON).forEach((key) => {
+                if (defaultConfig[key]) {
+                    defaultConfig[key] = _.extend(defaultConfig[key], packageJSON[key]);
+                }
+                else {
+                    defaultConfig[key] = packageJSON[key];
+                }
+            });
             cb(null, defaultConfig);
         });
         //生产配置文件
