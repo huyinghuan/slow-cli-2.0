@@ -44,6 +44,8 @@
     "port": 14422
   },
   "silky-build": {
-    "outdir": "./build"
+    "outdir": "./build",
+    "exclude":  [""],
+    "folderExclude": []
   }
 }

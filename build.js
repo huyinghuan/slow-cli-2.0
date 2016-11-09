@@ -11,12 +11,8 @@ function default_1() {
     queue.push((cb) => {
         _hook.scanPlugins('build', cb);
     });
-    //build初始化插件
-    queue.push((cb) => {
-        _hook.triggerBuildInitHook((error, stop) => {
-            cb(error, stop);
-        });
-    });
+    //build初始化HOOK
+    queue.push((cb) => { _hook.triggerBuildInitHook(cb); });
     _async.waterfall(queue, (error, stop) => {
         if (error) {
             console.log(error);

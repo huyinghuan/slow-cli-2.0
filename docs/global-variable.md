@@ -1,5 +1,7 @@
 ## global.__CLI
 
+For Developer
+
 ```js
 {
   index: 'index.html', //start server 默认首页
@@ -7,6 +9,8 @@
   pluginConfig:{
 
   }
-  build:{}
+  build:{
+    
+  }
 }
 ```
