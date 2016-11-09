@@ -9,7 +9,6 @@ import { CompilerCallBack } from './all';
 import * as _hooks from './hooks/index';
 import * as _hooksMap from './hooks/map';
 import _getMime from './lib/getMime';
-import { error } from './hooks/map';
 
 const startServer = function(app:any, cli:any, router:_express.Router){
   app.use(router)

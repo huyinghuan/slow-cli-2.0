@@ -2,19 +2,19 @@ import * as _allDefined from '../all';
 import * as _ from 'lodash';
 import * as _hookMap from './map';
 
-export default function(callback: _allDefined.CompilerCallBack){
-  let queue = _hookMap.HookQueue[_hookMap.route.didRequest] || [];
-  let contentFactoryList = [];
-  _.forEach(queue, (hook)=>{contentFactoryList.push(hook.fn)});
-  let next = (error, data, responseContent)=>{
+export default function(callback: _allDefined.BuildInitCallBack){
+  let queue = _hookMap.HookQueue[_hookMap.build.initial] || [];
+  let processFactoryList = [];
+  _.forEach(queue, (hook)=>{processFactoryList.push(hook.fn)});
+  let next = (error, stop)=>{
     if(error){
-      return callback(error, data, responseContent)
+      return callback(error, stop)
     }
-    let compiler = contentFactoryList.shift();
-    if(!compiler){
-      return callback(null, data, responseContent)
+    let processHandle = processFactoryList.shift();
+    if(!processHandle){
+      return callback(null, stop)
     }
-    compiler(data, responseContent, next)
+    processHandle(stop, next)
   }
-  next(null, {}, null)
+  next(null, false)
 }

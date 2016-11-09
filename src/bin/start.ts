@@ -18,7 +18,7 @@ export default function(_commander){
         _projectUtils.checkPluginVersion();
       }
       //加载插件
-      _hook.scanPlugins((error)=>{
+      _hook.scanPlugins('route',(error)=>{
         if(error){return}
         //静态域名接口
         if(program.port){

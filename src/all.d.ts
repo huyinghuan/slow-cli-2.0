@@ -35,3 +35,7 @@ export interface CallBack{
 export interface HookCallBack{
   (router: _express.Router)
 }
+
+export interface BuildInitCallBack{
+  (error:Object, stop)
+}

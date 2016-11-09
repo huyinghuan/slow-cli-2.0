@@ -18,10 +18,10 @@ exports.build = {
     willProcess: 'build:willProcess',
     didProcess: 'build:didProcess',
     willMake: 'build:willMake',
-    didMake: 'build:didMake'
+    didMake: 'build:didMake',
+    error: 'build:error'
 };
 exports.plugin = {
     run: 'plugin:run'
 };
-exports.error = "error";
 exports.HookQueue = [];

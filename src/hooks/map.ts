@@ -17,12 +17,11 @@ export const build = {
   willProcess: 'build:willProcess',
   didProcess: 'build:didProcess',
   willMake: 'build:willMake',
-  didMake: 'build:didMake'
+  didMake: 'build:didMake',
+  error: 'build:error'
 }
 export const plugin = {
   run: 'plugin:run'
 }
-
-export const error = "error";
 
 export var HookQueue = [];

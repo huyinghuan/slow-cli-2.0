@@ -5,18 +5,31 @@ import * as _allDefined from '../all';
 import _config from '../file-config';
 import _registerHook from './registerHook';
 import _getFullPluginName from './getFullPluginName';
-/**加载hooks */
-export function loadPlugin(pluginName:string, pluginPath, options:any, cb){
+
+/**
+ * 加载指定类型hooks
+ * hookType  hook类型，如start只用到了route 类型， build只用了build类型， 加载所有用 all
+ * pluginName 插件名字
+ * pluginPath 插件路径
+ * option 插件配置
+ * cb 回调函数
+ *  */
+export function loadPlugin(hookType:string, pluginName:string, pluginPath:string, options:any, cb){
   try {
     let plugin = require(pluginPath);
     //默认权重
     if(_.isFunction(plugin.registerPlugin)){
       plugin.registerPlugin({
-        registerHook: _registerHook,
+        registerHook: (hookName:string, callback:_allDefined.CallBack, priority?:number)=>{
+          if(hookName.indexOf(hookType) == 0 || hookType == 'all'){
+            _registerHook(hookName, callback, priority);
+            console.log(`加载插件${pluginName}'s hook ${hookName} 成功`.blue)
+            return
+          }
+        },
         options: (global as any).__CLI
       }, options)
     }
-    console.log(`加载插件${pluginName}成功`.blue)
     cb(null)
   } catch (error) {
     console.log(error)
@@ -26,9 +39,9 @@ export function loadPlugin(pluginName:string, pluginPath, options:any, cb){
 }
 
 /**
- * 扫描Hooks插件
+ * 扫描Hooks插件, 仅加载指定hook
 */
-export function scanPlugins(cb){
+export function scanPlugins(hookType:string, cb){
   let pluginsConfig = (global as any).__CLI.pluginsConfig;
   if(!pluginsConfig){
     console.log(`没有配置任何插件`.red)
@@ -45,7 +58,7 @@ export function scanPlugins(cb){
     }
     //从自定义路径或插件目录获取插件路径
     let pluginPath = pluginsConfig[pluginName].source || _path.join(_config.pluginDir, _getFullPluginName(pluginName)); 
-    loadPlugin(pluginName, pluginPath, pluginsConfig[pluginName], next)
+    loadPlugin(hookType, pluginName, pluginPath, pluginsConfig[pluginName], next)
   }, (error)=>{
     cb(error)
   })

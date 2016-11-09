@@ -18,7 +18,7 @@ function default_1(_commander) {
             _projectUtils.checkPluginVersion();
         }
         //加载插件
-        _hook.scanPlugins((error) => {
+        _hook.scanPlugins('route', (error) => {
             if (error) {
                 return;
             }

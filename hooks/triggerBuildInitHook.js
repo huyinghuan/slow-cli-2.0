@@ -2,20 +2,20 @@
 const _ = require('lodash');
 const _hookMap = require('./map');
 function default_1(callback) {
-    let queue = _hookMap.HookQueue[_hookMap.route.didRequest] || [];
-    let contentFactoryList = [];
-    _.forEach(queue, (hook) => { contentFactoryList.push(hook.fn); });
-    let next = (error, data, responseContent) => {
+    let queue = _hookMap.HookQueue[_hookMap.build.initial] || [];
+    let processFactoryList = [];
+    _.forEach(queue, (hook) => { processFactoryList.push(hook.fn); });
+    let next = (error, stop) => {
         if (error) {
-            return callback(error, data, responseContent);
+            return callback(error, stop);
         }
-        let compiler = contentFactoryList.shift();
-        if (!compiler) {
-            return callback(null, data, responseContent);
+        let processHandle = processFactoryList.shift();
+        if (!processHandle) {
+            return callback(null, stop);
         }
-        compiler(data, responseContent, next);
+        processHandle(stop, next);
     };
-    next(null, {}, null);
+    next(null, false);
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

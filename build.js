@@ -9,7 +9,7 @@ function default_1() {
     let queue = [];
     //加载插件
     queue.push((cb) => {
-        _hook.scanPlugins(cb);
+        _hook.scanPlugins('build', cb);
     });
     //build初始化插件
     queue.push((cb) => {

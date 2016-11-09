@@ -16,7 +16,7 @@
 const priority = 1;
 
 /**
-*cli {registerHook:registerHook, __CLI: global.__CLI 【全局配置】}
+*cli {registerHook:registerHook, options: global.__CLI 【全局配置】}
 *options 插件配置
 */
 export.registerPlugin = (cli, options)=>{
@@ -101,19 +101,6 @@ export.registerPlugin(cli, options)=>{
 
 ```
 
-### Hook 重要参数说明。
-
-#### data
-`route:didRequest`， `route:willResponse`中的data参数 ，初始化时：
-
-```
-{
-  status: 404,  #用于标示 是否经过编译器处理
-  realPath: pathname #用于代替 req.path。  主要是 将  path == '/'  替换为 配置的 silky.index.  没有默认为 index.html
-}
-```
-
-
 ### router  route:noFound
 
 #该Hook 仅可以配置一个。
@@ -132,3 +119,17 @@ export.registerPlugin(cli, options)=>{
 }
 
 ```
+
+### Hook 重要参数说明。
+
+#### data
+`route:didRequest`， `route:willResponse`中的data参数 ，初始化时：
+
+```
+{
+  status: 404,  #用于标示 是否经过编译器处理
+  realPath: pathname #用于代替 req.path。  主要是 将  path == '/'  替换为 配置的 silky.index.  没有默认为 index.html
+}
+```
+
+
