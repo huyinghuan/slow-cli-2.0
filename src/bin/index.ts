@@ -20,6 +20,7 @@ _start(_commander);
 _init(_commander);
 _check(_commander);
 _build(_commander);
+
 _commander.version(versionDesc).parse(process.argv);
 
 console.log(`${_fileConfig.infinity} version is ${versionDesc}`.green)

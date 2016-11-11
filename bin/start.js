@@ -1,5 +1,5 @@
 "use strict";
-const _init = require('../init');
+const _init = require('../init/index');
 const _projectUtils = require('../lib/project');
 const app_1 = require('../app');
 const _hook = require('../hooks/index');
@@ -11,6 +11,18 @@ function default_1(_commander) {
         .action((program) => {
         //读取用户自定义配置
         _init.prepareUserEnv();
+        //运行时参数记录
+        let userInputArgs = {};
+        if (program.port) {
+            userInputArgs.port = program.port;
+        }
+        //设置用户自定义启动参数
+        _init.setStartParams(userInputArgs);
+        //检查启动参数是否合法
+        if (!_init.checkStartArgs()) {
+            process.exit(1);
+        }
+        ;
         if (program.check) {
             //检查cli 版本
             _projectUtils.checkCLIVersion();
@@ -21,10 +33,6 @@ function default_1(_commander) {
         _hook.scanPlugins('route', (error) => {
             if (error) {
                 return;
-            }
-            //静态域名接口
-            if (program.port) {
-                global.__CLI.port = program.port;
             }
             app_1.default();
         });

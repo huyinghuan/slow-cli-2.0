@@ -9,8 +9,9 @@ For Developer
   pluginConfig:{
 
   }
-  build:{
-    
+  buildConfig:{
+    outdir: './build',
+    ignore: ['node_modules', "^(\\.)"]
   }
 }
 ```

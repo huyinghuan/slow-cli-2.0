@@ -20,7 +20,8 @@ export default function(){
     port: 14422
   };
   result[_fileConfig.buildField] = {
-    outdir: './build'
+    outdir: './build',
+    ignore: ["node_modules/.*", ".*"],
   };
   return result;
 }

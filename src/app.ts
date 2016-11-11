@@ -9,6 +9,7 @@ import { CompilerCallBack } from './all';
 import * as _hooks from './hooks/index';
 import * as _hooksMap from './hooks/map';
 import _getMime from './lib/getMime';
+import * as _init from './init/index'
 
 const startServer = function(app:any, cli:any, router:_express.Router){
   app.use(router)
@@ -32,9 +33,10 @@ const startServer = function(app:any, cli:any, router:_express.Router){
  * 启动静态服务
  */
 export default ()=>{
-  let cli = (global as any).__CLI;
+  let cli = _init.getFullConfig();
   let app = _express();
   let router = _express.Router();
+  let globalCLIConfig = _init.getFullConfig()
   //增加一些基础信息
   router.all('*', function(req, resp, next){
     //挂载时间点
@@ -70,7 +72,7 @@ export default ()=>{
     let queue = [];
     let realPath = req.path;
     if(realPath == '/'){
-      realPath = (global as any).__CLI.index || "index.html"
+      realPath = globalCLIConfig.index || "index.html"
     }
     let data = {
       status: 404,
@@ -120,7 +122,7 @@ export default ()=>{
   router.get('*', function(req, resp, next){
     let path = req.path;
     if(path == '/'){
-      path = `/${(global as any).__CLI.index}`;
+      path = `/${globalCLIConfig.index}`;
     }
     let responseFilePath =  _path.join(process.cwd(), _.compact(path.split('/')).join(_path.sep))
     if(_fs.existsSync(responseFilePath)){

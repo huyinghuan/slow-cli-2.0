@@ -21,7 +21,8 @@ function default_1() {
         port: 14422
     };
     result[file_config_1.default.buildField] = {
-        outdir: './build'
+        outdir: './build',
+        ignore: ["node_modules/.*", ".*"],
     };
     return result;
 }

@@ -5,6 +5,7 @@ import * as _allDefined from '../all';
 import _config from '../file-config';
 import _registerHook from './registerHook';
 import _getFullPluginName from './getFullPluginName';
+import * as _init from '../init/index';
 
 /**
  * 加载指定类型hooks
@@ -27,7 +28,7 @@ export function loadPlugin(hookType:string, pluginName:string, pluginPath:string
             return
           }
         },
-        options: (global as any).__CLI
+        options: _init.getFullConfig()
       }, options)
     }
     cb(null)
@@ -42,7 +43,7 @@ export function loadPlugin(hookType:string, pluginName:string, pluginPath:string
  * 扫描Hooks插件, 仅加载指定hook
 */
 export function scanPlugins(hookType:string, cb){
-  let pluginsConfig = (global as any).__CLI.pluginsConfig;
+  let pluginsConfig = _init.getPluginConfig();
   if(!pluginsConfig){
     console.log(`没有配置任何插件`.red)
     return cb(null)

@@ -1,12 +1,23 @@
-
+import * as _init from './init/index';
 import * as _hook from './hooks/index';
 import * as _hookMap from './hooks/map';
 import * as _async from 'async';
+import _getAllFileInDir from './lib/getAllFileInDir';
+
+const _workspace = process.cwd();
+
+function shouldInclude(filename, filepath){
+  const _buildConfig = _init.getBuildConfig();
+  //需要忽略掉文件
+  const buildIgnore:Array<string> = _buildConfig.ignore;
+
+}
 
 function normalExecute(){
+ 
   let queue = [];
   //获取所有待编译文件
-  
+  _getAllFileInDir(_workspace, [], shouldInclude)
 }
 
 export default function(){

@@ -1,4 +1,4 @@
-import * as _init from '../init'
+import * as _init from '../init/index'
 import * as _projectUtils from '../lib/project'
 import _app from '../app'
 import * as _hook from '../hooks/index';
@@ -11,6 +11,20 @@ export default function(_commander){
     .action((program)=>{
       //读取用户自定义配置
       _init.prepareUserEnv();
+
+      //运行时参数记录
+      let userInputArgs:any = {}
+
+      if(program.port){
+        userInputArgs.port = program.port
+      }
+      //设置用户自定义启动参数
+      _init.setStartParams(userInputArgs)
+      //检查启动参数是否合法
+      if(!_init.checkStartArgs()){
+        process.exit(1)
+      };
+
       if(program.check){
         //检查cli 版本
         _projectUtils.checkCLIVersion();
@@ -20,10 +34,6 @@ export default function(_commander){
       //加载插件
       _hook.scanPlugins('route',(error)=>{
         if(error){return}
-        //静态域名接口
-        if(program.port){
-          (global as any).__CLI.port = program.port
-        }
         _app()
       });
     

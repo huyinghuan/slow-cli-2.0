@@ -1,6 +1,7 @@
 import * as _init from '../init/index'
 import _build from '../build';
 import * as _projectUtils from '../lib/project';
+import * as _path from 'path';
 
 export default function(_commander){
   _commander.command('build')
@@ -18,7 +19,22 @@ export default function(_commander){
       if(!program.force && !checkResult){
         process.exit(1);
       }
+      //运行时参数记录
+      let userInputArgs:any = {}
       
+      //制定编译输出目录
+      if(program.outdir){
+        userInputArgs.outdir = program.outdir
+      }
+
+      //更新全局变量下的编译参数。
+      _init.setBuildParams(userInputArgs)
+
+      //检查编译参数
+      if(!_init.checkBuildArgs()){
+        return process.exit(1)
+      }
+
       _build()
     })
 }

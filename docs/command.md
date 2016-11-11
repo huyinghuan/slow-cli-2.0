@@ -52,7 +52,10 @@ silky:{
 xxx:xxx
 silky-build:{
   outdir: './build', //默认输出目录 
-  folderExclute: ['node_modules']  //support regexp string.  default
+  // fileInclude > folderExclude > fileExclude
+  folderExclude: ['node_modules']  //support regexp string.  default
+  fileExclude: ["^\\."],
+  fileInclude: [], //support regexp string
 }
 ```
 

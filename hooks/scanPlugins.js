@@ -5,6 +5,7 @@ const _async = require('async');
 const file_config_1 = require('../file-config');
 const registerHook_1 = require('./registerHook');
 const getFullPluginName_1 = require('./getFullPluginName');
+const _init = require('../init/index');
 /**
  * 加载指定类型hooks
  * hookType  hook类型，如start只用到了route 类型， build只用了build类型， 加载所有用 all
@@ -26,7 +27,7 @@ function loadPlugin(hookType, pluginName, pluginPath, options, cb) {
                         return;
                     }
                 },
-                options: global.__CLI
+                options: _init.getFullConfig()
             }, options);
         }
         cb(null);
@@ -42,7 +43,7 @@ exports.loadPlugin = loadPlugin;
  * 扫描Hooks插件, 仅加载指定hook
 */
 function scanPlugins(hookType, cb) {
-    let pluginsConfig = global.__CLI.pluginsConfig;
+    let pluginsConfig = _init.getPluginConfig();
     if (!pluginsConfig) {
         console.log(`没有配置任何插件`.red);
         return cb(null);

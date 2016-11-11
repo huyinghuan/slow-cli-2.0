@@ -16,6 +16,18 @@ function default_1(_commander) {
         if (!program.force && !checkResult) {
             process.exit(1);
         }
+        //运行时参数记录
+        let userInputArgs = {};
+        //制定编译输出目录
+        if (program.outdir) {
+            userInputArgs.outdir = program.outdir;
+        }
+        //更新全局变量下的编译参数。
+        _init.setBuildParams(userInputArgs);
+        //检查编译参数
+        if (!_init.checkBuildArgs()) {
+            return process.exit(1);
+        }
         build_1.default();
     });
 }

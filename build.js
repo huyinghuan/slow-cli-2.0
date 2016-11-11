@@ -1,9 +1,18 @@
 "use strict";
+const _init = require('./init/index');
 const _hook = require('./hooks/index');
 const _async = require('async');
+const getAllFileInDir_1 = require('./lib/getAllFileInDir');
+const _workspace = process.cwd();
+function shouldInclude(filename, filepath) {
+    const _buildConfig = _init.getBuildConfig();
+    //需要忽略掉文件
+    const buildIgnore = _buildConfig.ignore;
+}
 function normalExecute() {
     let queue = [];
     //获取所有待编译文件
+    getAllFileInDir_1.default(_workspace, [], shouldInclude);
 }
 function default_1() {
     let queue = [];

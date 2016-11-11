@@ -33,7 +33,7 @@
     "hbs-autoprefix": {
       "source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/hbs-autoprefixer"
     },
-    "build-plugin-demo":{
+    "build-plugin-demo": {
       "source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/build-plugin-demo",
       "setting": {
         "url": "xxxx.xxx"
@@ -45,7 +45,8 @@
   },
   "silky-build": {
     "outdir": "./build",
-    "exclude":  [""],
-    "folderExclude": []
+    "ignore": [
+      "node_modules"
+    ]
   }
 }

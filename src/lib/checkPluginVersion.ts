@@ -1,11 +1,11 @@
 import * as _hooks from '../hooks/index';
-import { getProjectPackageJSON } from '../init/index';
+import { getProjectPackageJSON, getPluginConfig } from '../init/index';
 import * as _path from 'path';
 import _fileConfig from '../file-config';
 //检查对比插件版本
 export default function ():boolean{
   //获取插件配置
-  let pluginConfig = (global as any).__CLI.pluginsConfig;
+  let pluginConfig = getPluginConfig();
   //搜集需要对比的插件。开发版本将跳过。
   let pluginList = [];
   Object.keys(pluginConfig).forEach((pluginName)=>{
