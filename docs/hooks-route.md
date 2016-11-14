@@ -1,5 +1,13 @@
 ## ROUTE-HOOKS
 
+### 触发顺序
+
+```js
+
+route:initial > route:didRequest >  route:willResponse > route:notFound[如果存在]
+
+```
+
 ### route:initial
 
 静态服务启动前的hooks。 
@@ -37,7 +45,7 @@ export.registerPlugin = (cli, options)=>{
         next()
     })
     return false
-  }, priority) //权重，默认为1， 越大排越前，可以忽略
+  }, priority) //权重，默认为1， 越小排越前，可以忽略
 }
 
 ```

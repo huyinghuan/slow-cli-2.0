@@ -1,5 +1,13 @@
 ## BUILD-HOOKS
 
+### 触发顺序
+
+```js
+
+build:initial > build:willBuild >  build:doCompile > build:didCompile > build:didBuild > build:end
+
+```
+
 ### build:initial
 
 全局接管编译系统

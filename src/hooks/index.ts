@@ -5,7 +5,8 @@ import _triggerHttpResponseHook from './triggerHttpResponseHook';
 import _triggerHttpNoFoundHook from './triggerHttpNoFoundHook';
 import getFullPluginName from './getFullPluginName';
 import triggerBuildInitHook from './triggerBuildInitHook';
-import _triggerBuildErrorHooks from './triggerBuildErrorHooks';
+import _triggerBuildErrorHook from './triggerBuildErrorHook';
+import _triggerBuildWillDoHook from './triggerBuildWillDoHook';
 
 export {
   _triggerHttpCompilerHook as triggerHttpCompilerHook, 
@@ -15,5 +16,6 @@ export {
   _triggerHttpNoFoundHook as triggerHttpNoFoundHook,
   getFullPluginName as getFullPluginName,
   triggerBuildInitHook as triggerBuildInitHook,
-  _triggerBuildErrorHooks as triggerBuildErrorHooks
+  _triggerBuildErrorHook as triggerBuildErrorHook,
+  _triggerBuildWillDoHook as triggerBuildWillDoHook
 } 

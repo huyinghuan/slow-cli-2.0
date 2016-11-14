@@ -22,7 +22,7 @@ function default_1() {
     };
     result[file_config_1.default.buildField] = {
         outdir: './build',
-        ignore: ["node_modules/.*", ".*"],
+        ignore: ["node_modules", "(\\/\\.[^/]+)$"],
     };
     return result;
 }

@@ -6,6 +6,7 @@ const file_config_1 = require('../file-config');
 const registerHook_1 = require('./registerHook');
 const getFullPluginName_1 = require('./getFullPluginName');
 const _init = require('../init/index');
+const _utils = require('./utils');
 /**
  * 加载指定类型hooks
  * hookType  hook类型，如start只用到了route 类型， build只用了build类型， 加载所有用 all
@@ -27,7 +28,8 @@ function loadPlugin(hookType, pluginName, pluginPath, options, cb) {
                         return;
                     }
                 },
-                options: _init.getFullConfig()
+                options: _init.getFullConfig(),
+                utils: _utils //一些默认工具函数，大多插件可以使用得到
             }, options);
         }
         cb(null);

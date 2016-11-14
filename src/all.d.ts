@@ -39,3 +39,13 @@ export interface HookCallBack{
 export interface BuildInitCallBack{
   (error:Object, stop)
 }
+
+export interface BuildWillDoCallBack{
+  (error:Object, buildConfig)
+}
+
+export interface ProcessFile{
+  fileName:string,
+  filePath:string,
+  relativeDir: string
+}

@@ -2,9 +2,9 @@ import * as _allDefined from '../all';
 import * as _ from 'lodash';
 import * as _hookMap from './map';
 
-//排序
+//排序 升序 越小先执行
 function sortHook(hookName){
-  _hookMap.HookQueue[hookName] = _.orderBy(_hookMap.HookQueue[hookName], 'priority', 'desc')
+  _hookMap.HookQueue[hookName] = _.orderBy(_hookMap.HookQueue[hookName], 'priority')
 }
 
 /**

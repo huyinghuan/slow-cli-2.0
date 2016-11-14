@@ -6,6 +6,7 @@ import _config from '../file-config';
 import _registerHook from './registerHook';
 import _getFullPluginName from './getFullPluginName';
 import * as _init from '../init/index';
+import * as _utils from './utils';
 
 /**
  * 加载指定类型hooks
@@ -28,7 +29,8 @@ export function loadPlugin(hookType:string, pluginName:string, pluginPath:string
             return
           }
         },
-        options: _init.getFullConfig()
+        options: _init.getFullConfig(),
+        utils: _utils //一些默认工具函数，大多插件可以使用得到
       }, options)
     }
     cb(null)

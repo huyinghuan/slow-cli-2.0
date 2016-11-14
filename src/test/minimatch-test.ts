@@ -4,6 +4,6 @@ import * as _should from 'should';
 
 describe("minimatch test", ()=>{
   it("/ax/axx/xx.html *.html true", ()=>{
-    (_minimatch("/ax/axx/xx.html", "*.html")).should.be.true;
+    _should(_minimatch("/ax/axx/xx.html", "*.+(html|hbs)", {matchBase: true})).be.true();
   })
 })

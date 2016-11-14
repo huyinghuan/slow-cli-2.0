@@ -15,6 +15,7 @@ function checkOutDir() {
         console.log("编译目录不能和项目跟目录为同一个");
         return false;
     }
+    _init.setBuildParams({ ourdir: outdir });
     return true;
 }
 function default_1() {

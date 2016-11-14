@@ -21,7 +21,7 @@ export default function(){
   };
   result[_fileConfig.buildField] = {
     outdir: './build',
-    ignore: ["node_modules/.*", ".*"],
+    ignore: ["node_modules", "(\\/\\.[^/]+)$"],
   };
   return result;
 }

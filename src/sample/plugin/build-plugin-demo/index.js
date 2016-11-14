@@ -12,4 +12,11 @@ exports.registerPlugin = function(cli, options){
     console.log('this is second initial hook 2.')
     cb(null, stop)
   }, 2)
+
+  cli.registerHook('build:willBuild', (buildConfig, cb)=>{
+    buildConfig.test = xxx;
+    console.log("build will do : ", buildConfig)
+    cb(null, buildConfig)
+  })
+
 }

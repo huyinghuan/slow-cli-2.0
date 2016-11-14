@@ -1,9 +1,9 @@
 "use strict";
 const _ = require('lodash');
 const _hookMap = require('./map');
-//排序
+//排序 升序 越小先执行
 function sortHook(hookName) {
-    _hookMap.HookQueue[hookName] = _.orderBy(_hookMap.HookQueue[hookName], 'priority', 'desc');
+    _hookMap.HookQueue[hookName] = _.orderBy(_hookMap.HookQueue[hookName], 'priority');
 }
 /**
  * 注册hooks
