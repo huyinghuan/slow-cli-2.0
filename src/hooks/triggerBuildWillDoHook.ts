@@ -17,5 +17,5 @@ export default function(buildConfig, callback: _allDefined.BuildWillDoCallBack){
     }
     processHandle(buildConfig, next)
   }
-  next(null, false)
+  next(null, buildConfig)
 }

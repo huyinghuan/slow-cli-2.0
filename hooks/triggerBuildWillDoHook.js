@@ -15,7 +15,7 @@ function default_1(buildConfig, callback) {
         }
         processHandle(buildConfig, next);
     };
-    next(null, false);
+    next(null, buildConfig);
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

@@ -31,3 +31,24 @@ export.registerPlugin = (cli, options)=>{
 }
 
 ```
+
+### build:willBuild
+
+即将要编译了。可以增加更多的编译数据或者修改编译数据
+
+
+```js
+
+export.registerPlugin = (cli, options)=>{
+  
+  //build 编译参数。 具体查看  [docs/command]
+  // stop true 停止其他插件的编译介入， false， 其他编译插件继续
+  cli.registerHook('build:willBuild', (buildConfig, cb)=>{
+    
+    buildConfig.test = "xxx";
+    console.log("build will do 2: ", buildConfig)
+    cb(null, buildConfig)
+  }, 1)
+}
+
+```

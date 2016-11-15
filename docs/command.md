@@ -10,6 +10,7 @@ For User
 
 -p --pluginListName #制定插件列表名称，从而获取插件列表
 
+e.g.: silky init -p web
 ```
 
 ## start
@@ -21,16 +22,21 @@ For User
 -p --port #指定运行端口
 
 -c --check #检测运行版本，和插件版本
+
+e.g.:  silky start -p 3002 -c
 ```
 
 对应的配置文件：package.json
 
-```
-xxx:xxx
-silky:{
-  port: 14422,
-  index: 'index.html'
+```json
+{
+  "xxx": "xxx",
+  "silky":{
+    "port": 14422,
+    "index": "index.html"
+  }
 }
+
 ```
 
 ## build
@@ -43,20 +49,22 @@ silky:{
 
 -o --outdir #输出路径
 
+e.g.: silky build -o ./build-test -f
 ```
 
 对应的配置文件：package.json
 已存在值为默认值。
 
 ```json
-xxx:xxx
-silky-build:{
-  outdir: './build', //默认输出目录 
+{
+  "xxx": "xxx",
+  "silky-build": {
+  "outdir": "./build", //默认输出目录 
   // fileInclude > folderExclude > fileExclude
-  folderExclude: ['node_modules']  //support regexp string.  default
-  fileExclude: ["^\\."],
-  fileInclude: [], //support regexp string
+   "ignore": ["node_modules", "(\\/\\.[^/]+)$"] // ==> new RegExp(ArrayItem)
+  }
 }
+
 ```
 
 

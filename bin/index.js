@@ -1,5 +1,4 @@
-#!/usr/bin/env node
-':'; //; exec node --harmony "$0" "$@";
+#! /usr/bin/env node --harmony
 "use strict";
 const _commander = require('commander');
 const start_1 = require('./start');

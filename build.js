@@ -15,6 +15,10 @@ const _workspace = process.cwd();
  */
 function shouldInclude(filename, filepath) {
     const _buildConfig = _init.getBuildConfig();
+    //忽略build文件夹
+    if (filepath.indexOf(_buildConfig.outdir) != -1) {
+        return false;
+    }
     //需要忽略掉文件
     const buildIgnore = _buildConfig.ignore;
     for (let i = 0, length = buildIgnore.length; i < length; i++) {
@@ -40,7 +44,7 @@ function compilerFileQueue(buildConfig, fileQueue, next) {
     _async.map(fileQueue, (fileItem, cb) => {
         let data = {
             inputFilePath: fileItem.filePath,
-            outFilePath: _path.join(buildConfig.outdir, fileItem.relativeDir, fileItem.fileName),
+            outputFilePath: _path.join(process.cwd(), buildConfig.outdir, fileItem.relativeDir, fileItem.fileName),
             fileName: fileItem.fileName
         };
         compileFile(data, cb);
@@ -63,12 +67,17 @@ function normalExecute() {
         //编译文件
         compilerFileQueue(buildConfig, fileQueue, next);
     });
-    //didBuild
+    //didBuild 
     queue.push((buildConfig, next) => {
         next(null);
     });
-    //endBuild
-    _async.waterfall(queue);
+    //endBuild 打包压缩 发送
+    queue.push((next) => {
+        console.log('build end!');
+        next(null);
+    });
+    _async.waterfall(queue, () => {
+    });
 }
 function default_1() {
     let queue = [];
