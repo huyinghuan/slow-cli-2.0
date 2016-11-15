@@ -44,6 +44,21 @@ export interface BuildWillDoCallBack{
   (error:Object, buildConfig)
 }
 
+export interface BuildDoCompileCallback{
+  (error: Object, data, content)
+}
+
+
+export interface BuildDidCompileCallback{
+  (error: Object, data, content)
+}
+
+export interface BuildDoNothingCallback{
+  (error: Object, hasProcess:boolean)
+}
+
+
+
 export interface ProcessFile{
   fileName:string,
   filePath:string,

@@ -60,5 +60,20 @@ exports.registerPlugin = function(cli, options){
       //交给下一个处理器
       cb(null, data, content)
     })
-  },999)
+  },1)
+
+
+  cli.registerHook('build:doCompile', (data, content, cb)=>{
+    let inputFilePath = data.inputFilePath;
+    if(!/(\.hbs)$/.test(inputFilePath)){
+      return cb(null, data, content)
+    }
+    getCompileContent(inputFilePath, data, (error, data, content)=>{
+      if(data.status == 200){
+        data.outputFilePath = data.outputFilePath.replace(/(\hbs)$/, "html")
+      }
+      cb(error, data, content);
+    })
+
+  }, 1)
 }

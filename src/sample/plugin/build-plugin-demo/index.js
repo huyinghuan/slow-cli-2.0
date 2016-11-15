@@ -15,13 +15,13 @@ exports.registerPlugin = function(cli, options){
 
   cli.registerHook('build:willBuild', (buildConfig, cb)=>{
     buildConfig.test = "xxx";
-    console.log("build will do 1: ", buildConfig)
+    console.log("build will do 1: ")
     cb(null, buildConfig)
   }, 2)
   
   cli.registerHook('build:willBuild', (buildConfig, cb)=>{
     buildConfig.test = "xxx";
-    console.log("build will do 2: ", buildConfig)
+    console.log("build will do 2: ")
     cb(null, buildConfig)
   }, 1)
 }

@@ -28,7 +28,7 @@ e.g.:  silky start -p 3002 -c
 
 对应的配置文件：package.json
 
-```json
+```js
 {
   "xxx": "xxx",
   "silky":{
@@ -55,12 +55,11 @@ e.g.: silky build -o ./build-test -f
 对应的配置文件：package.json
 已存在值为默认值。
 
-```json
+```js
 {
   "xxx": "xxx",
   "silky-build": {
-  "outdir": "./build", //默认输出目录 
-  // fileInclude > folderExclude > fileExclude
+    "outdir": "./build", //默认输出目录
    "ignore": ["node_modules", "(\\/\\.[^/]+)$"] // ==> new RegExp(ArrayItem)
   }
 }

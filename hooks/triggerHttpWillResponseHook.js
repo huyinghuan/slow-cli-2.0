@@ -1,6 +1,9 @@
 "use strict";
 const _ = require('lodash');
 const _hookMap = require('./map');
+/**
+ * route:willResponse
+ */
 function default_1(req, data, responseContent, callback) {
     let queue = _hookMap.HookQueue[_hookMap.route.willResponse] || [];
     let contentFactoryList = [];

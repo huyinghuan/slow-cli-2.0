@@ -4,7 +4,7 @@
 
 ```js
 
-route:initial > route:didRequest >  route:willResponse > route:notFound[如果存在]
+route:initial > route:didRequest >  route:willResponse > ?route:notFound > route:didResponse
 
 ```
 
@@ -126,6 +126,16 @@ export.registerPlugin(cli, options)=>{
   })
 }
 
+```
+
+### router  route:didResponse
+响应完成之后
+
+```js
+export.registerPlugin(cli, options)=>{
+  cli.registerHook('route:didResponse', (req)=>{})
+}
+ 
 ```
 
 ### Hook 重要参数说明。

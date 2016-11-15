@@ -57,13 +57,14 @@ export default ()=>{
         default:
           console.log(msg.gray);
       }
+      _hooks.triggerHttpDidResponseHook(req);
     })
     next()
   });
 
   //启动服务器之前
   //_hooksMap.route.initial
-  if(_hooks.triggerRouterHook(router)){
+  if(_hooks.triggerHttpRouterHook(router)){
     return;
   }
 
@@ -79,13 +80,15 @@ export default ()=>{
       realPath: realPath
     }
     queue.push((cb:CompilerCallBack)=>{
+      //route:didRequest
       _hooks.triggerHttpCompilerHook(req, data, cb)
     });
   
     //TODO  min js,css, html, autoprefix 
     //対编译后内容的加工处理
     queue.push((data, responseContent, cb)=>{
-      _hooks.triggerHttpResponseHook(req, data, responseContent, (error, processContent)=>{
+      //route:willResponse
+      _hooks.triggerHttpWillResponseHook(req, data, responseContent, (error, processContent)=>{
         cb(error, data, processContent)
       })
       

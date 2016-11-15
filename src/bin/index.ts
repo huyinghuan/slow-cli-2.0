@@ -11,6 +11,7 @@ require('colors');
 /**
  * 全局变量，保存配置数据
  */
+
 (global as any).__CLI = {};
 
 const versionDesc = _projectUtils.getCLIVersion();

@@ -4,7 +4,8 @@ export const route = {
   didRequest: 'route:didRequest', //接收到请求后
 //  willPrepareDirectory: 'route:willPrepareDirectory',
 //  didPrepareDirectory: 'route:didPrepareDirectory',
-  willResponse: 'route:willResponse' //编译内容的加工处理
+  willResponse: 'route:willResponse', //编译内容的加工处理
+  didResponse: 'route:didResponse'
 }
 export const build = {
   initial: 'build:initial', //正式编译之前
@@ -14,6 +15,7 @@ export const build = {
   didBuild: 'build:didBuild',
   doCompile: 'build:doCompile', //编译内容处理加工
   didCompile: 'build:didCompile', //
+  doNothing: 'build:doNothing',
 //  willProcess: 'build:willProcess',
 //  didProcess: 'build:didProcess',
 //  willMake: 'build:willMake',

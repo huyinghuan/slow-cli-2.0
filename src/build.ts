@@ -6,6 +6,7 @@ import * as _fs from 'fs-extra';
 import * as _path from 'path';
 
 import _getAllFileInDir from './lib/getAllFileInDir';
+import { ProcessFile } from './all';
 
 const _workspace = process.cwd();
 
@@ -18,7 +19,7 @@ const _workspace = process.cwd();
  */
 function shouldInclude(filename, filepath):boolean{
   const _buildConfig = _init.getBuildConfig();
-  
+  //console.log(filepath, _buildConfig.outdir, filepath.indexOf(_buildConfig.outdir))
   //忽略build文件夹
   if(filepath.indexOf(_buildConfig.outdir) != -1){
     return false
@@ -34,20 +35,55 @@ function shouldInclude(filename, filepath):boolean{
   return true
 }
 
-
 /**
  * 编译单个文件
- * 触发发各类hook， didCompile*/
+ * 触发发各类hook，doCompile, didCompile*/
 function compileFile(data, next){
-  console.log(data.inputFilePath, data.outputFilePath)
-  next(null)
+  let queue = [];
+
+  //编译工具编译
+  queue.push((cb)=>{
+    _hook.triggerBuildDoCompileHook(data, cb)
+  })
+
+  //内容加工
+  queue.push((data, content, cb)=>{
+    _hook.triggerBuildDidCompileHook(data, content, cb)
+  })
+
+  /**
+   * 已经编译完成，写入文件。
+   * 未完成编译， 触发hook， hook如果已经写入文件，那么不做任何事情， 如果没有写入文件， 那么默认copy文件。
+   */
+  queue.push((data, content, cb)=>{
+    if(content){
+      return _fs.writeFile(data.outputFilePath, content, (error)=>{
+        cb(error)
+      })
+    }
+    _hook.triggerBuildDoNothingHook(data, (error, processResult:any)=>{
+      if(error){return cb(error)}
+
+      if(processResult.hasProcess){
+        return cb(null)
+      }
+
+      _fs.copy(processResult.inputFilePath, processResult.outputFilePath, (error)=> {cb(error)})
+
+    })
+  })
+
+  _async.waterfall(queue, (error)=> next(error))
+
 }
 
 /**
  * 编译文件队列 */
 function compilerFileQueue(buildConfig, fileQueue, next){
   //确保编译目录存在
-  _fs.ensureDirSync(buildConfig.outdir)
+  _fs.ensureDirSync(buildConfig.outdir);
+  //清空编译目录
+  _fs.emptyDirSync(buildConfig.outdir);
   //异步编译
   _async.map(fileQueue, (fileItem:any, cb)=>{
     let data = {
@@ -89,7 +125,8 @@ function normalExecute(){
     console.log('build end!')
     next(null)
   })
-  _async.waterfall(queue, ()=>{
+  _async.waterfall(queue, (error)=>{
+    console.log(error)
 
   })
 

@@ -4,7 +4,7 @@
 
 ```js
 
-build:initial > build:willBuild >  build:doCompile > build:didCompile > build:didBuild > build:end
+build:initial > build:willBuild >  build:doCompile > build:didCompile > build:didBuild > ?build:doNothing > build:end
 
 ```
 
@@ -34,21 +34,49 @@ export.registerPlugin = (cli, options)=>{
 
 ### build:willBuild
 
-即将要编译了。可以增加更多的编译数据或者修改编译数据
+即将要编译了。可以增加更多的编译参数或者修改编译参数
 
 
 ```js
 
 export.registerPlugin = (cli, options)=>{
-  
-  //build 编译参数。 具体查看  [docs/command]
-  // stop true 停止其他插件的编译介入， false， 其他编译插件继续
+  //buildConfig 编译参数。 具体查看  [docs/command]
+  //cb [error, buildConfig]
   cli.registerHook('build:willBuild', (buildConfig, cb)=>{
-    
     buildConfig.test = "xxx";
     console.log("build will do 2: ", buildConfig)
     cb(null, buildConfig)
   }, 1)
+}
+
+```
+
+### build:doCompile
+
+编译文件
+
+```js
+export.registerPlugin = (cli, options)=>{
+
+  /*
+  Params: 
+    data: {
+      inputFilePath:
+      outputFilePath:
+      fileName
+    }
+    content 编译文件内容
+
+    这中间 data 还可能被赋予其他值：
+      status: 200 编译成功。 没有该值则认为编译失败
+    
+    编译完成后记得修改实际输出文件名
+      data.outputFilePath = xxx;
+  */
+
+  cli.registerHook('build:doCompile', (data, content, cb)=>{
+    cb(error, data, content)
+  })
 }
 
 ```

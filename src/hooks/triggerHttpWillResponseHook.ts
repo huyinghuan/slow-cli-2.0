@@ -4,6 +4,9 @@ import * as _ from 'lodash';
 import * as _hookMap from './map';
 import { route } from './map';
 
+/**
+ * route:willResponse
+ */
 export default function(req, data, responseContent, callback: _allDefined.WillResponseCallBack){
   let queue = _hookMap.HookQueue[_hookMap.route.willResponse] || [];
   let contentFactoryList = [];

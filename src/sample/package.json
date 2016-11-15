@@ -38,6 +38,9 @@
       "setting": {
         "url": "xxxx.xxx"
       }
+    },
+    "copy": {
+      "source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/copy"
     }
   },
   "silky": {

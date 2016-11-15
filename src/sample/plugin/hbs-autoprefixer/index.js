@@ -17,6 +17,7 @@ const isNeedProcess = (pathname)=>{
 
 exports.registerPlugin = function(cli, options){
   _.extend(_DefaultSetting, options.setting);
+  
   cli.registerHook('route:willResponse', (req, data, responseContent, cb)=>{
     let pathname = data.realPath;
     if(!isNeedProcess(pathname)){
@@ -33,5 +34,18 @@ exports.registerPlugin = function(cli, options){
       cb(e)
     }
   }, 1)
+
+  cli.registerHook('build:didBuild', (data, content, cb)=>{
+    if(!/(\.hbs)$/.test(data.inputFilePath) || data.status != 200){
+      return cb(null, data, content)
+    }
+
+    try{
+      cb(null, _htmlAutoprefixer.process(content, _DefaultSetting.options))
+    }catch(e){
+      cb(e)
+    }
+
+  })
 
 }
