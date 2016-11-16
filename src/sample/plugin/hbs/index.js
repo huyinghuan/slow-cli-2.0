@@ -71,7 +71,6 @@ exports.registerPlugin = function(cli, options){
         data.outputFilePath = data.outputFilePath.replace(/(\hbs)$/, "html")
       }
       if(error){
-        console.log(222)
         console.log(error)
       }
       cb(error, data, content);

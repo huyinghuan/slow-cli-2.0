@@ -27,4 +27,5 @@ export function outputFileSync(){
 export function ensureFileSync(){
   return _fs.ensureFileSync.apply(null, arguments)
 }
+
 export {_log as log}
