@@ -3,6 +3,7 @@ import * as _fs from 'fs-extra';
 import * as _path from 'path';
 import * as _init from './init/index';
 import * as _hook from './hooks/index';
+import * as _plugin from './plugin/index';
 import * as _hookMap from './hooks/map';
 import _log from './lib/log';
 
@@ -139,15 +140,13 @@ function normalExecute(){
     _log.success("build success".green)
     
   })
-
-
 }
 
 export default function(){
   let queue = [];
   //加载插件
   queue.push((cb)=>{
-    _hook.scanPlugins('build', cb)
+    _plugin.scanPlugins('build', cb)
   });
 
   //build初始化HOOK

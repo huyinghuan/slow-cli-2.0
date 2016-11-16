@@ -1,11 +1,11 @@
 @my-selector: banner;
 
 @import "@{__global}import-test.less";
-@import "relative/import-rel.less";
+@import "module/relative/import-rel.less";
 // Usage
 .@{my-selector} {
   font-weight: bold;
   line-height: 40px;
   margin: 0 auto;
 }
-@__global: "/css/pub/";
+@__global: "module/pub/";

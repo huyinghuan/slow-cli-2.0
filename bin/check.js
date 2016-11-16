@@ -1,6 +1,7 @@
 "use strict";
 const _init = require('../init');
 const _projectUtils = require('../lib/project');
+const _plugin = require('../plugin/index');
 function default_1(_commander) {
     _commander.command('check')
         .description('检查版本信息和插件信息')
@@ -10,7 +11,7 @@ function default_1(_commander) {
         //检查cli 版本
         _projectUtils.checkCLIVersion();
         // 检查插件版本
-        _projectUtils.checkPluginVersion();
+        _plugin.checkPluginVersion();
     });
 }
 Object.defineProperty(exports, "__esModule", { value: true });

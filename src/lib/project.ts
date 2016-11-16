@@ -5,7 +5,6 @@ import * as _path from 'path';
 
 import getCLIVersion from './getCLIVersion';
 import checkCLIVersion from './checkCLIVersion';
-import checkPluginVersion from './checkPluginVersion';
 
 export function getProjectDirectoryName():string{
   return process.cwd().split(_path.sep).pop();
@@ -13,7 +12,6 @@ export function getProjectDirectoryName():string{
 
 export {getCLIVersion as getCLIVersion}
 export {checkCLIVersion as checkCLIVersion}
-export {checkPluginVersion as checkPluginVersion}
 
 
 

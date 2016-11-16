@@ -8,6 +8,8 @@ export default function(_commander){
   _commander.command('init')
     .description('初始化')
     .option('-p, --pluginListName <value>', '根据插件列表名称获取插件列表')
+    .option('-n, --newPlugin <value>', '新建一个插件脚手架， 自定插件名称')
+
     .action((program)=>{
       
       let queue = []

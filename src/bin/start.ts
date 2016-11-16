@@ -1,7 +1,7 @@
 import * as _init from '../init/index'
 import * as _projectUtils from '../lib/project'
+import * as _utils from '../plugin/index';
 import _app from '../app'
-import * as _hook from '../hooks/index';
 
 export default function(_commander){
   _commander.command('start')
@@ -29,13 +29,10 @@ export default function(_commander){
         //检查cli 版本
         _projectUtils.checkCLIVersion();
         // 检查插件版本
-        _projectUtils.checkPluginVersion();
+        _utils.checkPluginVersion();
       }
-      //加载插件
-      _hook.scanPlugins('route',(error)=>{
-        if(error){return}
-        _app()
-      });
+      //启动http服务
+      _app()
     
-    })
+  })
 }

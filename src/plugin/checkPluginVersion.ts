@@ -1,7 +1,7 @@
-import * as _hooks from '../hooks/index';
 import { getProjectPackageJSON, getPluginConfig } from '../init/index';
 import * as _path from 'path';
 import _fileConfig from '../file-config';
+import _getFullPluginName from './getFullPluginName';
 //检查对比插件版本
 export default function ():boolean{
   //获取插件配置
@@ -17,7 +17,7 @@ export default function ():boolean{
       return
     }
     //获取完整
-    pluginName = _hooks.getFullPluginName(pluginName);
+    pluginName = _getFullPluginName(pluginName);
     pluginList.push(pluginName)
   })
 

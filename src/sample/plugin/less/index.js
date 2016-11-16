@@ -56,4 +56,20 @@ exports.registerPlugin = function(cli, options){
       cb(null, data, content)
     })
   })
+
+  cli.registerHook('build:doCompile', (data, content, cb)=>{
+    let inputFilePath = data.inputFilePath;
+    if(!/(\.less)$/.test(inputFilePath)){
+      return cb(null, data, content)
+    }
+    getCompileContent(inputFilePath, data, (error, data, content)=>{
+      if(data.status == 200){
+        data.outputFilePath = data.outputFilePath.replace(/(\less)$/, "css")
+      }
+      if(error){
+        console.log(error)
+      }
+      cb(error, data, content);
+    })
+  })
 }

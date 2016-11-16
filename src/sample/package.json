@@ -48,6 +48,6 @@
   },
   "silky-build": {
     "outdir": "./build",
-    "ignore": ["node_modules", "(\\/\\.[^/]+)$",  "plugin"]
+    "ignore": ["node_modules", "(\\/\\.[^/]+)$",  "plugin", "(css/module/)"]
   }
 }

@@ -8,6 +8,7 @@ const _ = require('lodash');
 const _hooks = require('./hooks/index');
 const getMime_1 = require('./lib/getMime');
 const _init = require('./init/index');
+const _plugin = require('./plugin/index');
 const startServer = function (app, cli, router) {
     app.use(router);
     let _server = _http.createServer(app);
@@ -126,6 +127,11 @@ exports.default = () => {
             }
         });
     });
-    //启动静态服务器
-    startServer(app, cli, router);
+    _plugin.scanPlugins('route', (error) => {
+        if (error) {
+            return;
+        }
+        //启动静态服务器
+        startServer(app, cli, router);
+    });
 };

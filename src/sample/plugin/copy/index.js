@@ -21,7 +21,7 @@ exports.registerPlugin = function(cli, options){
       if(ex){
         return cb(ex)
       }
-       cli.utils.log(`hook copy ${data.inputFilePath} -> ${data.outputFilePath} `)
+      cli.utils.log(`hook copy ${data.inputFilePath} -> ${data.outputFilePath} `)
       data.hasProcess = true
       cb(null, data)
     });

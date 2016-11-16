@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
-import _registerHook from './registerHook';
-import * as _utils from './utils';
+import _registerHook from '../hooks/registerHook';
+import * as _utils from '../hooks/utils';
 import * as _init from '../init/index';
 import * as _allDefined from '../all';
 import _log from '../lib/log';

@@ -1,5 +1,6 @@
 import * as _init from '../init'
-import * as _projectUtils from '../lib/project'
+import * as _projectUtils from '../lib/project';
+import * as _plugin from '../plugin/index';
 
 export default function(_commander){
   _commander.command('check')
@@ -10,7 +11,7 @@ export default function(_commander){
       //检查cli 版本
       _projectUtils.checkCLIVersion();
       // 检查插件版本
-      _projectUtils.checkPluginVersion();
+      _plugin.checkPluginVersion();
     
     })
 }

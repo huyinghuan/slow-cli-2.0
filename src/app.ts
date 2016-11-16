@@ -10,6 +10,7 @@ import * as _hooks from './hooks/index';
 import * as _hooksMap from './hooks/map';
 import _getMime from './lib/getMime';
 import * as _init from './init/index'
+import * as _plugin from './plugin/index';
 
 const startServer = function(app:any, cli:any, router:_express.Router){
   app.use(router)
@@ -139,6 +140,11 @@ export default ()=>{
     })
   })
   
-  //启动静态服务器
-  startServer(app, cli, router)
+  
+
+  _plugin.scanPlugins('route',(error)=>{
+    if(error){return}
+    //启动静态服务器
+    startServer(app, cli, router)
+  });
 }

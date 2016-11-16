@@ -1,8 +1,8 @@
 "use strict";
 const _init = require('../init/index');
 const _projectUtils = require('../lib/project');
+const _utils = require('../plugin/index');
 const app_1 = require('../app');
-const _hook = require('../hooks/index');
 function default_1(_commander) {
     _commander.command('start')
         .description('启动http服务')
@@ -27,15 +27,10 @@ function default_1(_commander) {
             //检查cli 版本
             _projectUtils.checkCLIVersion();
             // 检查插件版本
-            _projectUtils.checkPluginVersion();
+            _utils.checkPluginVersion();
         }
-        //加载插件
-        _hook.scanPlugins('route', (error) => {
-            if (error) {
-                return;
-            }
-            app_1.default();
-        });
+        //启动http服务
+        app_1.default();
     });
 }
 Object.defineProperty(exports, "__esModule", { value: true });

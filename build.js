@@ -4,6 +4,7 @@ const _fs = require('fs-extra');
 const _path = require('path');
 const _init = require('./init/index');
 const _hook = require('./hooks/index');
+const _plugin = require('./plugin/index');
 const log_1 = require('./lib/log');
 const getAllFileInDir_1 = require('./lib/getAllFileInDir');
 const _workspace = process.cwd();
@@ -124,7 +125,7 @@ function default_1() {
     let queue = [];
     //加载插件
     queue.push((cb) => {
-        _hook.scanPlugins('build', cb);
+        _plugin.scanPlugins('build', cb);
     });
     //build初始化HOOK
     queue.push((cb) => { _hook.triggerBuildInitHook(cb); });

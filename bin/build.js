@@ -2,6 +2,7 @@
 const _init = require('../init/index');
 const build_1 = require('../build');
 const _projectUtils = require('../lib/project');
+const _plugin = require('../plugin/index');
 function default_1(_commander) {
     _commander.command('build')
         .description('编译')
@@ -12,7 +13,7 @@ function default_1(_commander) {
         //读取用户自定义配置
         _init.prepareUserEnv();
         //build 强制进行版本检查
-        let checkResult = _projectUtils.checkCLIVersion() && _projectUtils.checkPluginVersion();
+        let checkResult = _projectUtils.checkCLIVersion() && _plugin.checkPluginVersion();
         //如没有强制build项目，那么如果版本检查没通过则结束build
         if (!program.force && !checkResult) {
             process.exit(1);

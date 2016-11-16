@@ -8,7 +8,7 @@ import _loadPlugin from './loadPlugin';
 /**
  * 扫描Hooks插件, 仅加载指定hook
 */
-export function scanPlugins(hookType:string, cb){
+export default function scanPlugins(hookType:string, cb){
   let pluginsConfig = _init.getPluginConfig();
   if(!pluginsConfig){
     console.log(`没有配置任何插件`.red)
