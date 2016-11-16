@@ -16,11 +16,11 @@ require('colors');
 
 const versionDesc = _projectUtils.getCLIVersion();
 
+console.log(`${_fileConfig.infinity} version is ${versionDesc}`.green)
+
 _start(_commander);
 _init(_commander);
 _check(_commander);
 _build(_commander);
 
 _commander.version(versionDesc).parse(process.argv);
-
-console.log(`${_fileConfig.infinity} version is ${versionDesc}`.green)

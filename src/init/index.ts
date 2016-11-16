@@ -38,7 +38,7 @@ export function prepareUserEnv(){
 
 
 export function setBuildParams(userInputAgruments){
-  _.extend((global as any).__CLI.buildConfig, userInputAgruments)
+  _.extend((global as any).__CLI.buildConfig, userInputAgruments);
 }
 
 export function setStartParams(userInputAgruments){

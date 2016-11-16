@@ -1,9 +1,10 @@
 "use strict";
-const _init = require('./init/index');
-const _hook = require('./hooks/index');
 const _async = require('async');
 const _fs = require('fs-extra');
 const _path = require('path');
+const _init = require('./init/index');
+const _hook = require('./hooks/index');
+const log_1 = require('./lib/log');
 const getAllFileInDir_1 = require('./lib/getAllFileInDir');
 const _workspace = process.cwd();
 /**
@@ -15,7 +16,6 @@ const _workspace = process.cwd();
  */
 function shouldInclude(filename, filepath) {
     const _buildConfig = _init.getBuildConfig();
-    //console.log(filepath, _buildConfig.outdir, filepath.indexOf(_buildConfig.outdir))
     //忽略build文件夹
     if (filepath.indexOf(_buildConfig.outdir) != -1) {
         return false;
@@ -32,7 +32,7 @@ function shouldInclude(filename, filepath) {
 /**
  * 编译单个文件
  * 触发发各类hook，doCompile, didCompile*/
-function compileFile(data, next) {
+function compileFile(buildConfig, data, next) {
     let queue = [];
     //编译工具编译
     queue.push((cb) => {
@@ -48,7 +48,7 @@ function compileFile(data, next) {
      */
     queue.push((data, content, cb) => {
         if (content) {
-            return _fs.writeFile(data.outputFilePath, content, (error) => {
+            return _fs.outputFile(data.outputFilePath, content, (error) => {
                 cb(error);
             });
         }
@@ -59,7 +59,10 @@ function compileFile(data, next) {
             if (processResult.hasProcess) {
                 return cb(null);
             }
-            _fs.copy(processResult.inputFilePath, processResult.outputFilePath, (error) => { cb(error); });
+            _fs.copy(processResult.inputFilePath, processResult.outputFilePath, (error) => {
+                log_1.default(`Copy ${processResult.inputFilePath} -> ${processResult.outputFilePath}`);
+                cb(error);
+            });
         });
     });
     _async.waterfall(queue, (error) => next(error));
@@ -75,10 +78,10 @@ function compilerFileQueue(buildConfig, fileQueue, next) {
     _async.map(fileQueue, (fileItem, cb) => {
         let data = {
             inputFilePath: fileItem.filePath,
-            outputFilePath: _path.join(process.cwd(), buildConfig.outdir, fileItem.relativeDir, fileItem.fileName),
+            outputFilePath: _path.join(buildConfig.outdir, fileItem.relativeDir, fileItem.fileName),
             fileName: fileItem.fileName
         };
-        compileFile(data, cb);
+        compileFile(buildConfig, data, cb);
     }, (error, result) => {
         next(error, buildConfig);
     });
@@ -104,11 +107,17 @@ function normalExecute() {
     });
     //endBuild 打包压缩 发送
     queue.push((next) => {
-        console.log('build end!');
+        log_1.default('build end!');
         next(null);
     });
     _async.waterfall(queue, (error) => {
-        console.log(error);
+        if (error) {
+            log_1.default.error(error);
+            log_1.default.error("build fail".red);
+            _hook.triggerBuildErrorHook(error);
+            return;
+        }
+        log_1.default.success("build success".green);
     });
 }
 function default_1() {
@@ -121,8 +130,8 @@ function default_1() {
     queue.push((cb) => { _hook.triggerBuildInitHook(cb); });
     _async.waterfall(queue, (error, stop) => {
         if (error) {
-            console.log(error);
-            console.log('build 初始化失败'.red);
+            log_1.default(error);
+            log_1.default('build 初始化失败'.red);
             _hook.triggerBuildErrorHook(error);
             return;
         }

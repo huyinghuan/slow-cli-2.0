@@ -27,9 +27,7 @@ const getCompileContent = (realFilePath, data, cb)=>{
     data.status = 404
     return cb(null, data, null)
   }
-
   let fileContent = _fs.readFileSync(realFilePath, {encoding: 'utf8'})
-  
   try{
     let template = _handlebars.compile(fileContent);
     //编译成功，标记状态码
@@ -71,6 +69,10 @@ exports.registerPlugin = function(cli, options){
     getCompileContent(inputFilePath, data, (error, data, content)=>{
       if(data.status == 200){
         data.outputFilePath = data.outputFilePath.replace(/(\hbs)$/, "html")
+      }
+      if(error){
+        console.log(222)
+        console.log(error)
       }
       cb(error, data, content);
     })

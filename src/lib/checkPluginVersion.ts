@@ -12,6 +12,9 @@ export default function ():boolean{
     if(pluginConfig[pluginName] && pluginConfig[pluginName].source){
       console.log(`警告: ${pluginName} 处于开发模式,跳过版本对比`.yellow);
       return
+    }else if(pluginConfig[pluginName] == false){
+      console.log(`警告: ${pluginName} 已被禁用`.yellow);
+      return
     }
     //获取完整
     pluginName = _hooks.getFullPluginName(pluginName);

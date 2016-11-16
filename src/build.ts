@@ -1,9 +1,11 @@
-import * as _init from './init/index';
-import * as _hook from './hooks/index';
-import * as _hookMap from './hooks/map';
 import * as _async from 'async';
 import * as _fs from 'fs-extra';
 import * as _path from 'path';
+import * as _init from './init/index';
+import * as _hook from './hooks/index';
+import * as _hookMap from './hooks/map';
+import _log from './lib/log';
+
 
 import _getAllFileInDir from './lib/getAllFileInDir';
 import { ProcessFile } from './all';
@@ -19,7 +21,6 @@ const _workspace = process.cwd();
  */
 function shouldInclude(filename, filepath):boolean{
   const _buildConfig = _init.getBuildConfig();
-  //console.log(filepath, _buildConfig.outdir, filepath.indexOf(_buildConfig.outdir))
   //忽略build文件夹
   if(filepath.indexOf(_buildConfig.outdir) != -1){
     return false
@@ -38,7 +39,7 @@ function shouldInclude(filename, filepath):boolean{
 /**
  * 编译单个文件
  * 触发发各类hook，doCompile, didCompile*/
-function compileFile(data, next){
+function compileFile(buildConfig, data, next){
   let queue = [];
 
   //编译工具编译
@@ -57,7 +58,7 @@ function compileFile(data, next){
    */
   queue.push((data, content, cb)=>{
     if(content){
-      return _fs.writeFile(data.outputFilePath, content, (error)=>{
+      return _fs.outputFile(data.outputFilePath, content, (error)=>{
         cb(error)
       })
     }
@@ -67,9 +68,11 @@ function compileFile(data, next){
       if(processResult.hasProcess){
         return cb(null)
       }
-
-      _fs.copy(processResult.inputFilePath, processResult.outputFilePath, (error)=> {cb(error)})
-
+      
+     _fs.copy(processResult.inputFilePath, processResult.outputFilePath, (error)=> {
+       _log(`Copy ${processResult.inputFilePath} -> ${processResult.outputFilePath}`);
+       cb(error)
+      })
     })
   })
 
@@ -88,10 +91,10 @@ function compilerFileQueue(buildConfig, fileQueue, next){
   _async.map(fileQueue, (fileItem:any, cb)=>{
     let data = {
       inputFilePath: fileItem.filePath,
-      outputFilePath: _path.join(process.cwd(), buildConfig.outdir, fileItem.relativeDir, fileItem.fileName),
+      outputFilePath: _path.join(buildConfig.outdir, fileItem.relativeDir, fileItem.fileName),
       fileName: fileItem.fileName
     }
-    compileFile(data, cb)
+    compileFile(buildConfig, data, cb)
   }, (error, result)=>{
     next(error, buildConfig)
   })
@@ -122,12 +125,19 @@ function normalExecute(){
 
   //endBuild 打包压缩 发送
   queue.push((next)=>{
-    console.log('build end!')
+    _log('build end!')
     next(null)
   })
-  _async.waterfall(queue, (error)=>{
-    console.log(error)
 
+  _async.waterfall(queue, (error)=>{
+    if(error){
+      _log.error(error);
+      _log.error("build fail".red);
+      _hook.triggerBuildErrorHook(error);
+      return
+    }
+    _log.success("build success".green)
+    
   })
 
 
@@ -145,8 +155,8 @@ export default function(){
 
   _async.waterfall(queue, (error, stop)=>{
     if(error){
-      console.log(error);
-      console.log('build 初始化失败'.red);
+      _log(error);
+      _log('build 初始化失败'.red);
       _hook.triggerBuildErrorHook(error);
       return;
     }

@@ -19,7 +19,7 @@ const getAllFileInDir = function(dir:string, fileQueue:Array<_allDefine.ProcessF
       return
     }
     if(_fs.statSync(filePath).isDirectory()){
-      getAllFileInDir(filePath, fileQueue, _path.join(relativeDir, fileName),shouldeInclude)
+      getAllFileInDir(filePath, fileQueue, _path.join(relativeDir, fileName), shouldeInclude)
     }else{
       fileQueue.push({filePath:filePath,fileName:fileName, relativeDir:relativeDir})
     }

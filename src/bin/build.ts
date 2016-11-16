@@ -8,6 +8,7 @@ export default function(_commander){
     .description('编译')
     .option('-o, --outdir <value>', '指定build文件夹')
     .option('-f, --force', '强制进行build，哪怕版本检查没通过')
+    .option('-i, --ignorMsg', '忽略不重要的log日志')
     .action((program)=>{
       //读取用户自定义配置
       _init.prepareUserEnv();
@@ -21,7 +22,7 @@ export default function(_commander){
       }
       //运行时参数记录
       let userInputArgs:any = {}
-      
+
       //制定编译输出目录
       if(program.outdir){
         userInputArgs.outdir = program.outdir
