@@ -71,7 +71,7 @@ function compileFile(buildConfig, data, next){
       }
       
      _fs.copy(processResult.inputFilePath, processResult.outputFilePath, (error)=> {
-       _log(`Copy ${processResult.inputFilePath} -> ${processResult.outputFilePath}`);
+       _log.info(`Copy ${processResult.inputFilePath} -> ${processResult.outputFilePath}`);
        cb(error)
       })
     })
@@ -113,7 +113,7 @@ function normalExecute(){
     _hook.triggerBuildWillDoHook(buildConfig, next)
   })
 
-  //处理文件队列
+  //处理文件队列 doCompile
   queue.push((buildConfig, next)=>{
     //编译文件
     compilerFileQueue(buildConfig, fileQueue, next)
@@ -126,7 +126,7 @@ function normalExecute(){
 
   //endBuild 打包压缩 发送
   queue.push((next)=>{
-    _log('build end!')
+    _log.info('build end!')
     next(null)
   })
 
@@ -154,8 +154,8 @@ export default function(){
 
   _async.waterfall(queue, (error, stop)=>{
     if(error){
-      _log(error);
-      _log('build 初始化失败'.red);
+      _log.error(error);
+      _log.fail('build 初始化失败'.red);
       _hook.triggerBuildErrorHook(error);
       return;
     }

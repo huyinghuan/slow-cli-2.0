@@ -3,12 +3,15 @@ const _init = require('../init/index');
 const build_1 = require('../build');
 const _projectUtils = require('../lib/project');
 const _plugin = require('../plugin/index');
+const extraParamsParse_1 = require('./extraParamsParse');
+const log_1 = require('../lib/log');
 function default_1(_commander) {
     _commander.command('build')
         .description('编译')
         .option('-o, --outdir <value>', '指定build文件夹')
         .option('-f, --force', '强制进行build，哪怕版本检查没通过')
-        .option('-i, --ignorMsg', '忽略不重要的log日志')
+        .option('-l, --log <value>', 'log日志,( 0[defaul]: show all; 1: show error, fail; 2: show error, fail, warn)', (value) => { log_1.default.setLevel(value); })
+        .option('-A, --additional <items>', '额外的参数，格式 -A A=1[,B=xxx]', extraParamsParse_1.default)
         .action((program) => {
         //读取用户自定义配置
         _init.prepareUserEnv();
@@ -26,6 +29,9 @@ function default_1(_commander) {
         }
         //更新全局变量下的编译参数。
         _init.setBuildParams(userInputArgs);
+        if (program.additional) {
+            _init.setBuildParams(program.additional);
+        }
         //检查编译参数
         if (!_init.checkBuildArgs()) {
             return process.exit(1);

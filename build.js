@@ -61,7 +61,7 @@ function compileFile(buildConfig, data, next) {
                 return cb(null);
             }
             _fs.copy(processResult.inputFilePath, processResult.outputFilePath, (error) => {
-                log_1.default(`Copy ${processResult.inputFilePath} -> ${processResult.outputFilePath}`);
+                log_1.default.info(`Copy ${processResult.inputFilePath} -> ${processResult.outputFilePath}`);
                 cb(error);
             });
         });
@@ -97,7 +97,7 @@ function normalExecute() {
     queue.push((next) => {
         _hook.triggerBuildWillDoHook(buildConfig, next);
     });
-    //处理文件队列
+    //处理文件队列 doCompile
     queue.push((buildConfig, next) => {
         //编译文件
         compilerFileQueue(buildConfig, fileQueue, next);
@@ -108,7 +108,7 @@ function normalExecute() {
     });
     //endBuild 打包压缩 发送
     queue.push((next) => {
-        log_1.default('build end!');
+        log_1.default.info('build end!');
         next(null);
     });
     _async.waterfall(queue, (error) => {
@@ -131,8 +131,8 @@ function default_1() {
     queue.push((cb) => { _hook.triggerBuildInitHook(cb); });
     _async.waterfall(queue, (error, stop) => {
         if (error) {
-            log_1.default(error);
-            log_1.default('build 初始化失败'.red);
+            log_1.default.error(error);
+            log_1.default.fail('build 初始化失败'.red);
             _hook.triggerBuildErrorHook(error);
             return;
         }

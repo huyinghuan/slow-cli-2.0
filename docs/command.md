@@ -13,6 +13,14 @@ For User
 e.g.: silky init -p web
 ```
 
+## 通用参数
+
+```shell
+-A key=value[,key2=value2]
+```
+
+额外的环境变量导入
+
 ## start
 
 启动静态服务器

@@ -32,4 +32,8 @@ exports.registerPlugin = function(cli, options){
       .catch((error)=>{cb(error);})
   }, 1)
 
+  cli.registerHook('build:didComplie', ()=>{
+
+  });
+
 }

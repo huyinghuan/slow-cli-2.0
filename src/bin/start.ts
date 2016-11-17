@@ -2,12 +2,16 @@ import * as _init from '../init/index'
 import * as _projectUtils from '../lib/project'
 import * as _utils from '../plugin/index';
 import _app from '../app'
+import _extraParamsParse from './extraParamsParse'
+import _log from '../lib/log';
 
 export default function(_commander){
   _commander.command('start')
     .description('启动http服务')
     .option('-p, --port <n>', '指定运行端口')
     .option('-c, --check', '检测运行版本，和插件版本')
+    .option('-l, --log <value>', 'log日志,( 0[defaul]: show all; 1: show error, fail; 2: show error, fail, warn)',(value)=>{_log.setLevel(value)})
+    .option('-A, --additional <items>', '额外的参数，格式 -A A=1[,B=xxx]', _extraParamsParse)
     .action((program)=>{
       //读取用户自定义配置
       _init.prepareUserEnv();
@@ -20,6 +24,11 @@ export default function(_commander){
       }
       //设置用户自定义启动参数
       _init.setStartParams(userInputArgs)
+
+      if(program.additional){
+         _init.setBuildParams(program.additional)
+      }
+      
       //检查启动参数是否合法
       if(!_init.checkStartArgs()){
         process.exit(1)
