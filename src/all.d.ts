@@ -48,6 +48,9 @@ export interface BuildDoCompileCallback{
   (error: Object, data, content)
 }
 
+export interface BuildEndCallback{
+  (error: Object, data)
+}
 
 export interface BuildDidCompileCallback{
   (error: Object, data, content)

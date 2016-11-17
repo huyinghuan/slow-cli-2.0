@@ -102,12 +102,11 @@ function normalExecute() {
     });
     //didBuild 
     queue.push((buildConfig, next) => {
-        next(null);
+        next(null, buildConfig);
     });
     //endBuild gzip 发送
-    queue.push((next) => {
-        log_1.default.info('build end!');
-        next(null);
+    queue.push((buildConfig, next) => {
+        _hook.triggerBuildEndHook(buildConfig, next);
     });
     _async.waterfall(queue, (error) => {
         if (error) {

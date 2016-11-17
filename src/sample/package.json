@@ -35,6 +35,9 @@
       "setting": {
         "url": "xxxx.xxx"
       }
+    },
+    "tar-send": {
+      "source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/tar-send"
     }
   },
   "silky": {

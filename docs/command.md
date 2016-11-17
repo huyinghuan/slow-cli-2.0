@@ -2,7 +2,10 @@
 
 For User.
 
-### start （docs/command-start.md）
-### build （docs/command-build.md）
-### init （docs/command-init.md）
-### check （docs/command-check.md）
+[start](command-start.md)
+
+[build](command-build.md)
+
+[init](command-init.md)
+
+[check](command-check.md)

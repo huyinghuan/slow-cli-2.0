@@ -9,7 +9,7 @@ import _triggerBuildWillDoHook from './triggerBuildWillDoHook';
 import _triggerBuildDoCompileHook from './triggerBuildDoCompileHook';
 import _triggerBuildDidCompileHook from './triggerBuildDidCompileHook';
 import _triggerBuildDoNothingHook from './triggerBuildDoNothingHook';
-
+import _triggerBuildEndHook from './triggerBuildEndHook';
 export {
   _triggerHttpCompilerHook as triggerHttpCompilerHook, 
   _triggerHttpRouterHook as triggerHttpRouterHook,
@@ -21,5 +21,6 @@ export {
   _triggerBuildWillDoHook as triggerBuildWillDoHook,
   _triggerBuildDoCompileHook as triggerBuildDoCompileHook,
   _triggerBuildDidCompileHook as triggerBuildDidCompileHook,
-  _triggerBuildDoNothingHook as triggerBuildDoNothingHook
+  _triggerBuildDoNothingHook as triggerBuildDoNothingHook,
+  _triggerBuildEndHook as triggerBuildEndHook
 } 
