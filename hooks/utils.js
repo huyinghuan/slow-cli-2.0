@@ -2,8 +2,6 @@
 const _minimatch = require('minimatch');
 const _ = require('lodash');
 const _fs = require('fs-extra');
-const log_1 = require('../lib/log');
-exports.log = log_1.default;
 /**
  * 文件后缀匹配
  */

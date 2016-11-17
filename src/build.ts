@@ -69,11 +69,8 @@ function compileFile(buildConfig, data, next){
       if(processResult.hasProcess){
         return cb(null)
       }
-      
-     _fs.copy(processResult.inputFilePath, processResult.outputFilePath, (error)=> {
-       _log.info(`Copy ${processResult.inputFilePath} -> ${processResult.outputFilePath}`);
-       cb(error)
-      })
+      _log.info(`忽略文件: ${processResult.inputFilePath}`);
+      cb(null)
     })
   })
 
@@ -113,7 +110,7 @@ function normalExecute(){
     _hook.triggerBuildWillDoHook(buildConfig, next)
   })
 
-  //处理文件队列 doCompile
+  //处理文件队列 （doCompile，didCompile，doNothing) in there
   queue.push((buildConfig, next)=>{
     //编译文件
     compilerFileQueue(buildConfig, fileQueue, next)
@@ -124,7 +121,7 @@ function normalExecute(){
     next(null)
   })
 
-  //endBuild 打包压缩 发送
+  //endBuild gzip 发送
   queue.push((next)=>{
     _log.info('build end!')
     next(null)

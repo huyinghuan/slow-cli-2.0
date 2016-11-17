@@ -21,12 +21,15 @@ function loadPlugin(hookType, pluginName, pluginPath, options, cb) {
                 registerHook: (hookName, callback, priority) => {
                     if (hookName.indexOf(hookType) == 0 || hookType == 'all') {
                         registerHook_1.default(hookName, callback, priority);
-                        log_1.default.success(`加载插件${pluginName}'s hook ${hookName} 成功`.blue);
+                        if (pluginName) {
+                            log_1.default.success(`加载插件${pluginName}'s hook ${hookName} 成功`.blue);
+                        }
                         return;
                     }
                 },
                 options: _init.getFullConfig(),
-                utils: _utils //一些默认工具函数，大多插件可以使用得到
+                utils: _utils,
+                log: log_1.default
             }, options);
         }
         cb(null);

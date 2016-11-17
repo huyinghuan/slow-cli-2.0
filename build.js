@@ -60,10 +60,8 @@ function compileFile(buildConfig, data, next) {
             if (processResult.hasProcess) {
                 return cb(null);
             }
-            _fs.copy(processResult.inputFilePath, processResult.outputFilePath, (error) => {
-                log_1.default.info(`Copy ${processResult.inputFilePath} -> ${processResult.outputFilePath}`);
-                cb(error);
-            });
+            log_1.default.info(`忽略文件: ${processResult.inputFilePath}`);
+            cb(null);
         });
     });
     _async.waterfall(queue, (error) => next(error));
@@ -97,7 +95,7 @@ function normalExecute() {
     queue.push((next) => {
         _hook.triggerBuildWillDoHook(buildConfig, next);
     });
-    //处理文件队列 doCompile
+    //处理文件队列 （doCompile，didCompile，doNothing) in there
     queue.push((buildConfig, next) => {
         //编译文件
         compilerFileQueue(buildConfig, fileQueue, next);
@@ -106,7 +104,7 @@ function normalExecute() {
     queue.push((buildConfig, next) => {
         next(null);
     });
-    //endBuild 打包压缩 发送
+    //endBuild gzip 发送
     queue.push((next) => {
         log_1.default.info('build end!');
         next(null);

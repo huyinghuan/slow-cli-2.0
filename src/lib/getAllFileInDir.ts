@@ -11,6 +11,9 @@ import * as _allDefine from '../all.d';
  */
 const getAllFileInDir = function(dir:string, fileQueue:Array<_allDefine.ProcessFile>, relativeDir: string, shouldeInclude:Function):Array<_allDefine.ProcessFile>{
   fileQueue = fileQueue || [];
+  if(!_fs.existsSync(dir)){
+    return []
+  }
   let files = _fs.readdirSync(dir)
   files.forEach((fileName)=>{
     let filePath = _path.join(dir, fileName);

@@ -2,6 +2,9 @@ export default function(value){
   if(!value){
     return {}
   }
+  if(/(\,|\=)/.test(value)){
+    return {extra: value}
+  }
   let arr = value.split(',')
   let params = {}
   arr.forEach((item)=>{

@@ -32,8 +32,19 @@ exports.registerPlugin = function(cli, options){
       .catch((error)=>{cb(error);})
   }, 1)
 
-  cli.registerHook('build:didComplie', ()=>{
-
-  });
+  cli.registerHook('build:doCompile', (data, content, cb)=>{
+    let inputFilePath = data.inputFilePath;
+    if(!/(\.less)$/.test(inputFilePath)){
+      return cb(null, data, content)
+    }
+    cleaner.process(content)
+      .then((result)=>{
+        result.warnings().forEach((warn)=>{
+          cli.log.warn(warn.toString())
+        });
+        cb(null, data, result.css)
+      })
+      .catch((error)=>{cb(error);})
+  }, 50)
 
 }

@@ -5,6 +5,20 @@ const file_config_1 = require('../file-config');
 const getFullPluginName_1 = require('./getFullPluginName');
 const _init = require('../init/index');
 const loadPlugin_1 = require('./loadPlugin');
+const getAllFileInDir_1 = require('../lib/getAllFileInDir');
+//扫描加载内置插件
+function scanDefaultPlugins(hookType, cb) {
+    let hookTypePluginDir = _path.join(__dirname, "default-plugin", hookType);
+    let pluginArray = getAllFileInDir_1.default(hookTypePluginDir, [], ".", (fileName, filePath) => { return true; });
+    _async.map(pluginArray, (pluginItem, next) => {
+        loadPlugin_1.default(hookType, "", pluginItem.filePath, {}, next);
+    }, (error, result) => {
+        if (error) {
+            return console.log(error);
+        }
+        cb(null);
+    });
+}
 /**
  * 扫描Hooks插件, 仅加载指定hook
 */
@@ -27,7 +41,10 @@ function scanPlugins(hookType, cb) {
         let pluginPath = pluginsConfig[pluginName].source || _path.join(file_config_1.default.pluginDir, getFullPluginName_1.default(pluginName));
         loadPlugin_1.default(hookType, pluginName, pluginPath, pluginsConfig[pluginName], next);
     }, (error) => {
-        cb(error);
+        if (error) {
+            return cb(error);
+        }
+        scanDefaultPlugins(hookType, cb);
     });
 }
 Object.defineProperty(exports, "__esModule", { value: true });

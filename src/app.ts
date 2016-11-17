@@ -124,23 +124,12 @@ export default ()=>{
 
   //如果其他编译hook没有完成编译，那么则使用默认文件发送
   router.get('*', function(req, resp, next){
-    let path = req.path;
-    if(path == '/'){
-      path = `/${globalCLIConfig.index}`;
-    }
-    let responseFilePath =  _path.join(process.cwd(), _.compact(path.split('/')).join(_path.sep))
-    if(_fs.existsSync(responseFilePath)){
-      resp.sendFile(responseFilePath)
-      return;
-    }
     _hooks.triggerHttpNoFoundHook(req, resp, (hasProcess)=>{
       if(!hasProcess){
         resp.sendStatus(404);
       }
     })
   })
-  
-  
 
   _plugin.scanPlugins('route',(error)=>{
     if(error){return}

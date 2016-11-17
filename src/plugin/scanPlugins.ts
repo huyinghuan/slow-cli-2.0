@@ -4,6 +4,22 @@ import _config from '../file-config';
 import _getFullPluginName from './getFullPluginName';
 import * as _init from '../init/index';
 import _loadPlugin from './loadPlugin';
+import _getAllFileInDir from '../lib/getAllFileInDir';
+import { plugin } from '../hooks/map';
+
+//扫描加载内置插件
+function scanDefaultPlugins(hookType:string, cb){
+  let hookTypePluginDir = _path.join(__dirname, "default-plugin", hookType)
+  let pluginArray = _getAllFileInDir(hookTypePluginDir, [], ".", (fileName, filePath)=> {return true});
+  _async.map(pluginArray, (pluginItem, next)=>{
+    _loadPlugin(hookType, "", pluginItem.filePath, {}, next)
+  }, (error, result)=>{
+    if(error){
+      return console.log(error)
+    }
+    cb(null)
+  })
+}
 
 /**
  * 扫描Hooks插件, 仅加载指定hook
@@ -28,6 +44,9 @@ export default function scanPlugins(hookType:string, cb){
     let pluginPath = pluginsConfig[pluginName].source || _path.join(_config.pluginDir, _getFullPluginName(pluginName)); 
     _loadPlugin(hookType, pluginName, pluginPath, pluginsConfig[pluginName], next)
   }, (error)=>{
-    cb(error)
+    if(error){
+      return  cb(error)
+    }
+    scanDefaultPlugins(hookType, cb)
   })
 }

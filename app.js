@@ -2,9 +2,6 @@
 const _express = require('express');
 const _http = require('http');
 const _async = require('async');
-const _fs = require('fs');
-const _path = require('path');
-const _ = require('lodash');
 const _hooks = require('./hooks/index');
 const getMime_1 = require('./lib/getMime');
 const _init = require('./init/index');
@@ -112,15 +109,6 @@ exports.default = () => {
     });
     //如果其他编译hook没有完成编译，那么则使用默认文件发送
     router.get('*', function (req, resp, next) {
-        let path = req.path;
-        if (path == '/') {
-            path = `/${globalCLIConfig.index}`;
-        }
-        let responseFilePath = _path.join(process.cwd(), _.compact(path.split('/')).join(_path.sep));
-        if (_fs.existsSync(responseFilePath)) {
-            resp.sendFile(responseFilePath);
-            return;
-        }
         _hooks.triggerHttpNoFoundHook(req, resp, (hasProcess) => {
             if (!hasProcess) {
                 resp.sendStatus(404);

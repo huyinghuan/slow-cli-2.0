@@ -4,7 +4,9 @@
 
 ```js
 
-build:initial > build:willBuild >  build:doCompile > build:didCompile > build:didBuild > ?build:doNothing > build:end
+build:initial > build:willBuild >  build:doCompile > build:didCompile >  ?build:doNothing > build:didBuild > build:end
+
+----------------------- 以上任意一个步骤发生错误将处罚 [build:error] -----------------------
 
 ```
 
@@ -18,8 +20,8 @@ build:initial > build:willBuild >  build:doCompile > build:didCompile > build:di
 const priority = 1;
 
 /**
-*cli {registerHook:registerHook, __CLI: global.__CLI 【全局配置】}
-*options 插件配置
+*cli 见文档 (registerPlugin 中 cli 参数说明)[docs/registerHook-params-cli.md]
+*options 见文档 (registerPlugin 中 options 参数说明)[docs/registerHook-params-options.md]
 */
 export.registerPlugin = (cli, options)=>{
   
@@ -27,7 +29,7 @@ export.registerPlugin = (cli, options)=>{
   // stop true 停止其他插件的编译介入， false， 其他编译插件继续
   cli.registerHook('build:initial', (cb)=>{
     cb(null, false)
-  }, priority) //权重，默认为1， 越大排越前，可以忽略
+  }, priority) //权重，默认为1， 越小排越前，可以忽略
 }
 
 ```
@@ -35,7 +37,6 @@ export.registerPlugin = (cli, options)=>{
 ### build:willBuild
 
 即将要编译了。可以增加更多的编译参数或者修改编译参数
-
 
 ```js
 
