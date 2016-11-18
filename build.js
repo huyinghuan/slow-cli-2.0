@@ -100,10 +100,6 @@ function normalExecute() {
         //编译文件
         compilerFileQueue(buildConfig, fileQueue, next);
     });
-    //didBuild 
-    queue.push((buildConfig, next) => {
-        next(null, buildConfig);
-    });
     //endBuild gzip 发送
     queue.push((buildConfig, next) => {
         _hook.triggerBuildEndHook(buildConfig, next);

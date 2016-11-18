@@ -116,16 +116,11 @@ function normalExecute(){
     compilerFileQueue(buildConfig, fileQueue, next)
   })
 
-  //didBuild 
-  queue.push((buildConfig, next)=>{
-    next(null, buildConfig)
-  })
-
   //endBuild gzip 发送
   queue.push((buildConfig, next)=>{
     _hook.triggerBuildEndHook(buildConfig, next)
   })
-
+  
   _async.waterfall(queue, (error)=>{
     if(error){
       _log.error(error);

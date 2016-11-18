@@ -9,9 +9,17 @@ import { plugin } from '../hooks/map';
 
 //扫描加载内置插件
 function scanDefaultPlugins(hookType:string, cb){
+  //指定类型的hook
   let hookTypePluginDir = _path.join(__dirname, "default-plugin", hookType)
   let pluginArray = _getAllFileInDir(hookTypePluginDir, [], ".", (fileName, filePath)=> {return true});
-  _async.map(pluginArray, (pluginItem, next)=>{
+  //通用的类型的hook
+  let commonHookTypePlugiDir = _path.join(__dirname, "default-plugin", 'commom')
+  let commonPluginArray = _getAllFileInDir(commonHookTypePlugiDir, [], ".", (fileName, filePath)=> {return true});
+
+  let allPlugin = pluginArray.concat(commonPluginArray)
+
+
+  _async.map(allPlugin, (pluginItem, next)=>{
     _loadPlugin(hookType, "", pluginItem.filePath, {}, next)
   }, (error, result)=>{
     if(error){

@@ -35,17 +35,15 @@ exports.registerPlugin = function(cli, options){
     }
   }, 1)
 
-  // cli.registerHook('build:didBuild', (data, content, cb)=>{
-  //   if(!/(\.hbs)$/.test(data.inputFilePath) || data.status != 200){
-  //     return cb(null, data, content)
-  //   }
-
-  //   try{
-  //     cb(null, _htmlAutoprefixer.process(content, _DefaultSetting.options))
-  //   }catch(e){
-  //     cb(e)
-  //   }
-
-  // })
+  cli.registerHook('build:didCompile', (data, content, cb)=>{
+    if(!/(\.html)$/.test(data.outputFilePath) || !content){
+      return cb(null, data, content)
+    }
+    try{
+      cb(null, data, _htmlAutoprefixer.process(content, _DefaultSetting.options))
+    }catch(e){
+      cb(e)
+    }
+  }, 1)
 
 }

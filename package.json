@@ -1,8 +1,10 @@
 {
-  "name": "slow-cli",
+  "name": "slow-cli2",
   "version": "2.0.0",
   "description": "",
-  "main": "lib/index.js",
+  "bin":{
+    "slow2": "./bin/index.js"
+  },
   "dependencies": {
     "async": "^2.1.2",
     "colors": "^1.1.2",
@@ -12,6 +14,9 @@
     "lodash": "^4.16.4",
     "mime": "^1.3.4",
     "minimatch": "^3.0.3"
+  },
+  "engines": {
+    "node": ">= 4.0.0"
   },
   "devDependencies": {
     "@types/async": "^2.0.32",

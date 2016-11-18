@@ -8,9 +8,14 @@ const loadPlugin_1 = require('./loadPlugin');
 const getAllFileInDir_1 = require('../lib/getAllFileInDir');
 //扫描加载内置插件
 function scanDefaultPlugins(hookType, cb) {
+    //指定类型的hook
     let hookTypePluginDir = _path.join(__dirname, "default-plugin", hookType);
     let pluginArray = getAllFileInDir_1.default(hookTypePluginDir, [], ".", (fileName, filePath) => { return true; });
-    _async.map(pluginArray, (pluginItem, next) => {
+    //通用的类型的hook
+    let commonHookTypePlugiDir = _path.join(__dirname, "default-plugin", 'commom');
+    let commonPluginArray = getAllFileInDir_1.default(commonHookTypePlugiDir, [], ".", (fileName, filePath) => { return true; });
+    let allPlugin = pluginArray.concat(commonPluginArray);
+    _async.map(allPlugin, (pluginItem, next) => {
         loadPlugin_1.default(hookType, "", pluginItem.filePath, {}, next);
     }, (error, result) => {
         if (error) {

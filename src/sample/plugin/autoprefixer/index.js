@@ -33,8 +33,8 @@ exports.registerPlugin = function(cli, options){
   }, 1)
 
   cli.registerHook('build:doCompile', (data, content, cb)=>{
-    let inputFilePath = data.inputFilePath;
-    if(!/(\.less)$/.test(inputFilePath)){
+    let outputFilePath = data.outputFilePath;
+    if(!/(\.css)$/.test(outputFilePath) || !content){
       return cb(null, data, content)
     }
     cleaner.process(content)

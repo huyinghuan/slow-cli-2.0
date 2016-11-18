@@ -15,6 +15,10 @@ const log_1 = require('../lib/log');
 function loadPlugin(hookType, pluginName, pluginPath, options, cb) {
     try {
         let plugin = require(pluginPath);
+        if (options.__stop) {
+            log_1.default.warn(`禁用插件${pluginName}`.red);
+            return cb(null);
+        }
         if (options.__source) {
             options = options.setting;
         }
