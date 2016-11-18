@@ -1,5 +1,6 @@
 const _cleanCss = require('clean-css');
 const _uglifyjs = require('uglify-js');
+const _cheerio = require('cheerio');
 
 var _defaultSetting = {
   ignore: ["(\\.min\\.css)$","(\\.min\\.js)$"],
@@ -19,11 +20,40 @@ function ignore(path, rules){
 }
 
 function miniCss(content, options){
+  if(typeof options == 'boolean'){
+    options = {}
+  }
   return new _cleanCss(options).minify(content).styles;
 }
 
 function miniJS(content, options){
+  if(typeof options == 'boolean'){
+    options = {}
+  }
   return _uglifyjs.minify(content, options).code
+}
+
+function miniHtml(content, options){
+  if(typeof options == 'boolean'){
+    options = {
+      js: true,
+      css: true
+    }
+  }
+
+  let $ = _cheerio.load(content)
+  if(options.js){
+    $('script').each(function() {
+      $(this).text(_uglifyjs.minify($(this).text(), {}).code)
+    });
+  }
+  if(options.css){
+    let clean = new _cleanCss({});
+    $('style').each(function() {
+     $(this).text(_uglifyjs.minify($(this).text(), options).styles)
+    });
+  }
+  return $.html()
 }
 
 exports.registerPlugin = (cli, options)=>{
@@ -38,9 +68,11 @@ exports.registerPlugin = (cli, options)=>{
     }
     try{
       if(/(\.css)$/.test(outFilePath) && _defaultSetting.css){
-        content = miniCss(content, _defaultSetting.css || {})
+        content = miniCss(content, _defaultSetting.css)
       }else if(/(\.js)$/.test(outFilePath) && _defaultSetting.js){
-        content = miniJS(content, _defaultSetting.css || {})
+        content = miniJS(content, _defaultSetting.css)
+      }else if(/(\.html)$/.test(outFilePath) && _defaultSetting.html){
+        content = miniHtml(content, _defaultSetting.html)
       }
       else{
         return  cb(null, data, content);
