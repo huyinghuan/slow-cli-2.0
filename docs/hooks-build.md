@@ -23,7 +23,7 @@ const priority = 1;
 *cli 见文档 (registerPlugin 中 cli 参数说明)[docs/registerHook-params-cli.md]
 *options 见文档 (registerPlugin 中 options 参数说明)[docs/registerHook-params-options.md]
 */
-export.registerPlugin = (cli, options)=>{
+exports.registerPlugin = (cli, options)=>{
   
   //cb callback.   (error, stop)
   // stop true 停止其他插件的编译介入， false， 其他编译插件继续
@@ -40,7 +40,7 @@ export.registerPlugin = (cli, options)=>{
 
 ```js
 
-export.registerPlugin = (cli, options)=>{
+expors.registerPlugin = (cli, options)=>{
   //buildConfig 编译参数。 具体查看  [docs/command]
   //cb [error, buildConfig]
   cli.registerHook('build:willBuild', (buildConfig, cb)=>{
@@ -57,7 +57,7 @@ export.registerPlugin = (cli, options)=>{
 编译文件
 
 ```js
-export.registerPlugin = (cli, options)=>{
+exports.registerPlugin = (cli, options)=>{
 
   /*
   Params: 
@@ -88,7 +88,7 @@ export.registerPlugin = (cli, options)=>{
 
 
 ```js
-export.registerPlugin = (cli, options)=>{
+exports.registerPlugin = (cli, options)=>{
 
   /*
   Params: 
@@ -111,4 +111,26 @@ export.registerPlugin = (cli, options)=>{
   })
 }
 
+```
+
+### build:end
+
+全部编译，copy完成
+
+```js
+exports.registerPlugin = (cli, options)=>{
+  cli.registerHook('build:end', (buildConfig, data, cb)=>{
+    let outdir = buildConfig.outdir;
+    let packageJSON = require(_path.join(process.cwd(), 'package.json'));
+    let tarFile = _path.join(process.cwd(), `${packageJSON.name}@${packageJSON.version}.tar`);
+    let commanderStr = `cd "${outdir}" && tar -cf "${tarFile}" .`;
+    cli.utils.executeCommand(commanderStr, (error)=>{
+      if(error){
+        return cb(error);
+      }
+      console.log("文件打包完成")
+      cb(null, data)
+    })
+  }, 1)
+}
 ```

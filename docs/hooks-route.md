@@ -27,7 +27,7 @@ const priority = 1;
 *cli {registerHook:registerHook, options: global.__CLI 【全局配置】}
 *options 插件配置
 */
-export.registerPlugin = (cli, options)=>{
+exports.registerPlugin = (cli, options)=>{
   //router: express.IRouter
   //return stop[boolean].  true 启动静态服务器，完全接管silky，弃用其他插件。  为false时，作为中间件存在, 默认为false
 
@@ -62,7 +62,7 @@ server接收到http服务后的处理流程。
 ```js
 const priority = 1;
 
-export.registerPlugin = (cli, options)=>{
+exports.registerPlugin = (cli, options)=>{
   /**
   *req:   http request
   *data: {status: int, realPath: string} status:  200 正常，404，未找到文件. 另外该编译器向下一个编译传递的数据可以存在这个里面. 详情见 hook data参数说明。
@@ -92,7 +92,7 @@ export.registerPlugin = (cli, options)=>{
   cb，回调函数， 必须传入error，和 processContent
   其中 processContent 为处理后的内容。 如果该hook不需要対传入的responseContent进行处理，那么将responseContent传回即可
 */
-export.registerPlugin(cli, options)=>{
+exports.registerPlugin(cli, options)=>{
   cli.registerHook('route:willResponse', (req, data, responseContent, cb)=>{
     //如果没有经过编译器处理则不处理条请求
     if(data.status != 200){
@@ -115,7 +115,7 @@ export.registerPlugin(cli, options)=>{
 
 ```js
 
-export.registerPlugin(cli, options)=>{
+exports.registerPlugin(cli, options)=>{
   /*
   *  cb: (hasProcess)=>{}     cb接收一个参数，如果该hook需要处理响应 这个404 那么传人 true， 如果要 交给默认处理器处理,那么传入false
   */
@@ -132,7 +132,7 @@ export.registerPlugin(cli, options)=>{
 响应完成之后
 
 ```js
-export.registerPlugin(cli, options)=>{
+exports.registerPlugin(cli, options)=>{
   cli.registerHook('route:didResponse', (req)=>{})
 }
  
@@ -145,7 +145,7 @@ export.registerPlugin(cli, options)=>{
 
 ```
 {
-  status: 404,  #用于标示 是否经过编译器处理
+  status: 404,  #用于标示 是否经过编译器处理 200 已经过编译
   realPath: pathname #用于代替 req.path。  主要是 将  path == '/'  替换为 配置的 silky.index.  没有默认为 index.html
 }
 ```

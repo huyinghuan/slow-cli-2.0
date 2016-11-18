@@ -10,7 +10,7 @@ function default_1() {
     //搜集需要对比的插件。开发版本将跳过。
     let pluginList = [];
     Object.keys(pluginConfig).forEach((pluginName) => {
-        if (pluginConfig[pluginName] && pluginConfig[pluginName].source) {
+        if (pluginConfig[pluginName] && pluginConfig[pluginName].__source) {
             console.log(`警告: ${pluginName} 处于开发模式,跳过版本对比`.yellow);
             return;
         }

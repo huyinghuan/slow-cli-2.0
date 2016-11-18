@@ -1,0 +1,2 @@
+exports.registerPlugin = (cli, options)=>{
+}

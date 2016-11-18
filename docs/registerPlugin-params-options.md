@@ -22,3 +22,38 @@
   ...
 }
 ```
+
+### 开发者注意！！！
+
+在开发过程中,可以使用`__source`来指定插件实际目录， `setting`来配置插件需要的参数。
+
+例如：
+
+```js
+
+{
+  devPluginA:{
+    __source: "xxxx",
+    setting: {
+      configA: xxx,
+      ...
+    },
+  }
+}
+
+```
+
+但在用户使用时，因为用户不用 设置插件目录，为避免配置字段冗余用户实际填写的是：
+
+```js
+{
+  devPluginA:{
+    configA: xxx,
+    ...
+  }
+}
+```
+
+也就是说`registerPlugin` 的参数 `options`  在开发状态[即存在`__source`时] 等同于 `devPluginA.setting`，在正式使用状态[即`__source`字段不存在时] 等同于 `devPluginA`
+
+因此插件需要用户配置的属性中，最好不要存在`__source`字段

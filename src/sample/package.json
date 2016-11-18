@@ -4,13 +4,13 @@
   "silky-version": "2.0.0",
   "silky-plugin": {
     "hbs": {
-      "source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/hbs",
+      "__source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/hbs",
       "setting": {
         "root": "/template"
       }
     },
     "proxy": {
-      "source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/proxy",
+      "__source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/proxy",
       "setting": [
         {
           "from": [
@@ -22,22 +22,22 @@
       ]
     },
     "less": {
-      "source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/less"
+      "__source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/less"
     },
     "autoprefix": {
-      "source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/autoprefixer"
+      "__source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/autoprefixer"
     },
     "hbs-autoprefix": {
-      "source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/hbs-autoprefixer"
+      "__source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/hbs-autoprefixer"
     },
     "build-plugin-demo": {
-      "source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/build-plugin-demo",
+      "__source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/build-plugin-demo",
       "setting": {
         "url": "xxxx.xxx"
       }
     },
     "tar-send": {
-      "source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/tar-send"
+      "__source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/tar-send"
     }
   },
   "silky": {

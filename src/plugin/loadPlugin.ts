@@ -15,6 +15,9 @@ import _log from '../lib/log';
 export default function loadPlugin(hookType:string, pluginName:string, pluginPath:string, options:any, cb){
   try {
     let plugin = require(pluginPath);
+    if(options.__source){
+      options = options.setting;
+    }
     //默认权重
     if(_.isFunction(plugin.registerPlugin)){
       plugin.registerPlugin({

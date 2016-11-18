@@ -4,7 +4,7 @@ const _http_proxy = require('http-proxy').createProxyServer({});
 
 exports.registerPlugin = (cli, options)=>{
   const getProxySetting = (path)=>{
-    let setting = [].concat(options.setting)
+    let setting = [].concat(options)
     for(let i = 0, len = setting.length; i < len; i++){
       let proxyPathArray = [].concat(setting[i].from);
       let regExpAttr = setting[i].attribute;

@@ -15,6 +15,9 @@ const log_1 = require('../lib/log');
 function loadPlugin(hookType, pluginName, pluginPath, options, cb) {
     try {
         let plugin = require(pluginPath);
+        if (options.__source) {
+            options = options.setting;
+        }
         //默认权重
         if (_.isFunction(plugin.registerPlugin)) {
             plugin.registerPlugin({

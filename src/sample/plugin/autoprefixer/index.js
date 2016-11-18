@@ -15,7 +15,7 @@ const isNeedCompile = (pathname)=>{
 }
 
 exports.registerPlugin = function(cli, options){
-  _.extend(_DefaultSetting, options.setting)
+  _.extend(_DefaultSetting, options)
   let setting = _DefaultSetting.options || {};
   let cleaner = _postcss([_autoprefixer(setting)])
   cli.registerHook('route:willResponse', (req, data, responseContent, cb)=>{

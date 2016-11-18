@@ -16,7 +16,7 @@ const isNeedProcess = (pathname)=>{
 }
 
 exports.registerPlugin = function(cli, options){
-  _.extend(_DefaultSetting, options.setting);
+  _.extend(_DefaultSetting, options);
   
   cli.registerHook('route:willResponse', (req, data, responseContent, cb)=>{
     let pathname = data.realPath;

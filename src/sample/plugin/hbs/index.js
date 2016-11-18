@@ -41,7 +41,7 @@ const getCompileContent = (realFilePath, data, cb)=>{
 
 exports.registerPlugin = function(cli, options){
   //继承定义
-  _.extend(_DefaultSetting, options.setting);
+  _.extend(_DefaultSetting, options);
   
   cli.registerHook('route:didRequest', (req, data, content, cb)=>{
     let pathname = data.realPath;

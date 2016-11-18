@@ -37,11 +37,11 @@ export default function scanPlugins(hookType:string, cb){
       console.log(`插件 ${pluginName} 已被禁用`.red)
       return cb(null);
     }
-    if(pluginsConfig[pluginName].source){
+    if(pluginsConfig[pluginName].__source){
       console.log(`警告！！ ${pluginName} 加载方式为 开发者模式`.red)
     }
     //从自定义路径或插件目录获取插件路径
-    let pluginPath = pluginsConfig[pluginName].source || _path.join(_config.pluginDir, _getFullPluginName(pluginName)); 
+    let pluginPath = pluginsConfig[pluginName].__source || _path.join(_config.pluginDir, _getFullPluginName(pluginName)); 
     _loadPlugin(hookType, pluginName, pluginPath, pluginsConfig[pluginName], next)
   }, (error)=>{
     if(error){
