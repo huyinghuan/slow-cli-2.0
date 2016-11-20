@@ -28,3 +28,4 @@ export const plugin = {
 }
 
 export var HookQueue = [];
+export var HookExtQueue = [];

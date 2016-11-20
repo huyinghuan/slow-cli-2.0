@@ -6,9 +6,6 @@ const _fs = require('fs');
 const _handlebars = require('handlebars');
 const _helper = require('./helper');
 
-//加载handlebars  helper
-_helper(_handlebars);
-
 var _DefaultSetting = {
   "root": ".",
   "regexp": "(\.html)$"
@@ -42,7 +39,10 @@ const getCompileContent = (realFilePath, data, cb)=>{
 exports.registerPlugin = function(cli, options){
   //继承定义
   _.extend(_DefaultSetting, options);
-  
+
+  //加载handlebars  helper
+  _helper(_handlebars, cli.ext['hbs']);
+
   cli.registerHook('route:didRequest', (req, data, content, cb)=>{
     let pathname = data.realPath;
     //如果不需要编译
@@ -52,7 +52,6 @@ exports.registerPlugin = function(cli, options){
     let fakeFilePath = _path.join(process.cwd(), _DefaultSetting.root, pathname);
     //替换路径为hbs
     let realFilePath = fakeFilePath.replace(/(html)$/,'hbs')
-
     getCompileContent(realFilePath, data, (error, data, content)=>{
       if(error){return cb(error)};
       //交给下一个处理器
@@ -67,12 +66,11 @@ exports.registerPlugin = function(cli, options){
       return cb(null, data, content)
     }
     getCompileContent(inputFilePath, data, (error, data, content)=>{
+      if(error){return  cb(error);}
       if(data.status == 200){
         data.outputFilePath = data.outputFilePath.replace(/(\hbs)$/, "html")
       }
-      if(error){
-        console.log(error)
-      }
+
       cb(error, data, content);
     })
 

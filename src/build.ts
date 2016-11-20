@@ -134,12 +134,11 @@ function normalExecute(){
 }
 
 export default function(){
-  let queue = [];
-  //加载插件
-  queue.push((cb)=>{
-    _plugin.scanPlugins('build', cb)
-  });
 
+  //加载插件
+  _plugin.scanPlugins('build')
+
+  let queue = [];
   //build初始化HOOK
   queue.push((cb)=>{_hook.triggerBuildInitHook(cb);});
 

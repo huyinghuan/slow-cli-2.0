@@ -1,9 +1,12 @@
 ## registerPlugin 中 options 参数说明
 
+
 项目目录下的 package.json：
+
 ```js
 {
   silky-plugin:{
+
     plugin-demo:{
       plugin-demo-params-xxx:xxx，
       ...
@@ -12,9 +15,7 @@
 }
 ```
 
-如果该插件的名字是 `plugin-demo`
-
-那么`options`的值为上面的部分：
+如果该插件的名字是 `plugin-demo` ,那么`options`的值为上面的部分：
 
 ```js
 {
@@ -25,7 +26,7 @@
 
 ### 开发者注意！！！
 
-在开发过程中,可以使用`__source`来指定插件实际目录， `__setting`来配置插件需要的参数, `__stop`来停用或启用改插件
+在开发过程中,可以使用`__source`来指定插件实际目录(用绝对路径或者相对路径(相对路径))， `__setting`来配置插件需要的参数, `__stop`来停用或启用改插件
 例如：
 
 ```js

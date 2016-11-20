@@ -28,3 +28,4 @@ exports.plugin = {
     run: 'plugin:run'
 };
 exports.HookQueue = [];
+exports.HookExtQueue = [];

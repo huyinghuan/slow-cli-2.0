@@ -115,11 +115,9 @@ function normalExecute() {
     });
 }
 function default_1() {
-    let queue = [];
     //加载插件
-    queue.push((cb) => {
-        _plugin.scanPlugins('build', cb);
-    });
+    _plugin.scanPlugins('build');
+    let queue = [];
     //build初始化HOOK
     queue.push((cb) => { _hook.triggerBuildInitHook(cb); });
     _async.waterfall(queue, (error, stop) => {

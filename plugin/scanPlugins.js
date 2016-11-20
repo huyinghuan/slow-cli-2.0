@@ -1,13 +1,12 @@
 "use strict";
 const _path = require('path');
-const _async = require('async');
 const file_config_1 = require('../file-config');
 const getFullPluginName_1 = require('./getFullPluginName');
 const _init = require('../init/index');
 const loadPlugin_1 = require('./loadPlugin');
 const getAllFileInDir_1 = require('../lib/getAllFileInDir');
 //扫描加载内置插件
-function scanDefaultPlugins(hookType, cb) {
+function scanDefaultPlugins(hookType) {
     //指定类型的hook
     let hookTypePluginDir = _path.join(__dirname, "default-plugin", hookType);
     let pluginArray = getAllFileInDir_1.default(hookTypePluginDir, [], ".", (fileName, filePath) => { return true; });
@@ -15,42 +14,61 @@ function scanDefaultPlugins(hookType, cb) {
     let commonHookTypePlugiDir = _path.join(__dirname, "default-plugin", 'commom');
     let commonPluginArray = getAllFileInDir_1.default(commonHookTypePlugiDir, [], ".", (fileName, filePath) => { return true; });
     let allPlugin = pluginArray.concat(commonPluginArray);
-    _async.map(allPlugin, (pluginItem, next) => {
-        loadPlugin_1.default(hookType, "", pluginItem.filePath, {}, next);
-    }, (error, result) => {
-        if (error) {
-            return console.log(error);
-        }
-        cb(null);
+    allPlugin.forEach((pluginItem) => {
+        loadPlugin_1.default(hookType, "", pluginItem.filePath, {});
     });
+}
+//获取开发中的插件实际位置
+function getDevPluginPath(source) {
+    if (!source) {
+        return "";
+    }
+    //是否为绝对路径
+    if (_path.isAbsolute(source)) {
+        return source;
+    }
+    //是否设置了根目录 没有设置 取执行目录为根目录
+    let pluginRootDir = _init.getPluginConfig().__root || process.cwd();
+    return _path.join(pluginRootDir, source);
 }
 /**
  * 扫描Hooks插件, 仅加载指定hook
 */
-function scanPlugins(hookType, cb) {
+function scanPlugins(hookType) {
     let pluginsConfig = _init.getPluginConfig();
     if (!pluginsConfig) {
         console.log(`没有配置任何插件`.red);
-        return cb(null);
+        return;
     }
-    let plugins = Object.keys(pluginsConfig);
-    _async.map(plugins, (pluginName, next) => {
+    let plugins = [];
+    let pluginExts = [];
+    Object.keys(pluginsConfig).forEach((key) => {
+        if (/^(__)/.test(key)) {
+            return;
+        }
+        if (/(\-ext)$/.test(key)) {
+            pluginExts.push(key);
+        }
+        else {
+            plugins.push(key);
+        }
+    });
+    //插件扩展优先加载，使得调用注册插件时，可以灵活使用。
+    plugins = pluginExts.concat(plugins);
+    plugins.forEach((pluginName) => {
         if (!pluginsConfig[pluginName]) {
             console.log(`插件 ${pluginName} 已被禁用`.red);
-            return cb(null);
+            return;
         }
         if (pluginsConfig[pluginName].__source) {
             console.log(`警告！！ ${pluginName} 加载方式为 开发者模式`.red);
         }
         //从自定义路径或插件目录获取插件路径
-        let pluginPath = pluginsConfig[pluginName].__source || _path.join(file_config_1.default.pluginDir, getFullPluginName_1.default(pluginName));
-        loadPlugin_1.default(hookType, pluginName, pluginPath, pluginsConfig[pluginName], next);
-    }, (error) => {
-        if (error) {
-            return cb(error);
-        }
-        scanDefaultPlugins(hookType, cb);
+        let pluginPath = getDevPluginPath(pluginsConfig[pluginName].__source) || _path.join(file_config_1.default.pluginDir, getFullPluginName_1.default(pluginName));
+        loadPlugin_1.default(hookType, pluginName, pluginPath, pluginsConfig[pluginName]);
     });
+    //内置插件
+    scanDefaultPlugins(hookType);
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = scanPlugins;

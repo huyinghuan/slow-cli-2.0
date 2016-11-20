@@ -115,11 +115,7 @@ exports.default = () => {
             }
         });
     });
-    _plugin.scanPlugins('route', (error) => {
-        if (error) {
-            return;
-        }
-        //启动静态服务器
-        startServer(app, cli, router);
-    });
+    _plugin.scanPlugins('route');
+    //启动静态服务器
+    startServer(app, cli, router);
 };

@@ -4,14 +4,14 @@
   "silky-version": "2.0.0",
   "silky-plugin": {
     "hbs": {
-      "__source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/hbs",
+      "__source": "./plugin/hbs",
       "__setting": {
         "root": "/template"
       }
     },
     "proxy": {
       "__stop": true,
-      "__source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/proxy",
+      "__source": "./plugin/proxy",
       "__setting": [
         {
           "from": [
@@ -23,20 +23,20 @@
       ]
     },
     "less": {
-      "__source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/less"
+      "__source": "./plugin/less"
     },
     "autoprefix": {
-      "__source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/autoprefixer"
+      "__source": "./plugin/autoprefixer"
     },
     "html-autoprefix": {
-      "__source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/html-autoprefixer"
+      "__source": "./plugin/html-autoprefixer"
     },
     "tar-send": {
-      "__source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/tar-send"
+      "__source": "./plugin/tar-send"
     },
     "mini":{
       "__stop": false,
-      "__source": "/Users/hyh/workspace/mgtv-silky-3.0/src/sample/plugin/mini",
+      "__source": "./plugin/mini",
       "__setting":{
         "ignore": ["(\\.min\\.js)$", "(\\.min\\.css)$"],
         "js":{},
@@ -46,6 +46,9 @@
           "css": true
         }
       }
+    },
+    "hbs-ext":{
+      "__source": "./plugin/hbs-ext"
     }
   },
   "silky": {
