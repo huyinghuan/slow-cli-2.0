@@ -4,6 +4,7 @@ import _start from './start';
 import _init from './init'
 import _check from './check';
 import _build from './build';
+import _install from './install';
 import * as _projectUtils from '../lib/project';
 import _fileConfig from '../file-config';
 //import * as colors from 'colors' 坑, 全应用引用， 其他module无须重复引用
@@ -22,5 +23,6 @@ _start(_commander);
 _init(_commander);
 _check(_commander);
 _build(_commander);
+_install(_commander);
 
 _commander.version(versionDesc).parse(process.argv);
