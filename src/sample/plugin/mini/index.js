@@ -30,6 +30,7 @@ function miniJS(content, options){
   if(typeof options == 'boolean'){
     options = {}
   }
+  options.fromString = true;
   return _uglifyjs.minify(content, options).code
 }
 
@@ -44,13 +45,18 @@ function miniHtml(content, options){
   let $ = _cheerio.load(content)
   if(options.js){
     $('script').each(function() {
-      $(this).text(_uglifyjs.minify($(this).text(), {}).code)
+      if($(this).attr('src')){return}
+      let type = $(this).attr('type');
+      if(type && type !== 'javascript'){return}
+      $(this).text(_uglifyjs.minify($(this).text(), {fromString: true}).code)
     });
   }
   if(options.css){
     let clean = new _cleanCss({});
     $('style').each(function() {
-     $(this).text(_uglifyjs.minify($(this).text(), options).styles)
+      let type = $(this).attr('type');
+      if(type && type !== 'text/css'){return}
+      $(this).text(clean.minify($(this).text()).styles)
     });
   }
   return $.html()
@@ -70,11 +76,10 @@ exports.registerPlugin = (cli, options)=>{
       if(/(\.css)$/.test(outFilePath) && _defaultSetting.css){
         content = miniCss(content, _defaultSetting.css)
       }else if(/(\.js)$/.test(outFilePath) && _defaultSetting.js){
-        content = miniJS(content, _defaultSetting.css)
+        content = miniJS(content, _defaultSetting.js)
       }else if(/(\.html)$/.test(outFilePath) && _defaultSetting.html){
         content = miniHtml(content, _defaultSetting.html)
-      }
-      else{
+      }else{
         return  cb(null, data, content);
       }
       cli.log.info(`minify ${outFilePath}`);

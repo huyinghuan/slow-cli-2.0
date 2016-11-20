@@ -126,7 +126,7 @@ function normalExecute(){
       _log.error(error);
       _log.error("build fail".red);
       _hook.triggerBuildErrorHook(error);
-      return
+      return process.exit(1)
     }
     _log.success("build success".green)
     
