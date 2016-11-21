@@ -23,10 +23,13 @@ const startServer = function (app, cli, router) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = () => {
+    //加载插件
+    _plugin.scanPlugins('route');
     let cli = _init.getFullConfig();
     let app = _express();
     let router = _express.Router();
     let globalCLIConfig = _init.getFullConfig();
+    //启动静态服务器
     //增加一些基础信息
     router.all('*', function (req, resp, next) {
         //挂载时间点
@@ -115,7 +118,5 @@ exports.default = () => {
             }
         });
     });
-    _plugin.scanPlugins('route');
-    //启动静态服务器
     startServer(app, cli, router);
 };

@@ -1,8 +1,8 @@
 import * as _minimatch from 'minimatch';
 import * as _ from 'lodash';
 import * as _fs from 'fs-extra';
-import * as _child from 'child_process';
 import _log from '../lib/log';
+import _executeCommand from '../lib/executeCommand';
 /**
  * 文件后缀匹配
  */
@@ -30,30 +30,4 @@ export function ensureFileSync(){
 }
 
 //执行命令
-export function executeCommand(command:string, cb){
-  let options ={
-    env: process.env,
-    maxBuffer: 20 * 1024 * 1024
-  }
-  let stdout = '';
-  let stderr = '';
-  let exec = _child.exec(command, options);
-
-  exec.on('close', (code)=>{
-    _log.info(stdout)
-    _log.error(stderr)
-    if(code != 0){
-      _log.error(`执行命令出错 -> ${command}`.red);
-      return cb(`执行命令出错 -> ${command}`)
-    } 
-    cb(null)
-  })
-  exec.stdout.on('data',  (message)=>{
-    console.log(message)
-    stdout += message
-  })
-   exec.stderr.on('data',  (message)=>{
-    console.log(message)
-    stdout += message
-  })
-}
+export const executeCommand = _executeCommand

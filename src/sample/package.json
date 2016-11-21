@@ -9,19 +9,6 @@
         "root": "/template"
       }
     },
-    "proxy": {
-      "__stop": true,
-      "__source": "./plugin/proxy",
-      "__setting": [
-        {
-          "from": [
-            "^/p"
-          ],
-          "attribute": "i",
-          "to": "http://10.200.8.234:9810/"
-        }
-      ]
-    },
     "less": {
       "__source": "./plugin/less"
     },
@@ -34,28 +21,50 @@
     "tar-send": {
       "__source": "./plugin/tar-send"
     },
-    "mini":{
+    "mini": {
       "__stop": false,
       "__source": "./plugin/mini",
-      "__setting":{
-        "ignore": ["(\\.min\\.js)$", "(\\.min\\.css)$"],
-        "js":{},
-        "css":{},
-        "html":{
-          "js":true,
+      "__setting": {
+        "ignore": [
+          "(\\.min\\.js)$",
+          "(\\.min\\.css)$"
+        ],
+        "js": {},
+        "css": {},
+        "html": {
+          "js": true,
           "css": true
         }
       }
     },
-    "hbs-ext":{
+    "hbs-ext": {
       "__source": "./plugin/hbs-ext"
-    }
+    },
+    "sp-proxy": [
+      {
+        "from": ["^/p", "^/t"],
+        "to": "http://10.200.8.234:9810" 
+      },{
+        "from": ["^/api"],
+        "to": "http://10.200.8.234:9810" 
+      }
+    ]
   },
   "silky": {
     "port": 14422
   },
   "silky-build": {
     "outdir": "./build",
-    "ignore": ["node_modules", "(\\/\\.[^/]+)$",  "plugin", "(css/module/)", "(\\.tar)$"]
+    "ignore": [
+      "node_modules",
+      "(\\/\\.[^/]+)$",
+      "plugin",
+      "(css/module/)",
+      "(\\.tar)$"
+    ]
+  },
+  "__registry": "https://registry.npmjs.com/",
+  "dependencies": {
+    "sp-proxy": "^1.0.0"
   }
 }

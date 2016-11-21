@@ -6,7 +6,7 @@ export default function(value){
     return {extra: value}
   }
   let arr = value.split(',')
-  let params = {}
+  let params:any = {}
   arr.forEach((item)=>{
     let keyValue = item.split('=');
     if(!keyValue[0] || !keyValue[1]){

@@ -15,12 +15,14 @@ const _hookMap = require('../hooks/map');
  *  */
 function loadPlugin(hookType, pluginName, pluginPath, options) {
     try {
-        if (options.__stop) {
-            log_1.default.warn(`禁用插件${pluginName}`.red);
-            return;
-        }
-        if (options.__source) {
-            options = options.__setting;
+        if (_.isPlainObject(options)) {
+            if (options.__stop) {
+                log_1.default.warn(`禁用插件${pluginName}`.red);
+                return;
+            }
+            if (options.__source) {
+                options = options.__setting;
+            }
         }
         let plugin = require(pluginPath);
         //默认权重 加载插件

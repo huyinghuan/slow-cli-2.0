@@ -12,14 +12,24 @@ const checkBuildArgs_1 = require('./checkBuildArgs');
 exports.checkBuildArgs = checkBuildArgs_1.default;
 const checkStartArgs_1 = require('./checkStartArgs');
 exports.checkStartArgs = checkStartArgs_1.default;
+function getProjectPackageJSONField(fieldName) {
+    let json = getProjectPackageJSON();
+    return json[fieldName];
+}
+exports.getProjectPackageJSONField = getProjectPackageJSONField;
 //返回packageJson内容
-function getProjectPackageJSON() {
+function getProjectPackageJSON(fieldName) {
     if (!_fs.existsSync(file_config_1.default.CLIConfigFile)) {
         return {};
     }
-    return require(file_config_1.default.CLIConfigFile);
+    return _fs.readJSONSync(file_config_1.default.CLIConfigFile); //require(_config.CLIConfigFile)
 }
 exports.getProjectPackageJSON = getProjectPackageJSON;
+//写入package.json文件
+function writeProjectPackageJSON(packageJSON) {
+    _fs.outputJSONSync(file_config_1.default.CLIConfigFile, packageJSON);
+}
+exports.writeProjectPackageJSON = writeProjectPackageJSON;
 /**
  * 准备用户环境，配置等
  */
@@ -57,7 +67,14 @@ function getPluginConfig() {
     return global.__CLI.pluginsConfig;
 }
 exports.getPluginConfig = getPluginConfig;
+// 仅为全局变量
 function getFullConfig() {
     return global.__CLI;
 }
 exports.getFullConfig = getFullConfig;
+function writePluginConfigToConfigFile(pluginConfig) {
+    let packageJSON = getProjectPackageJSON();
+    packageJSON = setPluginConfig_1.default(packageJSON, pluginConfig);
+    _fs.outputJSONSync(file_config_1.default.CLIConfigFile, packageJSON);
+}
+exports.writePluginConfigToConfigFile = writePluginConfigToConfigFile;

@@ -36,9 +36,10 @@ export default function(_commander){
 
       if(program.check){
         //检查cli 版本
-        _projectUtils.checkCLIVersion();
         // 检查插件版本
-        _utils.checkPluginVersion();
+        if(!_utils.checkPluginVersion() || ! _projectUtils.checkCLIVersion()){
+          process.exit(1)  
+        } 
       }
       //启动http服务
       _app()

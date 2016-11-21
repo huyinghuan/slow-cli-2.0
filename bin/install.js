@@ -10,17 +10,26 @@ function default_1(_commander) {
         .option('-A, --additional <items>', '额外的参数，格式 -A A=1[,B=xxx]', extraParamsParse_1.default)
         .option('-p, --pluginListName <value>', '根据插件列表名称获取插件列表')
         .action((plugins, program) => {
-        console.log(plugins);
-        let queue = [];
-        let pluginConfig = {};
-        plugins.forEach((pluginName) => {
-            pluginConfig[_plugin.getFullPluginName(pluginName)] = {};
-        });
+        _initUtils.prepareUserEnv();
+        let packageJSON = _initUtils.getProjectPackageJSON();
+        //如果指定了项目
         if (program.pluginListName) {
-            queue.push(() => {
-                _initUtils.getRemoteServerProjectPluginConfig(program.pluginListName, (pluginConfig) => {
-                });
+            _initUtils.getRemoteServerProjectPluginConfig(program.pluginListName, (pluginConfig) => {
+                _initUtils.writePluginConfigToConfigFile(pluginConfig);
+                _plugin.install(Object.keys(pluginConfig));
             });
+        }
+        else if (plugins.length) {
+            //写入到package.json
+            let pluginConfig = {};
+            plugins.forEach((pluginName) => {
+                pluginConfig[_plugin.getFullPluginName(pluginName)] = {};
+            });
+            _initUtils.writePluginConfigToConfigFile(pluginConfig);
+            _plugin.install(plugins);
+        }
+        else {
+            _plugin.install(Object.keys(_initUtils.getPluginConfig()));
         }
     });
 }

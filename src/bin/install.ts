@@ -1,8 +1,7 @@
 import _extraParamsParse from './extraParamsParse'
 import _log from '../lib/log';
-import {executeCommand as _executeCommand}  from '../hooks/utils';
 import * as _initUtils from '../init/index';
-import * as _plugin from '../plugin/index'
+import * as _plugin from '../plugin/index';
 
 export default function(_commander){
   _commander.command('install [plugins...]')
@@ -12,23 +11,24 @@ export default function(_commander){
     .option('-p, --pluginListName <value>', '根据插件列表名称获取插件列表')
     .action((plugins, program)=>{
 
-      console.log(plugins)
-
-      let queue = [];
-      let pluginConfig = {}
-      plugins.forEach((pluginName)=>{
-        pluginConfig[_plugin.getFullPluginName(pluginName)] = {}
-      })
-
+      _initUtils.prepareUserEnv();
+      let packageJSON = _initUtils.getProjectPackageJSON();
+      //如果指定了项目
       if(program.pluginListName){
-        queue.push(()=>{
-          _initUtils.getRemoteServerProjectPluginConfig(program.pluginListName, (pluginConfig)=>{
-            
-          })
+        _initUtils.getRemoteServerProjectPluginConfig(program.pluginListName, (pluginConfig)=>{
+          _initUtils.writePluginConfigToConfigFile(pluginConfig)
+          _plugin.install(Object.keys(pluginConfig))
         })
-        
+      }else if(plugins.length){ //指定了插件名称就安装插件
+        //写入到package.json
+        let pluginConfig = {}
+        plugins.forEach((pluginName)=>{
+          pluginConfig[_plugin.getFullPluginName(pluginName)] = {}
+        })
+        _initUtils.writePluginConfigToConfigFile(pluginConfig)
+        _plugin.install(plugins)
+      }else{ //没有指定，安装所有
+        _plugin.install(Object.keys(_initUtils.getPluginConfig()))
       }
-
-
     })
 }

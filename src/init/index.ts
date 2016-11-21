@@ -8,12 +8,23 @@ import setPluginConfig from './setPluginConfig';
 import checkBuildArgs from './checkBuildArgs';
 import checkStartArgs from './checkStartArgs';
 
+export function getProjectPackageJSONField(fieldName:string){
+  let json = getProjectPackageJSON();
+  return json[fieldName]
+}
+
 //返回packageJson内容
-export function getProjectPackageJSON(){
+export function getProjectPackageJSON(fieldName?:string){
   if(!_fs.existsSync(_config.CLIConfigFile)){
     return {}
   }
-  return require(_config.CLIConfigFile)
+  
+  return  _fs.readJSONSync(_config.CLIConfigFile) //require(_config.CLIConfigFile)
+}
+
+//写入package.json文件
+export function writeProjectPackageJSON(packageJSON){
+  _fs.outputJSONSync(_config.CLIConfigFile, packageJSON)
 }
 
 /**
@@ -52,10 +63,17 @@ export function getBuildConfig(){
 export function getPluginConfig(){
   return (global as any).__CLI.pluginsConfig
 }
-
+// 仅为全局变量
 export function getFullConfig(){
   return (global as any).__CLI
 }
+
+export function writePluginConfigToConfigFile(pluginConfig){
+  let packageJSON = getProjectPackageJSON()
+  packageJSON = setPluginConfig(packageJSON, pluginConfig)
+  _fs.outputJSONSync(_config.CLIConfigFile, packageJSON)
+}
+
 
 export {
   generatorDefaultConfig as generatorDefaultConfig,

@@ -7,3 +7,5 @@ const loadPlugin_1 = require('./loadPlugin');
 exports.loadPlugin = loadPlugin_1.default;
 const checkPluginVersion_1 = require('./checkPluginVersion');
 exports.checkPluginVersion = checkPluginVersion_1.default;
+const install_1 = require('./install');
+exports.install = install_1.default;

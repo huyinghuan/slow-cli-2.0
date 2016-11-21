@@ -2,8 +2,7 @@
 const _minimatch = require('minimatch');
 const _ = require('lodash');
 const _fs = require('fs-extra');
-const _child = require('child_process');
-const log_1 = require('../lib/log');
+const executeCommand_1 = require('../lib/executeCommand');
 /**
  * 文件后缀匹配
  */
@@ -31,30 +30,4 @@ function ensureFileSync() {
 }
 exports.ensureFileSync = ensureFileSync;
 //执行命令
-function executeCommand(command, cb) {
-    let options = {
-        env: process.env,
-        maxBuffer: 20 * 1024 * 1024
-    };
-    let stdout = '';
-    let stderr = '';
-    let exec = _child.exec(command, options);
-    exec.on('close', (code) => {
-        log_1.default.info(stdout);
-        log_1.default.error(stderr);
-        if (code != 0) {
-            log_1.default.error(`执行命令出错 -> ${command}`.red);
-            return cb(`执行命令出错 -> ${command}`);
-        }
-        cb(null);
-    });
-    exec.stdout.on('data', (message) => {
-        console.log(message);
-        stdout += message;
-    });
-    exec.stderr.on('data', (message) => {
-        console.log(message);
-        stdout += message;
-    });
-}
-exports.executeCommand = executeCommand;
+exports.executeCommand = executeCommand_1.default;

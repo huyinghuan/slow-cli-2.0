@@ -34,10 +34,15 @@ const startServer = function(app:any, cli:any, router:_express.Router){
  * 启动静态服务
  */
 export default ()=>{
+  //加载插件
+  _plugin.scanPlugins('route');
+
   let cli = _init.getFullConfig();
   let app = _express();
   let router = _express.Router();
   let globalCLIConfig = _init.getFullConfig()
+  
+  //启动静态服务器
   //增加一些基础信息
   router.all('*', function(req, resp, next){
     //挂载时间点
@@ -131,7 +136,5 @@ export default ()=>{
     })
   })
 
-  _plugin.scanPlugins('route')
-  //启动静态服务器
   startServer(app, cli, router)
 }

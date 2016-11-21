@@ -15,13 +15,16 @@ import * as _hookMap from '../hooks/map';
  *  */
 export default function loadPlugin(hookType:string, pluginName:string, pluginPath:string, options:any){
   try {
-    if(options.__stop){
+    if(_.isPlainObject(options)){
+      if(options.__stop){
         _log.warn(`禁用插件${pluginName}`.red)
         return
+      }
+      if(options.__source){
+        options = options.__setting;
+      }
     }
-    if(options.__source){
-      options = options.__setting;
-    }
+
     let plugin = require(pluginPath);
     //默认权重 加载插件
     if(_.isFunction(plugin.registerPlugin)){

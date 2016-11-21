@@ -3,6 +3,7 @@ const index_1 = require('../init/index');
 const _path = require('path');
 const file_config_1 = require('../file-config');
 const getFullPluginName_1 = require('./getFullPluginName');
+const _fs = require('fs-extra');
 //检查对比插件版本
 function default_1() {
     //获取插件配置
@@ -35,6 +36,11 @@ function default_1() {
     for (let i = 0, length = pluginList.length; i < length; i++) {
         let pluginName = pluginList[i];
         let targetVersion = dependencies[pluginName];
+        if (!_fs.existsSync(_path.join(file_config_1.default.pluginDir, pluginName))) {
+            console.log(`警告! 配置${pluginName}未安装,请先安装插件`);
+            isMatch = false;
+            continue;
+        }
         let currentVersion = require(_path.join(file_config_1.default.pluginDir, pluginName, 'package.json')).version;
         if (targetVersion == currentVersion) {
             continue;
