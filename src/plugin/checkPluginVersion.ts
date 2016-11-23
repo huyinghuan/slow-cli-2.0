@@ -39,13 +39,15 @@ export default function ():boolean{
   let isMatch = true;
   for(let i = 0, length = pluginList.length; i < length; i++){
     let pluginName = pluginList[i];
-    let targetVersion = dependencies[pluginName];
+    let targetVersion:string = dependencies[pluginName];
     if(!_fs.existsSync(_path.join(_fileConfig.pluginDir, pluginName))){
       console.log(`警告! 配置${pluginName}未安装,请先安装插件`)
       isMatch = false;
       continue;
     }
-    let currentVersion = require(_path.join(_fileConfig.pluginDir, pluginName, 'package.json')).version;
+    
+    let currentVersion:string = require(_path.join(_fileConfig.pluginDir, pluginName, 'package.json')).version;
+    console.log(_semver.compare(targetVersion, currentVersion));
     if(_semver.lt(targetVersion, currentVersion)){
       continue;
     }

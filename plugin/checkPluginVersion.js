@@ -43,6 +43,7 @@ function default_1() {
             continue;
         }
         let currentVersion = require(_path.join(file_config_1.default.pluginDir, pluginName, 'package.json')).version;
+        console.log(_semver.compare(targetVersion, currentVersion));
         if (_semver.lt(targetVersion, currentVersion)) {
             continue;
         }
