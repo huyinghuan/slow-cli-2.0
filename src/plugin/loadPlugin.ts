@@ -14,6 +14,7 @@ import * as _hookMap from '../hooks/map';
  * option 插件配置
  *  */
 export default function loadPlugin(hookType:string, pluginName:string, pluginPath:string, options:any){
+  const cwd = process.cwd()
   try {
     if(_.isPlainObject(options)){
       if(options.__stop){
@@ -42,7 +43,8 @@ export default function loadPlugin(hookType:string, pluginName:string, pluginPat
         ext: _hookMap.HookExtQueue,
         options: _init.getFullConfig(),
         utils: _utils, //一些默认工具函数，大多插件可以使用得到
-        log: _log
+        log: _log,
+        cwd: cwd
       }, options)
     }
 
@@ -54,7 +56,8 @@ export default function loadPlugin(hookType:string, pluginName:string, pluginPat
         },
         options: _init.getFullConfig(),
         utils: _utils, //一些默认工具函数，大多插件可以使用得到
-        log: _log
+        log: _log,
+        cwd: cwd
       }, options)
     }
 

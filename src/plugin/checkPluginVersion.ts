@@ -3,6 +3,8 @@ import * as _path from 'path';
 import _fileConfig from '../file-config';
 import _getFullPluginName from './getFullPluginName';
 import * as _fs from 'fs-extra';
+import * as _semver from 'semver';
+
 //检查对比插件版本
 export default function ():boolean{
   //获取插件配置
@@ -44,7 +46,7 @@ export default function ():boolean{
       continue;
     }
     let currentVersion = require(_path.join(_fileConfig.pluginDir, pluginName, 'package.json')).version;
-    if(targetVersion == currentVersion){
+    if(_semver.lt(targetVersion, currentVersion)){
       continue;
     }
     console.log(`警告！插件：${pluginName} 项目依赖版本是 ${targetVersion}，实际版本是 ${currentVersion}`)

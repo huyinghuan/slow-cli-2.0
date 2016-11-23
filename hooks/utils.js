@@ -3,6 +3,7 @@ const _minimatch = require('minimatch');
 const _ = require('lodash');
 const _fs = require('fs-extra');
 const executeCommand_1 = require('../lib/executeCommand');
+const getAllFileInDir_1 = require('../lib/getAllFileInDir');
 /**
  * 文件后缀匹配
  */
@@ -31,3 +32,4 @@ function ensureFileSync() {
 exports.ensureFileSync = ensureFileSync;
 //执行命令
 exports.executeCommand = executeCommand_1.default;
+exports.getAllFileInDir = getAllFileInDir_1.default;

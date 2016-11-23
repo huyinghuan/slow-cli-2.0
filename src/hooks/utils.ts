@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import * as _fs from 'fs-extra';
 import _log from '../lib/log';
 import _executeCommand from '../lib/executeCommand';
+import _getAllFileInDir from '../lib/getAllFileInDir';
 /**
  * 文件后缀匹配
  */
@@ -30,4 +31,5 @@ export function ensureFileSync(){
 }
 
 //执行命令
-export const executeCommand = _executeCommand
+export const executeCommand = _executeCommand;
+export const getAllFileInDir = _getAllFileInDir;

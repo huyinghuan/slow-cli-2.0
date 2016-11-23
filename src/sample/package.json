@@ -40,15 +40,29 @@
     "hbs-ext": {
       "__source": "./plugin/hbs-ext"
     },
-    "sp-proxy": [
-      {
-        "from": ["^/p", "^/t"],
-        "to": "http://10.200.8.234:9810" 
-      },{
-        "from": ["^/api"],
-        "to": "http://10.200.8.234:9810" 
-      }
-    ]
+    "merge": {
+      "__source": "./plugin/merge",
+      "__setting": [
+        {
+          "_regexp": true,
+          "target": "/js/global.js",
+          "source": [
+            "(\\-componts\\.js)$",
+            "B-beMerge"
+          ]
+        },
+        {
+          "suffix": "js/",
+          "postfix": ".js",
+          "target": "global-1",
+          "source": [
+            "A-componts",
+            "B-beMerge"
+          ]
+        }
+      ]
+    },
+    "sp-proxy": {}
   },
   "silky": {
     "port": 14422

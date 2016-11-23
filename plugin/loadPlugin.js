@@ -14,6 +14,7 @@ const _hookMap = require('../hooks/map');
  * option 插件配置
  *  */
 function loadPlugin(hookType, pluginName, pluginPath, options) {
+    const cwd = process.cwd();
     try {
         if (_.isPlainObject(options)) {
             if (options.__stop) {
@@ -41,7 +42,8 @@ function loadPlugin(hookType, pluginName, pluginPath, options) {
                 ext: _hookMap.HookExtQueue,
                 options: _init.getFullConfig(),
                 utils: _utils,
-                log: log_1.default
+                log: log_1.default,
+                cwd: cwd
             }, options);
         }
         if (_.isFunction(plugin.registerPluginExt)) {
@@ -52,7 +54,8 @@ function loadPlugin(hookType, pluginName, pluginPath, options) {
                 },
                 options: _init.getFullConfig(),
                 utils: _utils,
-                log: log_1.default
+                log: log_1.default,
+                cwd: cwd
             }, options);
         }
     }

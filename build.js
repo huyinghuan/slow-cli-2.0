@@ -45,13 +45,35 @@ function compileFile(buildConfig, data, next) {
     });
     /**
      * 已经编译完成，写入文件。
-     * 未完成编译， 触发hook， hook如果已经写入文件，那么不做任何事情， 如果没有写入文件， 那么默认copy文件。
-     */
+     * 如果没有任何内容，则跳过,
+    */
     queue.push((data, content, cb) => {
-        if (content) {
-            return _fs.outputFile(data.outputFilePath, content, (error) => {
-                cb(error);
+        if (!content) {
+            return cb(null, false, data);
+        }
+        let outputFilePathArr = [].concat(data.outputFilePath);
+        let appendFile = data.appendFile;
+        try {
+            //如果一个内容要输出到多个文件
+            outputFilePathArr.forEach((outputFilePath) => {
+                if (!appendFile || !_fs.existsSync(outputFilePath)) {
+                    _fs.outputFileSync(outputFilePath, content);
+                }
+                else {
+                    _fs.appendFileSync(outputFilePath, content, { encoding: 'utf8' });
+                }
             });
+        }
+        catch (e) {
+            return cb(e);
+        }
+        cb(null, true, data);
+    });
+    /* 未完成编译， 触发hook， hook如果已经写入文件，那么不做任何事情，
+     如果没有写入文件， 那么默认copy[调用默认hook(plugin/default-plugin/build/*)]文件。*/
+    queue.push((didWrite, data, cb) => {
+        if (didWrite) {
+            return cb(null);
         }
         _hook.triggerBuildDoNothingHook(data, (error, processResult) => {
             if (error) {
@@ -78,7 +100,9 @@ function compilerFileQueue(buildConfig, fileQueue, next) {
         let data = {
             inputFilePath: fileItem.filePath,
             outputFilePath: _path.join(buildConfig.outdir, fileItem.relativeDir, fileItem.fileName),
-            fileName: fileItem.fileName
+            outdir: buildConfig.outdir,
+            fileName: fileItem.fileName,
+            appendFile: false
         };
         compileFile(buildConfig, data, cb);
     }, (error, result) => {

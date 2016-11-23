@@ -64,7 +64,8 @@ exports.registerPlugin = (cli, options)=>{
     data: {
       inputFilePath:
       outputFilePath:
-      fileName
+      fileName,
+      appendFile: false 
     }
     content 编译文件内容
 
@@ -95,7 +96,8 @@ exports.registerPlugin = (cli, options)=>{
     data: {
       inputFilePath:
       outputFilePath:
-      fileName
+      fileName,
+       appendFile: false 添加到文件尾还是替换全部内容， 默认false，替换全部内容
     }
     content 编译文件内容
 
