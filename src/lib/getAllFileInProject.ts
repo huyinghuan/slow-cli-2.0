@@ -28,7 +28,7 @@ function shouldInclude(filename, filepath):boolean{
 
 
 /* 获取项目目录下的所有文件，除编译目录外*/
-const getAllFileInProject = (justFilePath:string):Array<any>=>{
+const getAllFileInProject = (justFilePath:boolean):Array<any>=>{
   let arr = _getAllFileInDir(process.cwd(), [], '.', shouldInclude)
   if(!justFilePath){return arr}
   let queue = [];

@@ -1,5 +1,4 @@
 "use strict";
-const _async = require('async');
 const _init = require('../init/index');
 const executeCommand_1 = require('../lib/executeCommand');
 const log_1 = require('../lib/log');
@@ -8,7 +7,8 @@ const _registry = "http://npm.hunantv.com";
 function installPlugin(pluginName, cb) {
     let registry = _init.getProjectPackageJSONField('__registry') || _registry;
     pluginName = getFullPluginName_1.default(pluginName, true);
-    executeCommand_1.default(`npm install ${pluginName} -S -E --registry ${registry}`, (error) => {
+    console.log(`npm install ${pluginName}  --save --save-exact --registry ${registry}`);
+    executeCommand_1.default(`npm install ${pluginName} --save --save-exact --registry ${registry}`, (error) => {
         if (error) {
             cb(`安装插件${pluginName}失败`.red);
         }
@@ -19,7 +19,11 @@ function installPlugin(pluginName, cb) {
     });
 }
 function default_1(pluginList) {
-    _async.map(pluginList, installPlugin, (error) => {
+    let beInstallPluginList = [];
+    pluginList.forEach((pluginName) => {
+        beInstallPluginList.push(getFullPluginName_1.default(pluginName, true));
+    });
+    installPlugin(beInstallPluginList.join(' '), (error) => {
         if (error) {
             log_1.default.error(error);
         }

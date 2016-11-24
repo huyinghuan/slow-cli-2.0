@@ -46,17 +46,23 @@
       "__stop": false,
       "__source": "./plugin/hbs-ext"
     },
-    "sp-merge":[
+    "sp-merge": [
       {
         "_regexp": true,
         "target": "/js/global.js",
-        "source": [ "(\\-componts\\.js)$", "B-beMerge"]
+        "source": [
+          "(\\-componts\\.js)$",
+          "B-beMerge"
+        ]
       },
       {
         "suffix": "js/",
         "postfix": ".js",
         "target": "/js/global-1",
-        "source": ["A-componts","B-beMerge"]
+        "source": [
+          "A-componts",
+          "B-beMerge"
+        ]
       }
     ],
     "sp-proxy": {}
@@ -76,6 +82,7 @@
   },
   "__registry": "https://registry.npmjs.com/",
   "dependencies": {
+    "sp-merge": "1.0.0",
     "sp-proxy": "1.0.0"
   }
 }

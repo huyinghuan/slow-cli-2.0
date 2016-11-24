@@ -92,7 +92,7 @@ function compilerFileQueue(buildConfig, fileQueue, next) {
 function normalExecute() {
     let queue = [];
     //获取所有待编译文件
-    let fileQueue = getAllFileInProject_1.default();
+    let fileQueue = getAllFileInProject_1.default(false);
     //获取编译参数
     let buildConfig = _init.getBuildConfig();
     //将要编译了

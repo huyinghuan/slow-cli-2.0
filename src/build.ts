@@ -103,7 +103,7 @@ function compilerFileQueue(buildConfig, fileQueue, next){
 function normalExecute(){
   let queue = [];
   //获取所有待编译文件
-  let fileQueue:Array<Object> = _getAllFileInProject();
+  let fileQueue:Array<Object> = _getAllFileInProject(false);
   //获取编译参数
   let buildConfig = _init.getBuildConfig()
 
