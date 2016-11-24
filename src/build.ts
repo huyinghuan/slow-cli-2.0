@@ -65,7 +65,6 @@ function compileFile(buildConfig, data, next){
 
     let outputFilePathArr = [].concat(data.outputFilePath);
     let appendFile = data.appendFile;
-    
     try{
       //如果一个内容要输出到多个文件
       outputFilePathArr.forEach((outputFilePath)=>{
@@ -113,6 +112,8 @@ function compilerFileQueue(buildConfig, fileQueue, next){
       inputFilePath: fileItem.filePath,
       outputFilePath: _path.join(buildConfig.outdir, fileItem.relativeDir, fileItem.fileName),
       outdir: buildConfig.outdir,
+      inputFileRelativePath:  _path.join(fileItem.relativeDir, fileItem.fileName),
+      outputFileRelativePath: _path.join(buildConfig.outRelativeDir, fileItem.relativeDir, fileItem.fileName),
       fileName: fileItem.fileName,
       appendFile: false 
     }
@@ -152,7 +153,7 @@ function normalExecute(){
       _hook.triggerBuildErrorHook(error);
       return process.exit(1)
     }
-    _log.success("build success".green)
+    console.log("build success".green)
     
   })
 }

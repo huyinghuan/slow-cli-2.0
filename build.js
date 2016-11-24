@@ -101,6 +101,8 @@ function compilerFileQueue(buildConfig, fileQueue, next) {
             inputFilePath: fileItem.filePath,
             outputFilePath: _path.join(buildConfig.outdir, fileItem.relativeDir, fileItem.fileName),
             outdir: buildConfig.outdir,
+            inputFileRelativePath: _path.join(fileItem.relativeDir, fileItem.fileName),
+            outputFileRelativePath: _path.join(buildConfig.outRelativeDir, fileItem.relativeDir, fileItem.fileName),
             fileName: fileItem.fileName,
             appendFile: false
         };
@@ -135,7 +137,7 @@ function normalExecute() {
             _hook.triggerBuildErrorHook(error);
             return process.exit(1);
         }
-        log_1.default.success("build success".green);
+        console.log("build success".green);
     });
 }
 function default_1() {

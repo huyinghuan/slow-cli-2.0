@@ -5,17 +5,19 @@ const _path = require('path');
 const _init = require('./index');
 function checkOutDir() {
     let outdir = _init.getBuildConfig().outdir;
+    let outRelativeDir = outdir;
     if (!outdir) {
         return false;
     }
     if (!_path.isAbsolute(outdir)) {
+        outRelativeDir = outdir;
         outdir = _path.join(process.cwd(), outdir);
     }
     if (process.cwd() == outdir) {
         console.log("编译目录不能和项目跟目录为同一个");
         return false;
     }
-    _init.setBuildParams({ outdir: outdir });
+    _init.setBuildParams({ outdir: outdir, outRelativeDir: outRelativeDir });
     return true;
 }
 function default_1() {

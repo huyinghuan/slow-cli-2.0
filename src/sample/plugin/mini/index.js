@@ -82,8 +82,9 @@ exports.registerPlugin = (cli, options)=>{
       }else{
         return  cb(null, data, content);
       }
-      cli.log.info(`minify ${outFilePath}`);
+      cli.log.info(`minify ${data.inputFileRelativePath} -> ${data.outputFileRelativePath}`);
     }catch(e){
+      cli.log.error(`parse ${data.fileName} error`)
       return cb(e)
     }
     cb(null, data, content);

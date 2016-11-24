@@ -13,7 +13,7 @@ exports.registerPlugin = (cli, options)=>{
       if(error){
         return cb(error);
       }
-      console.log("文件打包完成")
+      cli.log.info(`文件${tarFile}打包完成`)
       cb(null, data)
     })
   }, 1)

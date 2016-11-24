@@ -14,7 +14,7 @@ exports.registerPlugin = (cli, options)=>{
     rd.pipe(wr);
     wr.on("close", function(ex) {
       if(ex){return cb(ex)}
-      cli.log.info(`copy ${data.inputFilePath} -> ${data.outputFilePath} `)
+      cli.log.info(`copy ${data.inputFileRelativePath} -> ${data.outputFileRelativePath} `)
       data.hasProcess = true
       cb(null, data)
     });
