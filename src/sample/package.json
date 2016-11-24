@@ -46,29 +46,19 @@
       "__stop": false,
       "__source": "./plugin/hbs-ext"
     },
-    "merge": {
-      "__stop": false,
-      "__source": "./plugin/merge/index.js",
-      "__setting": [
-        {
-          "_regexp": true,
-          "target": "/js/global.js",
-          "source": [
-            "(\\-componts\\.js)$",
-            "B-beMerge"
-          ]
-        },
-        {
-          "suffix": "js/",
-          "postfix": ".js",
-          "target": "/js/global-1",
-          "source": [
-            "A-componts",
-            "B-beMerge"
-          ]
-        }
-      ]
-    },
+    "sp-merge":[
+      {
+        "_regexp": true,
+        "target": "/js/global.js",
+        "source": [ "(\\-componts\\.js)$", "B-beMerge"]
+      },
+      {
+        "suffix": "js/",
+        "postfix": ".js",
+        "target": "/js/global-1",
+        "source": ["A-componts","B-beMerge"]
+      }
+    ],
     "sp-proxy": {}
   },
   "silky": {
