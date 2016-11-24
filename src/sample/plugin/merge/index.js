@@ -13,9 +13,7 @@ function isMatchRegExp(str, arr){
 
 exports.registerPlugin = (cli, optionsArr)=>{
   cli.registerHook('build:didCompile', (data, content, cb)=>{
-
     if(!optionsArr || !optionsArr.length){cb(null, data, content)}
-
     let outputFileArr = [];
     let inputFilePath = data.inputFilePath;
     optionsArr.forEach((option)=>{
@@ -43,4 +41,10 @@ exports.registerPlugin = (cli, optionsArr)=>{
     cb(null, data, content)
 
   }, 100)
+
+  // cli.registerHook('route:didRequest', (data, responseContent, cb)=>{
+    
+    
+
+  // })
 }

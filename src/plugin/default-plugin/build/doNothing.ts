@@ -18,5 +18,5 @@ exports.registerPlugin = (cli, options)=>{
       data.hasProcess = true
       cb(null, data)
     });
-  }, 99)
+  }, 1000)
 }

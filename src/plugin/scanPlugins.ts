@@ -17,7 +17,6 @@ function scanDefaultPlugins(hookType:string){
   let commonPluginArray = _getAllFileInDir(commonHookTypePlugiDir, [], ".", (fileName, filePath)=> {return true});
 
   let allPlugin = pluginArray.concat(commonPluginArray)
-
   allPlugin.forEach((pluginItem)=>{
      _loadPlugin(hookType, "", pluginItem.filePath, {})
   })

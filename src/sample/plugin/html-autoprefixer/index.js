@@ -24,7 +24,7 @@ exports.registerPlugin = function(cli, options){
       return cb(null,  responseContent)
     }
     //没有经过 hbs 编译, 纯html,不处理
-    if(data.status != 200){
+    if(data.status != 200 || !responseContent){
       return cb(null, responseContent)
     }
 

@@ -22,6 +22,9 @@ exports.registerPlugin = function(cli, options){
     if(!isNeedCompile(data.realPath)){
       return cb(null, responseContent)
     }
+    if(!responseContent){
+      return cb(null, responseContent)
+    }
     cleaner.process(responseContent)
       .then((result)=>{
         result.warnings().forEach((warn)=>{

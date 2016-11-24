@@ -7,7 +7,7 @@ exports.registerPlugin = function (cli, options) {
             return cb(null, data, content);
         }
         _fs.readFile(inputFilePath, 'utf8', (err, result) => {
-            cb(null, data, result);
+            cb(err, data, result);
         });
-    }, 1);
+    }, 0);
 };
