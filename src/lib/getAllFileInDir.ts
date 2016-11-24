@@ -1,7 +1,6 @@
 import * as _fs from 'fs';
 import * as _path from 'path';
 import * as _allDefine from '../all.d';
-
 /**
  * dir：目录
  * fileQueu： file数组

@@ -61,7 +61,7 @@
         {
           "suffix": "js/",
           "postfix": ".js",
-          "target": "js/global-1",
+          "target": "/js/global-1",
           "source": [
             "A-componts",
             "B-beMerge"

@@ -6,30 +6,8 @@ const _init = require('./init/index');
 const _hook = require('./hooks/index');
 const _plugin = require('./plugin/index');
 const log_1 = require('./lib/log');
-const getAllFileInDir_1 = require('./lib/getAllFileInDir');
+const getAllFileInProject_1 = require('./lib/getAllFileInProject');
 const _workspace = process.cwd();
-/**
- * 是否应该处理该文件。
- * filename: string, filepath
- * return boolean.
- * 如果忽略 返回false
- * 如果处理 返回true
- */
-function shouldInclude(filename, filepath) {
-    const _buildConfig = _init.getBuildConfig();
-    //忽略build文件夹
-    if (filepath.indexOf(_buildConfig.outdir) != -1) {
-        return false;
-    }
-    //需要忽略掉文件
-    const buildIgnore = _buildConfig.ignore;
-    for (let i = 0, length = buildIgnore.length; i < length; i++) {
-        if (new RegExp(buildIgnore[i]).test(filepath)) {
-            return false;
-        }
-    }
-    return true;
-}
 /**
  * 编译单个文件
  * 触发发各类hook，doCompile, didCompile*/
@@ -114,7 +92,7 @@ function compilerFileQueue(buildConfig, fileQueue, next) {
 function normalExecute() {
     let queue = [];
     //获取所有待编译文件
-    let fileQueue = getAllFileInDir_1.default(_workspace, [], '.', shouldInclude);
+    let fileQueue = getAllFileInProject_1.default();
     //获取编译参数
     let buildConfig = _init.getBuildConfig();
     //将要编译了
