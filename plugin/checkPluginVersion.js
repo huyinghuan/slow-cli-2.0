@@ -4,7 +4,6 @@ const _path = require('path');
 const file_config_1 = require('../file-config');
 const getFullPluginName_1 = require('./getFullPluginName');
 const _fs = require('fs-extra');
-const _semver = require('semver');
 //检查对比插件版本
 function default_1() {
     //获取插件配置
@@ -43,8 +42,7 @@ function default_1() {
             continue;
         }
         let currentVersion = require(_path.join(file_config_1.default.pluginDir, pluginName, 'package.json')).version;
-        console.log(_semver.compare(targetVersion, currentVersion));
-        if (_semver.lt(targetVersion, currentVersion)) {
+        if (targetVersion == currentVersion) {
             continue;
         }
         console.log(`警告！插件：${pluginName} 项目依赖版本是 ${targetVersion}，实际版本是 ${currentVersion}`);

@@ -8,8 +8,9 @@ import _getFullPluginName from './getFullPluginName';
 const _registry = "http://npm.hunantv.com";
 
 function installPlugin(pluginName, cb){
+  let registry = _init.getProjectPackageJSONField('__registry') || _registry
   pluginName  = _getFullPluginName(pluginName, true)
-  _executeCommand(`npm install ${pluginName} --save`, (error)=>{
+  _executeCommand(`npm install ${pluginName} -S -E --registry ${registry}`, (error)=>{
     if(error){
       cb(`安装插件${pluginName}失败`.red)
     }else{
@@ -20,7 +21,7 @@ function installPlugin(pluginName, cb){
 }
 
 export default function(pluginList){
-  let registry = _init.getProjectPackageJSONField('__registry')
+ 
   _async.map(pluginList, installPlugin, (error)=>{
     if(error){
       _log.error(error);

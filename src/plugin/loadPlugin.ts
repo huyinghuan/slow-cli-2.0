@@ -25,7 +25,6 @@ export default function loadPlugin(hookType:string, pluginName:string, pluginPat
         options = options.__setting;
       }
     }
-
     let plugin = require(pluginPath);
     //默认权重 加载插件
     if(_.isFunction(plugin.registerPlugin)){
@@ -63,7 +62,7 @@ export default function loadPlugin(hookType:string, pluginName:string, pluginPat
 
   } catch (error) {
     _log.fail(error)
-    _log.success(`加载插件 ${pluginName} 失败, 缺少注册函数`.red)
+    _log.success(`加载插件 ${pluginName} 失败`.red)
     process.exit(1)
   }
 }

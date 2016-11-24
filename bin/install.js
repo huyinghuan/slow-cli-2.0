@@ -3,6 +3,7 @@ const extraParamsParse_1 = require('./extraParamsParse');
 const log_1 = require('../lib/log');
 const _initUtils = require('../init/index');
 const _plugin = require('../plugin/index');
+const _ = require('lodash');
 function default_1(_commander) {
     _commander.command('install [plugins...]')
         .description('安装插件')
@@ -29,7 +30,21 @@ function default_1(_commander) {
             _plugin.install(plugins);
         }
         else {
-            _plugin.install(Object.keys(_initUtils.getPluginConfig()));
+            //没有指定，安装所有
+            let pluginConfig = _initUtils.getPluginConfig();
+            let pluginNameArr = [];
+            Object.keys(pluginConfig).forEach((key) => {
+                if (pluginConfig[key] == false) {
+                    log_1.default.info(`插件${key}已被禁用， 跳过安装`);
+                    return;
+                }
+                if (_.isPlainObject(pluginConfig[key]) && pluginConfig[key].__source) {
+                    log_1.default.info(`插件${key}处于开发中模式， 跳过安装`);
+                    return;
+                }
+                pluginNameArr.push(key);
+            });
+            _plugin.install(pluginNameArr);
         }
     });
 }

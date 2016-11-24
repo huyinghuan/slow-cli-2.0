@@ -61,7 +61,7 @@ function loadPlugin(hookType, pluginName, pluginPath, options) {
     }
     catch (error) {
         log_1.default.fail(error);
-        log_1.default.success(`加载插件 ${pluginName} 失败, 缺少注册函数`.red);
+        log_1.default.success(`加载插件 ${pluginName} 失败`.red);
         process.exit(1);
     }
 }

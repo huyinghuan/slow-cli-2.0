@@ -2,6 +2,7 @@ import _extraParamsParse from './extraParamsParse'
 import _log from '../lib/log';
 import * as _initUtils from '../init/index';
 import * as _plugin from '../plugin/index';
+import * as _ from 'lodash';
 
 export default function(_commander){
   _commander.command('install [plugins...]')
@@ -27,8 +28,24 @@ export default function(_commander){
         })
         _initUtils.writePluginConfigToConfigFile(pluginConfig)
         _plugin.install(plugins)
-      }else{ //没有指定，安装所有
-        _plugin.install(Object.keys(_initUtils.getPluginConfig()))
+      }else{ 
+        //没有指定，安装所有
+        let pluginConfig = _initUtils.getPluginConfig();
+        let pluginNameArr = [];
+        Object.keys(pluginConfig).forEach((key)=>{
+          if(pluginConfig[key] == false){
+            _log.info(`插件${key}已被禁用， 跳过安装`)
+            return;
+          }
+
+          if(_.isPlainObject(pluginConfig[key]) && pluginConfig[key].__source){
+            _log.info(`插件${key}处于开发中模式， 跳过安装`);
+            return
+          }
+          pluginNameArr.push(key)
+
+        })
+        _plugin.install(pluginNameArr)
       }
     })
 }

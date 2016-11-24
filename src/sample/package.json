@@ -4,21 +4,26 @@
   "silky-version": "2.0.0",
   "silky-plugin": {
     "hbs": {
+      "__stop": false,
       "__source": "./plugin/hbs",
       "__setting": {
         "root": "/template"
       }
     },
     "less": {
+      "__stop": false,
       "__source": "./plugin/less"
     },
     "autoprefix": {
+      "__stop": false,
       "__source": "./plugin/autoprefixer"
     },
     "html-autoprefix": {
+      "__stop": false,
       "__source": "./plugin/html-autoprefixer"
     },
     "tar-send": {
+      "__stop": false,
       "__source": "./plugin/tar-send"
     },
     "mini": {
@@ -38,10 +43,12 @@
       }
     },
     "hbs-ext": {
+      "__stop": false,
       "__source": "./plugin/hbs-ext"
     },
     "merge": {
-      "__source": "./plugin/merge",
+      "__stop": false,
+      "__source": "./plugin/merge/index.js",
       "__setting": [
         {
           "_regexp": true,
@@ -79,6 +86,6 @@
   },
   "__registry": "https://registry.npmjs.com/",
   "dependencies": {
-    "sp-proxy": "^1.0.0"
+    "sp-proxy": "1.0.0"
   }
 }

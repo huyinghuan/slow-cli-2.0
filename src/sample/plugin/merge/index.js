@@ -1,5 +1,6 @@
 'use strict';
-const _path = require('path')
+const _path = require('path');
+
 function isMatchRegExp(str, arr){
   if(!arr || arr.length == 0){return false}
   for(let i = 0, length = arr.length; i < length; i++){
@@ -13,11 +14,11 @@ function isMatchRegExp(str, arr){
 exports.registerPlugin = (cli, optionsArr)=>{
   cli.registerHook('build:didCompile', (data, content, cb)=>{
     
-    if(!options || !options.length){cb(null, data, content)}
+    if(!optionsArr || !optionsArr.length){cb(null, data, content)}
     
     let outputFileArr = [];
     let inputFilePath = data.inputFilePath;
-    (optionsArr as Array).forEach((option)=>{
+    optionsArr.forEach((option)=>{
       //正则表达式匹配模式
       if(option._regexp){
         if(isMatchRegExp(inputFilePath, option.source)){
@@ -36,7 +37,7 @@ exports.registerPlugin = (cli, optionsArr)=>{
     })
     data.outputFile = outputFileArr.length ? outputFileArr : data.outputFile;
     data.appendFile = true
-    content = `/*${data.filename}*/\n` + content
+    content = `;"${data.filename} \n;"` + content
     cb(null, data, content)
 
   })

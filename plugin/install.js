@@ -6,8 +6,9 @@ const log_1 = require('../lib/log');
 const getFullPluginName_1 = require('./getFullPluginName');
 const _registry = "http://npm.hunantv.com";
 function installPlugin(pluginName, cb) {
+    let registry = _init.getProjectPackageJSONField('__registry') || _registry;
     pluginName = getFullPluginName_1.default(pluginName, true);
-    executeCommand_1.default(`npm install ${pluginName} --save`, (error) => {
+    executeCommand_1.default(`npm install ${pluginName} -S -E --registry ${registry}`, (error) => {
         if (error) {
             cb(`安装插件${pluginName}失败`.red);
         }
@@ -18,7 +19,6 @@ function installPlugin(pluginName, cb) {
     });
 }
 function default_1(pluginList) {
-    let registry = _init.getProjectPackageJSONField('__registry');
     _async.map(pluginList, installPlugin, (error) => {
         if (error) {
             log_1.default.error(error);
