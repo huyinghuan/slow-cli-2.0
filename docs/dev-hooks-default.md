@@ -8,13 +8,13 @@
 
 Desc: 单某些资源没有被用户hook 捕获处理时， 将它作为静态文件夹响应给客户端. 
 
-(noFound.ts)[src/pluign/default-plugin/route/noFound.ts]
+[noFound.ts](../src/pluign/default-plugin/route/noFound.ts)
 
 #### route:didRequest
 
 Desc: 将基本的已存在的静态资源【js, css, html】读取到hook流程中，交给 可能需要的内容处理插件使用
 
-(responseHTML_JS_CSS.ts)[src/pluign/default-plugin/route/noFouresponseHTML_JS_CSSnd.ts]
+[responseHTML_JS_CSS.ts](../src/pluign/default-plugin/route/noFouresponseHTML_JS_CSSnd.ts)
 
 ### build
 
@@ -22,9 +22,9 @@ Desc: 将基本的已存在的静态资源【js, css, html】读取到hook流程
 
 Desc: 单某些资源没有被用户hook 捕获处理时， 将它copy到build相应目录.
 
-(doNothing.ts)[src/pluign/default-plugin/build/doNothing.ts]
+[doNothing.ts](../src/pluign/default-plugin/build/doNothing.ts)
 
 ### build:doCompile
 
 Desc: 将基本的已存在的静态资源【js, css, html】读取到hook流程中，交给 可能需要的内容处理插件使用
-(parseHTML_JS_CSS.ts)[src/pluign/default-plugin/build/parseHTML_JS_CSS.ts]
+[parseHTML_JS_CSS.ts](src/pluign/default-plugin/build/parseHTML_JS_CSS.ts)
