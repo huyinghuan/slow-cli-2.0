@@ -118,7 +118,7 @@ route:initial -> route:didRequest ->  route:willResponse -> ?route:notFound -> r
 
 build:initial > build:willBuild >  build:doCompile > build:didCompile >  ?build:doNothing > build:end
 
------------------------ 以上任意一个步骤发生错误将处罚 [build:error] -----------------------
+----------------------- 以上任意一个步骤发生错误将触发[build:error] -----------------------
 
 ```
 
