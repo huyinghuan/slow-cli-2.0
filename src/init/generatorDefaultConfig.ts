@@ -1,5 +1,5 @@
 import * as _projectUtils from '../lib/project';
-import _fileConfig from '../file-config';
+import _configFiledConstant from '../config-filed-constant';
 /**
  * 用户写入到项目目录下的package.json文件中。
  * 必须包含的信息
@@ -14,12 +14,12 @@ export default function(){
   let result:any = {};
   result.name = _projectUtils.getProjectDirectoryName();
   result.version = '1.0';
-  result[_fileConfig.pluginVersionField] = _projectUtils.getCLIVersion();
-  result[_fileConfig.pluginConfigField] = {};
-  result[_fileConfig.infinity] = {
-    port: 14422
+  result[_configFiledConstant.pluginVersionField] = _projectUtils.getCLIVersion();
+  result[_configFiledConstant.pluginConfigField] = {};
+  result[_configFiledConstant.infinity] = {
+    port: 14422, index: 'index.html'
   };
-  result[_fileConfig.buildField] = {
+  result[_configFiledConstant.buildField] = {
     outdir: './build',
     ignore: ["node_modules", "(\\/\\.[^/]+)$"],
   };

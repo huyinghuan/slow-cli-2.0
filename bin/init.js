@@ -3,7 +3,7 @@ const _ = require('lodash');
 const _fs = require('fs-extra');
 const _async = require('async');
 const _initUtils = require('../init/index');
-const file_config_1 = require('../file-config');
+const config_filed_constant_1 = require('../config-filed-constant');
 function default_1(_commander) {
     _commander.command('init')
         .description('初始化')
@@ -29,7 +29,7 @@ function default_1(_commander) {
             // (default-config.plugin-config) [extend] (remote project plugin config)
             // (default-config) [extend] (package json)
             if (program.pluginListName) {
-                delete packageJSON[file_config_1.default.pluginConfigField];
+                delete packageJSON[config_filed_constant_1.default.pluginConfigField];
             }
             Object.keys(packageJSON).forEach((key) => {
                 if (defaultConfig[key]) {
@@ -48,7 +48,7 @@ function default_1(_commander) {
                 console.log(error);
                 process.exit(1);
             }
-            _fs.writeJSONSync(file_config_1.default.CLIConfigFile, config);
+            _fs.writeJSONSync(config_filed_constant_1.default.CLIConfigFile, config);
             console.log('初始化成功！ 安装插件请运行命令 silky install'.green);
             process.exit(0);
         });

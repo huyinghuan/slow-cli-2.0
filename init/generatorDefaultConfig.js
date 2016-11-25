@@ -1,6 +1,6 @@
 "use strict";
 const _projectUtils = require('../lib/project');
-const file_config_1 = require('../file-config');
+const config_filed_constant_1 = require('../config-filed-constant');
 /**
  * 用户写入到项目目录下的package.json文件中。
  * 必须包含的信息
@@ -15,12 +15,12 @@ function default_1() {
     let result = {};
     result.name = _projectUtils.getProjectDirectoryName();
     result.version = '1.0';
-    result[file_config_1.default.pluginVersionField] = _projectUtils.getCLIVersion();
-    result[file_config_1.default.pluginConfigField] = {};
-    result[file_config_1.default.infinity] = {
-        port: 14422
+    result[config_filed_constant_1.default.pluginVersionField] = _projectUtils.getCLIVersion();
+    result[config_filed_constant_1.default.pluginConfigField] = {};
+    result[config_filed_constant_1.default.infinity] = {
+        port: 14422, index: 'index.html'
     };
-    result[file_config_1.default.buildField] = {
+    result[config_filed_constant_1.default.buildField] = {
         outdir: './build',
         ignore: ["node_modules", "(\\/\\.[^/]+)$"],
     };

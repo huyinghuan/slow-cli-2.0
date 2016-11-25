@@ -3,16 +3,18 @@ import * as _ from 'lodash';
 import * as _fs from 'fs-extra';
 import * as _async from 'async';
 import * as _initUtils from '../init/index';
-import _fileConfig from '../file-config';
+import _configFiledConstant from '../config-filed-constant';
 export default function(_commander){
   _commander.command('init')
     .description('初始化')
     .option('-p, --pluginListName <value>', '根据插件列表名称获取插件列表')
     .option('-n, --newPlugin <value>', '新建一个插件脚手架， 自定插件名称')
-
     .action((program)=>{
       
       let queue = []
+
+      
+
       //生成默认配置文件
       queue.push((cb)=>{
         cb(null, _initUtils.generatorDefaultConfig())
@@ -33,7 +35,7 @@ export default function(_commander){
         // (default-config.plugin-config) [extend] (remote project plugin config)
         // (default-config) [extend] (package json)
         if(program.pluginListName){
-          delete packageJSON[_fileConfig.pluginConfigField]
+          delete packageJSON[_configFiledConstant.pluginConfigField]
         }
 
         Object.keys(packageJSON).forEach((key)=>{
@@ -53,7 +55,7 @@ export default function(_commander){
           console.log(error);
           process.exit(1);
         }
-        _fs.writeJSONSync(_fileConfig.CLIConfigFile, config)
+        _fs.writeJSONSync(_configFiledConstant.CLIConfigFile, config)
         console.log('初始化成功！ 安装插件请运行命令 silky install'.green);
         process.exit(0);
       })

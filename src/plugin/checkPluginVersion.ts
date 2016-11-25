@@ -1,6 +1,6 @@
 import { getProjectPackageJSON, getPluginConfig } from '../init/index';
 import * as _path from 'path';
-import _fileConfig from '../file-config';
+import _configFiledConstant from '../config-filed-constant';
 import _getFullPluginName from './getFullPluginName';
 import * as _fs from 'fs-extra';
 
@@ -39,13 +39,13 @@ export default function ():boolean{
   for(let i = 0, length = pluginList.length; i < length; i++){
     let pluginName = pluginList[i];
     let targetVersion:string = dependencies[pluginName];
-    if(!_fs.existsSync(_path.join(_fileConfig.pluginDir, pluginName))){
+    if(!_fs.existsSync(_path.join(_configFiledConstant.pluginDir, pluginName))){
       console.log(`警告! 配置${pluginName}未安装,请先安装插件`)
       isMatch = false;
       continue;
     }
     
-    let currentVersion:string = require(_path.join(_fileConfig.pluginDir, pluginName, 'package.json')).version;
+    let currentVersion:string = require(_path.join(_configFiledConstant.pluginDir, pluginName, 'package.json')).version;
 
     if(targetVersion == currentVersion){
       continue;

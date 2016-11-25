@@ -1,6 +1,6 @@
 "use strict";
 const _path = require('path');
-const file_config_1 = require('../file-config');
+const config_filed_constant_1 = require('../config-filed-constant');
 const getFullPluginName_1 = require('./getFullPluginName');
 const _init = require('../init/index');
 const loadPlugin_1 = require('./loadPlugin');
@@ -64,7 +64,7 @@ function scanPlugins(hookType) {
             console.log(`警告！！ ${pluginName} 加载方式为 开发者模式`.red);
         }
         //从自定义路径或插件目录获取插件路径
-        let pluginPath = getDevPluginPath(pluginsConfig[pluginName].__source) || _path.join(file_config_1.default.pluginDir, getFullPluginName_1.default(pluginName));
+        let pluginPath = getDevPluginPath(pluginsConfig[pluginName].__source) || _path.join(config_filed_constant_1.default.pluginDir, getFullPluginName_1.default(pluginName));
         loadPlugin_1.default(hookType, pluginName, pluginPath, pluginsConfig[pluginName]);
     });
     //内置插件
