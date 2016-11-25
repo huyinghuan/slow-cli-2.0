@@ -8,7 +8,6 @@ export default function(_commander){
   _commander.command('install [plugins...]')
     .description('安装插件')
     .option('-l, --log <value>', 'log日志,( 0[defaul]: show all; 1: show error, fail; 2: show error, fail, warn)',(value)=>{_log.setLevel(value)})
-    .option('-A, --additional <items>', '额外的参数，格式 -A A=1[,B=xxx]', _extraParamsParse)
     .option('-p, --pluginListName <value>', '根据插件列表名称获取插件列表')
     .action((plugins, program)=>{
 
