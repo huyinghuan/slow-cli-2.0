@@ -10,12 +10,15 @@ export default function(_commander){
     .description('启动http服务')
     .option('-p, --port <n>', '指定运行端口')
     .option('-c, --check', '检测运行版本，和插件版本')
+    .option('-e, --enviroment <value>', "运行时环境可选[develop, production，或其他] 默认develop")
     .option('-l, --log <value>', 'log日志,( 0[defaul]: show all; 1: show error, fail; 2: show error, fail, warn)',(value)=>{_log.setLevel(value)})
     .option('-A, --additional <items>', '额外的参数，格式 -A A=1[,B=xxx]', _extraParamsParse)
+    .allowUnknownOption()
     .action((program)=>{
       //读取用户自定义配置
       _init.prepareUserEnv();
-
+      //读取运行时环境配置
+      _init.prepareRuntimeEnv(program.enviroment)
       //运行时参数记录
       let userInputArgs:any = {}
 
