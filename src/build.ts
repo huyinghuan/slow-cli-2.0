@@ -33,10 +33,10 @@ function compileFile(buildConfig, data, next){
 
   /**
    * 已经编译完成，写入文件。
-   * 如果没有任何内容，则跳过,
+   * 如果没有任何内容，则跳过, 如果ignore为true也跳过
   */
   queue.push((data, content, cb)=>{
-    if(!content){
+    if(!content || data.ignore){
       return cb(null, false, data)
     }
 
@@ -57,10 +57,10 @@ function compileFile(buildConfig, data, next){
     cb(null, true, data)
   })
   
-  /* 未完成编译， 触发hook， hook如果已经写入文件，那么不做任何事情，
+  /* 未完成编译， 触发hook， hook如果已经写入文件，那么不做任何事情， 如果ignore为true也不做任何事情
    如果没有写入文件， 那么默认copy[调用默认hook(plugin/default-plugin/build/*)]文件。*/
   queue.push((didWrite, data, cb)=>{
-    if(didWrite){return cb(null)}
+    if(didWrite || data.ignore){return cb(null)}
     _hook.triggerBuildDoNothingHook(data, (error, processResult:any)=>{
       if(error){return cb(error)}
 
@@ -92,7 +92,8 @@ function compilerFileQueue(buildConfig, fileQueue, next){
       inputFileRelativePath:  _path.join(fileItem.relativeDir, fileItem.fileName),
       outputFileRelativePath: _path.join(buildConfig.outRelativeDir, fileItem.relativeDir, fileItem.fileName),
       fileName: fileItem.fileName,
-      appendFile: false 
+      appendFile: false,
+      ignore: false
     }
     compileFile(buildConfig, data, cb)
   }, (error, result)=>{

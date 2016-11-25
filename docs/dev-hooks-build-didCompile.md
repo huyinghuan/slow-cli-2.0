@@ -12,7 +12,11 @@ exports.registerPlugin = (cli, options)=>{
       inputFilePath:
       outputFilePath:
       fileName,
-       appendFile: false 添加到文件尾还是替换全部内容， 默认false，替换全部内容
+      appendFile: false 添加到文件尾还是替换全部内容， 默认false，替换全部内容
+      outdir: buildConfig.outdir,
+      inputFileRelativePath:  _path.join(fileItem.relativeDir, fileItem.fileName),
+      outputFileRelativePath: _path.join(buildConfig.outRelativeDir, fileItem.relativeDir, fileItem.fileName),
+      ignore: false 是否取消对该文件处理 不处理，不copy
     }
     content 编译文件内容
 
