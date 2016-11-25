@@ -12,7 +12,12 @@
     },
     "less": {
       "__stop": false,
-      "__source": "./plugin/less"
+      "__source": "./plugin/less",
+      "__setting":{
+        "_env_global": "global.less",
+        "global": [],
+        "ignore": ["(css/module/)"]
+      }
     },
     "autoprefix": {
       "__stop": false,
@@ -76,7 +81,6 @@
       "node_modules",
       "(\\/\\.[^/]+)$",
       "plugin",
-      "(css/module/)",
       "(\\.tar)$"
     ]
   },

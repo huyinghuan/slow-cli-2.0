@@ -10,7 +10,10 @@ var _DefaultSetting = {
   "regexp": "(\.css)$",
   "options":{
     paths: ['.', _path.join(process.cwd(), 'css')]
-  }
+  },
+  ignore: [],
+  global: [],
+  _golbal: []
 }
 
 //判断该文件是否需要处理
@@ -37,6 +40,15 @@ const getCompileContent = (realFilePath, data, cb)=>{
   })
 } 
 
+function needIgnore(filename, ignoreRegList){
+  for(let i = 0, length = ignoreRegList.length; i < length; i++){
+    if(new RegExp(ignoreRegList[i]).test(filename)){
+      return true
+    }
+  }
+  return false
+}
+
 exports.registerPlugin = function(cli, options){
   //继承定义
   _.extend(_DefaultSetting, options);
@@ -62,12 +74,29 @@ exports.registerPlugin = function(cli, options){
     if(!/(\.less)$/.test(inputFilePath)){
       return cb(null, data, content)
     }
+
+    //查看忽略
+    if(_DefaultSetting.ignore && _DefaultSetting.ignore.length > 0){
+      if(needIgnore(inputFilePath, _DefaultSetting.ignore)){
+        data.ignore = true;
+        return cb(null, data, content)
+      }
+    }
+
+    let globaleLessContent = ""
+    //获取环境相关全局less，添加到每个less文件后
+    _env_global = [].concat(_DefaultSetting._env_global)
+    _env_global.forEach((filename)=>{
+      let filePath = _path.join(cli.options.environmentDir, filename);
+      
+
+    })
+
+    //获取春全局less，添加到每个less文件后
+
     getCompileContent(inputFilePath, data, (error, data, content)=>{
       if(data.status == 200){
         data.outputFilePath = data.outputFilePath.replace(/(\less)$/, "css")
-      }
-      if(error){
-        console.log(error)
       }
       cb(error, data, content);
     })
