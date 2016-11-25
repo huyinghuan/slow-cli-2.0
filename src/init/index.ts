@@ -1,4 +1,4 @@
-import _config from '../file-config';
+import _configFiledConstant from '../config-filed-constant';
 import * as _fs from 'fs-extra';
 import * as _path from 'path';
 import * as _ from 'lodash';
@@ -7,6 +7,9 @@ import getRemoteServerProjectPluginConfig from './getRemoteServerProjectPluginCo
 import setPluginConfig from './setPluginConfig';
 import checkBuildArgs from './checkBuildArgs';
 import checkStartArgs from './checkStartArgs';
+import prepareUserEnv from './prepareUserEnv';
+import prepareRuntimeEnv from './prepareRuntimeEnv';
+import preparePrerequisiteDir from './preparePrerequisiteDir';
 
 export function getProjectPackageJSONField(fieldName:string){
   let json = getProjectPackageJSON();
@@ -15,38 +18,20 @@ export function getProjectPackageJSONField(fieldName:string){
 
 //返回packageJson内容
 export function getProjectPackageJSON(fieldName?:string){
-  if(!_fs.existsSync(_config.CLIConfigFile)){
+  if(!_fs.existsSync(_configFiledConstant.CLIConfigFile)){
     return {}
   }
-  
-  return  _fs.readJSONSync(_config.CLIConfigFile) //require(_config.CLIConfigFile)
+  return  _fs.readJSONSync(_configFiledConstant.CLIConfigFile) //require(_configFiledConstant.CLIConfigFile)
 }
 
 //写入package.json文件
 export function writeProjectPackageJSON(packageJSON){
-  _fs.outputJSONSync(_config.CLIConfigFile, packageJSON)
+  _fs.outputJSONSync(_configFiledConstant.CLIConfigFile, packageJSON)
 }
 
-/**
- * 准备用户环境，配置等
- */
-export function prepareUserEnv(){
-  let config = {}
-  let defaultConfig = generatorDefaultConfig();
-  if(!_fs.existsSync(_config.CLIConfigFile)){
-    console.log(`非 ${_config.infinity} 项目， 仅启用静态服务器功能`);
-    config = defaultConfig
-  }else{
-    //读取项目目录下的package.json
-    //读取package.json下用户自定义配置
-    config = getProjectPackageJSON()
-  }
-  //如果package.json里面没有相关配置，那么则使用默认配置。
-  (global as any).__CLI = config[_config.infinity] || defaultConfig[_config.infinity];
-  (global as any).__CLI.pluginsConfig = config[_config.pluginConfigField];
-  (global as any).__CLI.buildConfig = config[_config.buildField] || defaultConfig[_config.buildField];
+export function setEnviroment(setting){
+  _.extend((global as any).__CLI, setting);
 }
-
 
 export function setBuildParams(userInputAgruments){
   _.extend((global as any).__CLI.buildConfig, userInputAgruments);
@@ -71,7 +56,7 @@ export function getFullConfig(){
 export function writePluginConfigToConfigFile(pluginConfig){
   let packageJSON = getProjectPackageJSON()
   packageJSON = setPluginConfig(packageJSON, pluginConfig)
-  _fs.outputJSONSync(_config.CLIConfigFile, packageJSON)
+  _fs.outputJSONSync(_configFiledConstant.CLIConfigFile, packageJSON)
 }
 
 
@@ -80,5 +65,8 @@ export {
   getRemoteServerProjectPluginConfig as getRemoteServerProjectPluginConfig,
   setPluginConfig as setPluginConfig,
   checkBuildArgs as checkBuildArgs,
-  checkStartArgs as checkStartArgs
+  checkStartArgs as checkStartArgs,
+  prepareUserEnv as prepareUserEnv,
+  prepareRuntimeEnv as prepareRuntimeEnv,
+  preparePrerequisiteDir as preparePrerequisiteDir
 }

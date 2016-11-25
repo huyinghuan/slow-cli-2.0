@@ -1,5 +1,5 @@
 "use strict";
-const file_config_1 = require('../file-config');
+const config_filed_constant_1 = require('../config-filed-constant');
 const _fs = require('fs-extra');
 const _ = require('lodash');
 const generatorDefaultConfig_1 = require('./generatorDefaultConfig');
@@ -12,6 +12,12 @@ const checkBuildArgs_1 = require('./checkBuildArgs');
 exports.checkBuildArgs = checkBuildArgs_1.default;
 const checkStartArgs_1 = require('./checkStartArgs');
 exports.checkStartArgs = checkStartArgs_1.default;
+const prepareUserEnv_1 = require('./prepareUserEnv');
+exports.prepareUserEnv = prepareUserEnv_1.default;
+const prepareRuntimeEnv_1 = require('./prepareRuntimeEnv');
+exports.prepareRuntimeEnv = prepareRuntimeEnv_1.default;
+const preparePrerequisiteDir_1 = require('./preparePrerequisiteDir');
+exports.preparePrerequisiteDir = preparePrerequisiteDir_1.default;
 function getProjectPackageJSONField(fieldName) {
     let json = getProjectPackageJSON();
     return json[fieldName];
@@ -19,38 +25,21 @@ function getProjectPackageJSONField(fieldName) {
 exports.getProjectPackageJSONField = getProjectPackageJSONField;
 //返回packageJson内容
 function getProjectPackageJSON(fieldName) {
-    if (!_fs.existsSync(file_config_1.default.CLIConfigFile)) {
+    if (!_fs.existsSync(config_filed_constant_1.default.CLIConfigFile)) {
         return {};
     }
-    return _fs.readJSONSync(file_config_1.default.CLIConfigFile); //require(_config.CLIConfigFile)
+    return _fs.readJSONSync(config_filed_constant_1.default.CLIConfigFile); //require(_configFiledConstant.CLIConfigFile)
 }
 exports.getProjectPackageJSON = getProjectPackageJSON;
 //写入package.json文件
 function writeProjectPackageJSON(packageJSON) {
-    _fs.outputJSONSync(file_config_1.default.CLIConfigFile, packageJSON);
+    _fs.outputJSONSync(config_filed_constant_1.default.CLIConfigFile, packageJSON);
 }
 exports.writeProjectPackageJSON = writeProjectPackageJSON;
-/**
- * 准备用户环境，配置等
- */
-function prepareUserEnv() {
-    let config = {};
-    let defaultConfig = generatorDefaultConfig_1.default();
-    if (!_fs.existsSync(file_config_1.default.CLIConfigFile)) {
-        console.log(`非 ${file_config_1.default.infinity} 项目， 仅启用静态服务器功能`);
-        config = defaultConfig;
-    }
-    else {
-        //读取项目目录下的package.json
-        //读取package.json下用户自定义配置
-        config = getProjectPackageJSON();
-    }
-    //如果package.json里面没有相关配置，那么则使用默认配置。
-    global.__CLI = config[file_config_1.default.infinity] || defaultConfig[file_config_1.default.infinity];
-    global.__CLI.pluginsConfig = config[file_config_1.default.pluginConfigField];
-    global.__CLI.buildConfig = config[file_config_1.default.buildField] || defaultConfig[file_config_1.default.buildField];
+function setEnviroment(setting) {
+    _.extend(global.__CLI, setting);
 }
-exports.prepareUserEnv = prepareUserEnv;
+exports.setEnviroment = setEnviroment;
 function setBuildParams(userInputAgruments) {
     _.extend(global.__CLI.buildConfig, userInputAgruments);
 }
@@ -75,6 +64,6 @@ exports.getFullConfig = getFullConfig;
 function writePluginConfigToConfigFile(pluginConfig) {
     let packageJSON = getProjectPackageJSON();
     packageJSON = setPluginConfig_1.default(packageJSON, pluginConfig);
-    _fs.outputJSONSync(file_config_1.default.CLIConfigFile, packageJSON);
+    _fs.outputJSONSync(config_filed_constant_1.default.CLIConfigFile, packageJSON);
 }
 exports.writePluginConfigToConfigFile = writePluginConfigToConfigFile;
