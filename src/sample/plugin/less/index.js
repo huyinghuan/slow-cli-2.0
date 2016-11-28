@@ -35,7 +35,6 @@ const getCompileContent = (realFilePath, data, cb)=>{
     if(e){return cb(e)}
     //编译成功，标记状态码
     data.status = 200;
-    //这里可以添加数据获取逻辑 TODO
     cb(null, data, result.css)
   })
 } 

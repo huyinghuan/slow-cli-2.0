@@ -19,7 +19,7 @@ const config = {
   CLIConfigFile: _path.join(_root, 'package.json'), //插件配置文件
   buildField: `${_infinity}-build`, //build 相关配置】
   environmentRootDir:  _path.join(_root, `.${_infinity}`),
-  prerequisiteEnvironment: ['production', 'develop']
+  prerequisiteEnvironment: ['production', 'develop', 'normal']
 }
 
 export default config;

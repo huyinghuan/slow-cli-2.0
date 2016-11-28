@@ -31,6 +31,8 @@ export default function(_commander){
         //没有指定，安装所有
         let pluginConfig = _initUtils.getPluginConfig();
         let pluginNameArr = [];
+        let versionDependencies = _initUtils.getProjectPackageJSONField('dependencies')
+
         Object.keys(pluginConfig).forEach((key)=>{
           if(pluginConfig[key] == false){
             _log.info(`插件${key}已被禁用， 跳过安装`)
@@ -40,6 +42,11 @@ export default function(_commander){
           if(_.isPlainObject(pluginConfig[key]) && pluginConfig[key].__source){
             _log.info(`插件${key}处于开发中模式， 跳过安装`);
             return
+          }
+          let version = versionDependencies[_plugin.getFullPluginName(key, false)]
+          //获取依赖的版本,如果有依赖版本则安装以来版本
+          if(versionDependencies[_plugin.getFullPluginName(key, false)]){
+            key = `${key}@${version}`
           }
           pluginNameArr.push(key)
 

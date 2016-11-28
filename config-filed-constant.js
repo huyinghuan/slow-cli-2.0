@@ -15,7 +15,7 @@ const config = {
     CLIConfigFile: _path.join(_root, 'package.json'),
     buildField: `${_infinity}-build`,
     environmentRootDir: _path.join(_root, `.${_infinity}`),
-    prerequisiteEnvironment: ['production', 'develop']
+    prerequisiteEnvironment: ['production', 'develop', 'normal']
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = config;

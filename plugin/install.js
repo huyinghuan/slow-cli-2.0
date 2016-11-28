@@ -6,7 +6,6 @@ const getFullPluginName_1 = require('./getFullPluginName');
 const _registry = "http://npm.hunantv.com";
 function installPlugin(pluginName, cb) {
     let registry = _init.getProjectPackageJSONField('__registry') || _registry;
-    pluginName = getFullPluginName_1.default(pluginName, true);
     console.log(`npm install ${pluginName}  --save --save-exact --registry ${registry}`);
     executeCommand_1.default(`npm install ${pluginName} --save --save-exact --registry ${registry}`, (error) => {
         if (error) {
