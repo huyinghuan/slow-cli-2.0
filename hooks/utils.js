@@ -1,16 +1,8 @@
 "use strict";
-const _minimatch = require('minimatch');
 const _ = require('lodash');
 const _fs = require('fs-extra');
 const executeCommand_1 = require('../lib/executeCommand');
 const getAllFileInProject_1 = require('../lib/getAllFileInProject');
-/**
- * 文件后缀匹配
- */
-function match(path, express) {
-    return _minimatch(path, express, { matchBase: true });
-}
-exports.match = match;
 /**
  *lodash.extend
  */

@@ -6,6 +6,7 @@ import * as _init from '../init/index';
 import * as _allDefined from '../all';
 import _log from '../lib/log';
 import * as _hookMap from '../hooks/map';
+import * as _runtime from '../runtime-enviroment/index';
 /**
  * 加载指定类型hooks
  * hookType  hook类型，如start只用到了route 类型， build只用了build类型， 加载所有用 all
@@ -43,7 +44,8 @@ export default function loadPlugin(hookType:string, pluginName:string, pluginPat
         options: _init.getFullConfig(),
         utils: _utils, //一些默认工具函数，大多插件可以使用得到
         log: _log,
-        cwd: cwd
+        cwd: cwd,
+        runtime: _runtime
       }, options)
     }
 

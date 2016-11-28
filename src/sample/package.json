@@ -15,7 +15,7 @@
       "__source": "./plugin/less",
       "__setting": {
         "_env_global": "global.less",
-        "global": [],
+        "global": ["css/global.less"],
         "ignore": [
           "(css/module/)"
         ]

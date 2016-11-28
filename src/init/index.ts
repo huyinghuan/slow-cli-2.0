@@ -16,6 +16,13 @@ export function setEnviroment(setting){
   _.extend((global as any).__CLI, setting);
 }
 
+export function getEnviroment(){
+  return {
+    enviroment: (global as any).__CLI.enviroment,
+    enviromentDir:  (global as any).__CLI.enviroment.enviromentDir
+  }
+}
+
 //设置build参数，用于 命令行指定参数
 export function setBuildParams(userInputAgruments){
   _.extend((global as any).__CLI.buildConfig, userInputAgruments);

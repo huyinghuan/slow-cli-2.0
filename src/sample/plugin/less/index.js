@@ -86,12 +86,14 @@ exports.registerPlugin = function(cli, options){
     //获取环境相关全局less，添加到每个less文件后
     _env_global = [].concat(_DefaultSetting._env_global)
     _env_global.forEach((filename)=>{
-      let filePath = _path.join(cli.options.environmentDir, filename);
-      
-
+      globaleLessContent = globaleLessContent + cli.runtime.getRuntimeEnvFile(filename, true); 
     })
 
-    //获取春全局less，添加到每个less文件后
+    //获取全局less，添加到每个less文件后
+    let lessGlobal = [].concat(_DefaultSetting.global)
+    lessGlobal.forEach((filename)=>{
+      globaleLessContent = globaleLessContent + _fs.readFileSync(_path.join(cli.cwd, filename))
+    })
 
     getCompileContent(inputFilePath, data, (error, data, content)=>{
       if(data.status == 200){
