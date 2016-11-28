@@ -1,14 +1,14 @@
 import * as _fs from 'fs-extra';
 import _configFiledConstant from '../config-filed-constant';
 import getCLIVersion from './getCLIVersion';
-import { getProjectPackageJSON } from '../init/index';
+import * as _project from '../project';
 
 export default function():boolean{
   if(!_fs.existsSync(_configFiledConstant.CLIConfigFile)){
     console.log('默认执行环境，跳过CLI环境检查')
     return true;
   }
-  let packageJSON = getProjectPackageJSON();
+  let packageJSON = _project.getProjectPackageJSON();
   let currentCLIVersion = getCLIVersion();
   let macth = packageJSON[_configFiledConstant.pluginVersionField] == currentCLIVersion;
   if(macth){

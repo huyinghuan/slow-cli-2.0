@@ -7,6 +7,8 @@
   utils: Object 见下文说明
   logs: Object 见下文说明
   cwd: string 当前工作目录
+  getRuntimeEnvFileContent:  获取运行时 相对应的文件内容
+  getRuntimeEnvConfig:  获取运行时 相对应的
 }
 ```
 
@@ -17,3 +19,7 @@
 ### log
 
 [log.ts](../src/lib/log.ts)
+
+## getRuntimeEnvFileContent
+
+[getRuntimeEnvFileContent](../src/hooks/getRuntimeEnvFileContent)

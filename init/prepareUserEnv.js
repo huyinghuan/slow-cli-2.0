@@ -2,7 +2,7 @@
 const generatorDefaultConfig_1 = require('./generatorDefaultConfig');
 const config_filed_constant_1 = require('../config-filed-constant');
 const _fs = require('fs-extra');
-const index_1 = require('./index');
+const _project = require('../project');
 /**
  * 准备用户环境，配置等
  */
@@ -16,7 +16,7 @@ function prepareUserEnv() {
     else {
         //读取项目目录下的package.json
         //读取package.json下用户自定义配置
-        config = index_1.getProjectPackageJSON();
+        config = _project.getProjectPackageJSON();
     }
     //如果package.json里面没有相关配置，那么则使用默认配置。
     global.__CLI = config[config_filed_constant_1.default.infinity] || defaultConfig[config_filed_constant_1.default.infinity];

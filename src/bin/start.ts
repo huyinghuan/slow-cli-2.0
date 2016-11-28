@@ -1,5 +1,5 @@
 import * as _init from '../init/index'
-import * as _projectUtils from '../lib/project'
+import * as _project from '../project'
 import * as _utils from '../plugin/index';
 import _app from '../app'
 import _extraParamsParse from './extraParamsParse'
@@ -40,7 +40,7 @@ export default function(_commander){
       if(program.check){
         //检查cli 版本
         // 检查插件版本
-        if(!_utils.checkPluginVersion() || ! _projectUtils.checkCLIVersion()){
+        if(!_utils.checkPluginVersion() || ! _project.checkCLIVersion()){
           process.exit(1)  
         } 
       }

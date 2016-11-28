@@ -2,7 +2,7 @@
 const _path = require('path');
 const config_filed_constant_1 = require('../config-filed-constant');
 const getFullPluginName_1 = require('./getFullPluginName');
-const _init = require('../init/index');
+const _plugin = require('../plugin/index');
 const loadPlugin_1 = require('./loadPlugin');
 const getAllFileInDir_1 = require('../lib/getAllFileInDir');
 //扫描加载内置插件
@@ -28,14 +28,14 @@ function getDevPluginPath(source) {
         return source;
     }
     //是否设置了根目录 没有设置 取执行目录为根目录
-    let pluginRootDir = _init.getPluginConfig().__root || process.cwd();
+    let pluginRootDir = _plugin.getPluginConfig().__root || process.cwd();
     return _path.join(pluginRootDir, source);
 }
 /**
  * 扫描Hooks插件, 仅加载指定hook
 */
 function scanPlugins(hookType) {
-    let pluginsConfig = _init.getPluginConfig();
+    let pluginsConfig = _plugin.getPluginConfig();
     if (!pluginsConfig) {
         console.log(`没有配置任何插件`.red);
         return;

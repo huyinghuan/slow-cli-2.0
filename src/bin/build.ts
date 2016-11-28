@@ -1,6 +1,6 @@
 import * as _init from '../init/index'
 import _build from '../build';
-import * as _projectUtils from '../lib/project';
+import * as _project from '../project';
 import * as _plugin from '../plugin/index' 
 import * as _path from 'path';
 import _extraParamsParse from './extraParamsParse';
@@ -19,7 +19,7 @@ export default function(_commander){
       _init.prepareUserEnv();
 
       //build 强制进行版本检查
-      let checkResult = _projectUtils.checkCLIVersion() && _plugin.checkPluginVersion();
+      let checkResult = _project.checkCLIVersion() && _plugin.checkPluginVersion();
 
       //如没有强制build项目，那么如果版本检查没通过则结束build
       if(!program.force && !checkResult){

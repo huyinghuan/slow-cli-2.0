@@ -1,4 +1,6 @@
-import { getProjectPackageJSON, getPluginConfig } from '../init/index';
+import * as _plugin from '../plugin/index';
+import * as _project from '../project';
+
 import * as _path from 'path';
 import _configFiledConstant from '../config-filed-constant';
 import _getFullPluginName from './getFullPluginName';
@@ -7,7 +9,7 @@ import * as _fs from 'fs-extra';
 //检查对比插件版本
 export default function ():boolean{
   //获取插件配置
-  let pluginConfig = getPluginConfig();
+  let pluginConfig = _plugin.getPluginConfig();
   //搜集需要对比的插件。开发版本将跳过。
   let pluginList = [];
   Object.keys(pluginConfig).forEach((pluginName)=>{
@@ -23,7 +25,7 @@ export default function ():boolean{
     pluginList.push(pluginName)
   })
 
-  let packageJSON = getProjectPackageJSON();
+  let packageJSON = _project.getProjectPackageJSON();
   let dependencies = packageJSON.dependencies;
   
   if(!dependencies && pluginList.length != 0){

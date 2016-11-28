@@ -1,5 +1,6 @@
 "use strict";
-const index_1 = require('../init/index');
+const _plugin = require('../plugin/index');
+const _project = require('../project');
 const _path = require('path');
 const config_filed_constant_1 = require('../config-filed-constant');
 const getFullPluginName_1 = require('./getFullPluginName');
@@ -7,7 +8,7 @@ const _fs = require('fs-extra');
 //检查对比插件版本
 function default_1() {
     //获取插件配置
-    let pluginConfig = index_1.getPluginConfig();
+    let pluginConfig = _plugin.getPluginConfig();
     //搜集需要对比的插件。开发版本将跳过。
     let pluginList = [];
     Object.keys(pluginConfig).forEach((pluginName) => {
@@ -23,7 +24,7 @@ function default_1() {
         pluginName = getFullPluginName_1.default(pluginName);
         pluginList.push(pluginName);
     });
-    let packageJSON = index_1.getProjectPackageJSON();
+    let packageJSON = _project.getProjectPackageJSON();
     let dependencies = packageJSON.dependencies;
     if (!dependencies && pluginList.length != 0) {
         console.log(`警告! 配置插件未安装， 请先安装插件`.yellow);

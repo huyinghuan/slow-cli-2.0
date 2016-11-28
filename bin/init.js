@@ -4,6 +4,8 @@ const _fs = require('fs-extra');
 const _async = require('async');
 const _initUtils = require('../init/index');
 const config_filed_constant_1 = require('../config-filed-constant');
+const _project = require('../project');
+const _plugin = require('../plugin/index');
 function default_1(_commander) {
     _commander.command('init')
         .description('初始化')
@@ -19,13 +21,13 @@ function default_1(_commander) {
         if (program.pluginListName) {
             queue.push((defaultConfig, cb) => {
                 _initUtils.getRemoteServerProjectPluginConfig(program.pluginListName, (error, pluginConfig) => {
-                    cb(error, _initUtils.setPluginConfig(defaultConfig, pluginConfig));
+                    cb(error, _plugin.setPluginConfig(defaultConfig, pluginConfig));
                 });
             });
         }
         //如果已经存在package.json文件，那么读取内容，覆盖配置
         queue.push((defaultConfig, cb) => {
-            let packageJSON = _initUtils.getProjectPackageJSON();
+            let packageJSON = _project.getProjectPackageJSON();
             // (default-config.plugin-config) [extend] (remote project plugin config)
             // (default-config) [extend] (package json)
             if (program.pluginListName) {

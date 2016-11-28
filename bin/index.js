@@ -7,7 +7,7 @@ const check_1 = require('./check');
 const build_1 = require('./build');
 const install_1 = require('./install');
 const info_1 = require('./info');
-const _projectUtils = require('../lib/project');
+const _project = require('../project');
 const config_filed_constant_1 = require('../config-filed-constant');
 //import * as colors from 'colors' 坑, 全应用引用， 其他module无须重复引用
 require('colors');
@@ -15,7 +15,7 @@ require('colors');
  * 全局变量，保存配置数据
  */
 global.__CLI = {};
-const versionDesc = _projectUtils.getCLIVersion();
+const versionDesc = _project.getCLIVersion();
 console.log(`${config_filed_constant_1.default.infinity} version is ${versionDesc}`.green);
 start_1.default(_commander);
 init_1.default(_commander);

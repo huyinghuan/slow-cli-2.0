@@ -1,6 +1,6 @@
 "use strict";
 const _init = require('../init/index');
-const _projectUtils = require('../lib/project');
+const _project = require('../project');
 const _utils = require('../plugin/index');
 const app_1 = require('../app');
 const extraParamsParse_1 = require('./extraParamsParse');
@@ -37,7 +37,7 @@ function default_1(_commander) {
         if (program.check) {
             //检查cli 版本
             // 检查插件版本
-            if (!_utils.checkPluginVersion() || !_projectUtils.checkCLIVersion()) {
+            if (!_utils.checkPluginVersion() || !_project.checkCLIVersion()) {
                 process.exit(1);
             }
         }

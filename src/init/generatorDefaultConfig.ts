@@ -1,4 +1,4 @@
-import * as _projectUtils from '../lib/project';
+import * as _project from '../project';
 import _configFiledConstant from '../config-filed-constant';
 /**
  * 用户写入到项目目录下的package.json文件中。
@@ -12,9 +12,9 @@ import _configFiledConstant from '../config-filed-constant';
  */
 export default function(){
   let result:any = {};
-  result.name = _projectUtils.getProjectDirectoryName();
+  result.name = _project.getProjectDirectoryName();
   result.version = '1.0';
-  result[_configFiledConstant.pluginVersionField] = _projectUtils.getCLIVersion();
+  result[_configFiledConstant.pluginVersionField] = _project.getCLIVersion();
   result[_configFiledConstant.pluginConfigField] = {};
   result[_configFiledConstant.infinity] = {
     port: 14422, index: 'index.html'

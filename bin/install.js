@@ -3,6 +3,7 @@ const log_1 = require('../lib/log');
 const _initUtils = require('../init/index');
 const _plugin = require('../plugin/index');
 const _ = require('lodash');
+const _project = require('../project');
 function default_1(_commander) {
     _commander.command('install [plugins...]')
         .description('安装插件')
@@ -10,11 +11,11 @@ function default_1(_commander) {
         .option('-p, --pluginListName <value>', '根据插件列表名称获取插件列表')
         .action((plugins, program) => {
         _initUtils.prepareUserEnv();
-        let packageJSON = _initUtils.getProjectPackageJSON();
+        let packageJSON = _project.getProjectPackageJSON();
         //如果指定了项目
         if (program.pluginListName) {
             _initUtils.getRemoteServerProjectPluginConfig(program.pluginListName, (pluginConfig) => {
-                _initUtils.writePluginConfigToConfigFile(pluginConfig);
+                _plugin.writePluginConfigToConfigFile(pluginConfig);
                 _plugin.install(Object.keys(pluginConfig));
             });
         }
@@ -24,14 +25,14 @@ function default_1(_commander) {
             plugins.forEach((pluginName) => {
                 pluginConfig[_plugin.getFullPluginName(pluginName)] = {};
             });
-            _initUtils.writePluginConfigToConfigFile(pluginConfig);
+            _plugin.writePluginConfigToConfigFile(pluginConfig);
             _plugin.install(plugins);
         }
         else {
             //没有指定，安装所有
-            let pluginConfig = _initUtils.getPluginConfig();
+            let pluginConfig = _plugin.getPluginConfig();
             let pluginNameArr = [];
-            let versionDependencies = _initUtils.getProjectPackageJSONField('dependencies');
+            let versionDependencies = _project.getProjectPackageJSONField('dependencies');
             Object.keys(pluginConfig).forEach((key) => {
                 if (pluginConfig[key] == false) {
                     log_1.default.info(`插件${key}已被禁用， 跳过安装`);

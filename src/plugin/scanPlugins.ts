@@ -2,10 +2,9 @@ import * as _path from 'path';
 import * as _async from 'async';
 import _configFiledConstant from '../config-filed-constant';
 import _getFullPluginName from './getFullPluginName';
-import * as _init from '../init/index';
+import * as _plugin from '../plugin/index';
 import _loadPlugin from './loadPlugin';
 import _getAllFileInDir from '../lib/getAllFileInDir';
-import { plugin } from '../hooks/map';
 
 //扫描加载内置插件
 function scanDefaultPlugins(hookType:string){
@@ -30,7 +29,7 @@ function getDevPluginPath(source):string{
     return source;
   }
   //是否设置了根目录 没有设置 取执行目录为根目录
-  let pluginRootDir = _init.getPluginConfig().__root || process.cwd()
+  let pluginRootDir = _plugin.getPluginConfig().__root || process.cwd()
   return _path.join(pluginRootDir, source)
 }
 
@@ -38,7 +37,7 @@ function getDevPluginPath(source):string{
  * 扫描Hooks插件, 仅加载指定hook
 */
 export default function scanPlugins(hookType:string){
-  let pluginsConfig = _init.getPluginConfig();
+  let pluginsConfig = _plugin.getPluginConfig();
   if(!pluginsConfig){
     console.log(`没有配置任何插件`.red)
     return

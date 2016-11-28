@@ -3,6 +3,7 @@ import _log from '../lib/log';
 import * as _initUtils from '../init/index';
 import * as _plugin from '../plugin/index';
 import * as _ from 'lodash';
+import * as _project from '../project';
 
 export default function(_commander){
   _commander.command('install [plugins...]')
@@ -12,11 +13,11 @@ export default function(_commander){
     .action((plugins, program)=>{
 
       _initUtils.prepareUserEnv();
-      let packageJSON = _initUtils.getProjectPackageJSON();
+      let packageJSON = _project.getProjectPackageJSON();
       //如果指定了项目
       if(program.pluginListName){
         _initUtils.getRemoteServerProjectPluginConfig(program.pluginListName, (pluginConfig)=>{
-          _initUtils.writePluginConfigToConfigFile(pluginConfig)
+          _plugin.writePluginConfigToConfigFile(pluginConfig)
           _plugin.install(Object.keys(pluginConfig))
         })
       }else if(plugins.length){ //指定了插件名称就安装插件
@@ -25,13 +26,13 @@ export default function(_commander){
         plugins.forEach((pluginName)=>{
           pluginConfig[_plugin.getFullPluginName(pluginName)] = {}
         })
-        _initUtils.writePluginConfigToConfigFile(pluginConfig)
+        _plugin.writePluginConfigToConfigFile(pluginConfig)
         _plugin.install(plugins)
       }else{ 
         //没有指定，安装所有
-        let pluginConfig = _initUtils.getPluginConfig();
+        let pluginConfig = _plugin.getPluginConfig();
         let pluginNameArr = [];
-        let versionDependencies = _initUtils.getProjectPackageJSONField('dependencies')
+        let versionDependencies = _project.getProjectPackageJSONField('dependencies')
 
         Object.keys(pluginConfig).forEach((key)=>{
           if(pluginConfig[key] == false){

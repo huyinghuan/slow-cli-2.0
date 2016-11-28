@@ -1,5 +1,5 @@
 "use strict";
-const _projectUtils = require('../lib/project');
+const _project = require('../project');
 const config_filed_constant_1 = require('../config-filed-constant');
 /**
  * 用户写入到项目目录下的package.json文件中。
@@ -13,9 +13,9 @@ const config_filed_constant_1 = require('../config-filed-constant');
  */
 function default_1() {
     let result = {};
-    result.name = _projectUtils.getProjectDirectoryName();
+    result.name = _project.getProjectDirectoryName();
     result.version = '1.0';
-    result[config_filed_constant_1.default.pluginVersionField] = _projectUtils.getCLIVersion();
+    result[config_filed_constant_1.default.pluginVersionField] = _project.getCLIVersion();
     result[config_filed_constant_1.default.pluginConfigField] = {};
     result[config_filed_constant_1.default.infinity] = {
         port: 14422, index: 'index.html'

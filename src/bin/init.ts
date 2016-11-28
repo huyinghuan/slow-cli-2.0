@@ -4,6 +4,9 @@ import * as _fs from 'fs-extra';
 import * as _async from 'async';
 import * as _initUtils from '../init/index';
 import _configFiledConstant from '../config-filed-constant';
+import * as _project from '../project';
+import * as _plugin from '../plugin/index';
+
 export default function(_commander){
   _commander.command('init')
     .description('初始化')
@@ -24,14 +27,14 @@ export default function(_commander){
       if(program.pluginListName){
         queue.push((defaultConfig, cb)=>{
           _initUtils.getRemoteServerProjectPluginConfig(program.pluginListName, (error, pluginConfig)=>{
-            cb(error, _initUtils.setPluginConfig(defaultConfig, pluginConfig))
+            cb(error, _plugin.setPluginConfig(defaultConfig, pluginConfig))
           })
         })
       }
 
       //如果已经存在package.json文件，那么读取内容，覆盖配置
       queue.push((defaultConfig, cb)=>{
-        let packageJSON = _initUtils.getProjectPackageJSON()
+        let packageJSON = _project.getProjectPackageJSON()
         // (default-config.plugin-config) [extend] (remote project plugin config)
         // (default-config) [extend] (package json)
         if(program.pluginListName){
