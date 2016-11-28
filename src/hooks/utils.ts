@@ -1,15 +1,8 @@
-import * as _minimatch from 'minimatch';
 import * as _ from 'lodash';
 import * as _fs from 'fs-extra';
 import _log from '../lib/log';
 import _executeCommand from '../lib/executeCommand';
 import _getAllFileInProject from '../lib/getAllFileInProject';
-/**
- * 文件后缀匹配
- */
-export function match(path, express){
-  return _minimatch(path, express, {matchBase: true})  
-}
 
 /**
  *lodash.extend
