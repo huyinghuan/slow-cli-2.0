@@ -74,6 +74,8 @@ exports.registerPlugin = function(cli, options){
       return cb(null, data, content)
     }
 
+    let lessGlobal = [].concat(_DefaultSetting.global)
+    _DefaultSetting.ignore = lessGlobal.concat(_DefaultSetting.ignore)
     //查看忽略
     if(_DefaultSetting.ignore && _DefaultSetting.ignore.length > 0){
       if(needIgnore(inputFilePath, _DefaultSetting.ignore)){
@@ -89,8 +91,7 @@ exports.registerPlugin = function(cli, options){
       globaleLessContent = globaleLessContent + cli.runtime.getRuntimeEnvFile(filename, true); 
     })
 
-    //获取全局less，添加到每个less文件后
-    let lessGlobal = [].concat(_DefaultSetting.global)
+    //获取全局less，添加到每个less文件后\
     lessGlobal.forEach((filename)=>{
       globaleLessContent = globaleLessContent + _fs.readFileSync(_path.join(cli.cwd, filename))
     })
