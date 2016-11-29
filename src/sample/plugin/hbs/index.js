@@ -5,6 +5,7 @@ const _path = require('path');
 const _fs = require('fs'); 
 const _handlebars = require('handlebars');
 const _helper = require('./helper');
+const _fetchData = require('./fetch-data');
 
 var _DefaultSetting = {
   "root": ".",
@@ -26,6 +27,7 @@ const getCompileContent = (realFilePath, data, cb)=>{
   }
   let fileContent = _fs.readFileSync(realFilePath, {encoding: 'utf8'})
   try{
+
     let template = _handlebars.compile(fileContent);
     //编译成功，标记状态码
     data.status = 200;
@@ -48,7 +50,10 @@ exports.registerPlugin = function(cli, options){
     //如果不需要编译
     if(!isNeedCompile(pathname)){
       return cb(null, data, content)
-    }  
+    } 
+    
+    let templateRoot =  _DefaultSetting.root || "";
+    
     let fakeFilePath = _path.join(process.cwd(), _DefaultSetting.root, pathname);
     //替换路径为hbs
     let realFilePath = fakeFilePath.replace(/(html)$/,'hbs')
