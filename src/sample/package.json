@@ -10,16 +10,14 @@
         "root": "/template"
       }
     },
-    "less": {
-      "__stop": false,
-      "__source": "./plugin/less",
-      "__setting": {
-        "_env_global": "global.less",
-        "global": ["css/global.less"],
-        "ignore": [
-          "(css/module/)"
-        ]
-      }
+    "sp-less": {
+      "_env_global": "global.less",
+      "global": [
+        "css/global.less"
+      ],
+      "ignore": [
+        "(css/module/)"
+      ]
     },
     "autoprefix": {
       "__stop": false,
@@ -89,6 +87,7 @@
   },
   "__registry": "https://registry.npmjs.com/",
   "dependencies": {
+    "sp-less": "1.0.0",
     "sp-merge": "1.0.0",
     "sp-proxy": "1.0.0"
   }
