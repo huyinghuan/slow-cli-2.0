@@ -9,6 +9,7 @@ function default_1(_commander) {
         .description('安装插件')
         .option('-l, --log <value>', 'log日志,( 0[defaul]: show all; 1: show error, fail; 2: show error, fail, warn)', (value) => { log_1.default.setLevel(value); })
         .option('-p, --pluginListName <value>', '根据插件列表名称获取插件列表')
+        .option('-f, --force', '强制重新安装')
         .action((plugins, program) => {
         _initUtils.prepareUserEnv();
         let packageJSON = _project.getProjectPackageJSON();
@@ -43,12 +44,19 @@ function default_1(_commander) {
                     return;
                 }
                 let version = versionDependencies[_plugin.getFullPluginName(key, false)];
-                //获取依赖的版本,如果有依赖版本则安装以来版本
+                let hadInstalledVersion = _plugin.getInstalledPluginVersion(_plugin.getFullPluginName(key, false));
+                if (version == hadInstalledVersion && !program.force) {
+                    return console.log(`插件${key}已安装规定版本${version}`);
+                }
+                //获取依赖的版本,如果有依赖版本则安装依赖版本
                 if (versionDependencies[_plugin.getFullPluginName(key, false)]) {
                     key = `${key}@${version}`;
                 }
                 pluginNameArr.push(key);
             });
+            if (pluginNameArr.length == 0) {
+                return console.log('所有依赖已全部安装。');
+            }
             _plugin.install(pluginNameArr);
         }
     });

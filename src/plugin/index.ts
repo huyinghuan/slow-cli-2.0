@@ -5,7 +5,7 @@ import _checkPluginVersion from './checkPluginVersion';
 import _install from './install'
 import _setPluginConfig from './setPluginConfig'
 import _writePluginConfigToConfigFile from './writePluginConfigToConfigFile'
-
+import _getInstalledPluginVersion from './getInstalledPluginVersion'
 //获取插件设置 用于传递给hook plugin
 export function getPluginConfig(){
   return (global as any).__CLI.pluginsConfig
@@ -18,5 +18,6 @@ export {
   _checkPluginVersion as checkPluginVersion,
   _install as install,
   _setPluginConfig as setPluginConfig,
-  _writePluginConfigToConfigFile as writePluginConfigToConfigFile
+  _writePluginConfigToConfigFile as writePluginConfigToConfigFile,
+  _getInstalledPluginVersion as getInstalledPluginVersion
 }

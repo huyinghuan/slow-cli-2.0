@@ -13,6 +13,8 @@ const setPluginConfig_1 = require('./setPluginConfig');
 exports.setPluginConfig = setPluginConfig_1.default;
 const writePluginConfigToConfigFile_1 = require('./writePluginConfigToConfigFile');
 exports.writePluginConfigToConfigFile = writePluginConfigToConfigFile_1.default;
+const getInstalledPluginVersion_1 = require('./getInstalledPluginVersion');
+exports.getInstalledPluginVersion = getInstalledPluginVersion_1.default;
 //获取插件设置 用于传递给hook plugin
 function getPluginConfig() {
     return global.__CLI.pluginsConfig;
