@@ -11,7 +11,7 @@ silky start -p 3002 -c
 ```shell
 -p --port #指定运行端口
 -c --check #检测运行版本，和插件版本
-
+-e --enviroment #指定运行环境，使插件读取相应环境等配置 optional:【develop, production】
 -l --log #见 command-common-params.md
 -A --additional #见command-common-params.md
 ```

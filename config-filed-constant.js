@@ -14,9 +14,9 @@ const config = {
     pluginDir: _path.join(_root, 'node_modules'),
     CLIConfigFile: _path.join(_root, 'package.json'),
     buildField: `${_infinity}-build`,
-    environmentRootDir: _path.join(_root, _infinity),
+    environmentRootDir: _path.join(_root, `.${_infinity}`),
     prerequisiteEnvironment: ['production', 'develop', 'normal'],
-    normalEnviromentDir: _path.join(_root, _infinity, 'normal')
+    normalEnviromentDir: _path.join(_root, `.${_infinity}`, 'normal')
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = config;

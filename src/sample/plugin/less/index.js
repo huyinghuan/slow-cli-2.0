@@ -23,13 +23,30 @@ const isNeedCompile = (pathname)=>{
 }
 
 //根据实际路径获取文件内容
-const getCompileContent = (realFilePath, data, cb)=>{
+const getCompileContent = (cli, realFilePath, data, cb)=>{
   if(!_fs.existsSync(realFilePath)){
     data.status = 404
     return cb(null, data, null)
   }
 
   let fileContent = _fs.readFileSync(realFilePath, {encoding: 'utf8'})
+  
+  //----------- 全局 less 开始 ---------- //
+  let globaleLessContent = [];
+  let lessGlobal = [].concat(_DefaultSetting.global)
+  //获取环境相关全局less，添加到每个less文件后
+  let _env_global = [].concat(_DefaultSetting._env_global)
+  _env_global.forEach((filename)=>{
+    globaleLessContent.push(cli.runtime.getRuntimeEnvFile(filename, true)); 
+  })
+
+  //获取全局less，添加到每个less文件后
+  lessGlobal.forEach((filename)=>{
+     globaleLessContent.push(_fs.readFileSync(_path.join(cli.cwd, filename)));
+  });
+
+  fileContent = fileContent + globaleLessContent.join(';');
+  //----------- 全局 less 结束 ---------- //
 
   _less.render(fileContent, _DefaultSetting.options, (e, result)=>{
     if(e){return cb(e)}
@@ -61,7 +78,7 @@ exports.registerPlugin = function(cli, options){
     //替换路径为hbs
     let realFilePath = fakeFilePath.replace(/(css)$/,'less')
 
-    getCompileContent(realFilePath, data, (error, data, content)=>{
+    getCompileContent(cli, realFilePath, data, (error, data, content)=>{
       if(error){return cb(error)};
       //交给下一个处理器
       cb(null, data, content)
@@ -74,8 +91,7 @@ exports.registerPlugin = function(cli, options){
       return cb(null, data, content)
     }
 
-    let lessGlobal = [].concat(_DefaultSetting.global)
-    _DefaultSetting.ignore = lessGlobal.concat(_DefaultSetting.ignore)
+    _DefaultSetting.ignore = [].concat(_DefaultSetting.global).concat(_DefaultSetting.ignore)
     //查看忽略
     if(_DefaultSetting.ignore && _DefaultSetting.ignore.length > 0){
       if(needIgnore(inputFilePath, _DefaultSetting.ignore)){
@@ -84,19 +100,7 @@ exports.registerPlugin = function(cli, options){
       }
     }
 
-    let globaleLessContent = ""
-    //获取环境相关全局less，添加到每个less文件后
-    _env_global = [].concat(_DefaultSetting._env_global)
-    _env_global.forEach((filename)=>{
-      globaleLessContent = globaleLessContent + cli.runtime.getRuntimeEnvFile(filename, true); 
-    })
-
-    //获取全局less，添加到每个less文件后\
-    lessGlobal.forEach((filename)=>{
-      globaleLessContent = globaleLessContent + _fs.readFileSync(_path.join(cli.cwd, filename))
-    })
-
-    getCompileContent(inputFilePath, data, (error, data, content)=>{
+    getCompileContent(cli, inputFilePath, data, (error, data, content)=>{
       if(data.status == 200){
         data.outputFilePath = data.outputFilePath.replace(/(\less)$/, "css")
       }

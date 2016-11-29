@@ -18,9 +18,9 @@ const config = {
   pluginDir: _path.join(_root, 'node_modules'), //插件目录
   CLIConfigFile: _path.join(_root, 'package.json'), //插件配置文件
   buildField: `${_infinity}-build`, //build 相关配置】//silky-build
-  environmentRootDir:  _path.join(_root, _infinity),
+  environmentRootDir:  _path.join(_root, `.${_infinity}`),
   prerequisiteEnvironment: ['production', 'develop', 'normal'],
-  normalEnviromentDir: _path.join(_root, _infinity, 'normal')
+  normalEnviromentDir: _path.join(_root, `.${_infinity}`, 'normal')
 }
 
 export default config;

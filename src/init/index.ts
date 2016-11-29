@@ -19,7 +19,7 @@ export function setEnviroment(setting){
 export function getEnviroment(){
   return {
     enviroment: (global as any).__CLI.enviroment,
-    enviromentDir:  (global as any).__CLI.enviroment.enviromentDir
+    enviromentDir:  (global as any).__CLI.enviromentDir
   }
 }
 

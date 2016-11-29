@@ -22,7 +22,7 @@ exports.setEnviroment = setEnviroment;
 function getEnviroment() {
     return {
         enviroment: global.__CLI.enviroment,
-        enviromentDir: global.__CLI.enviroment.enviromentDir
+        enviromentDir: global.__CLI.enviromentDir
     };
 }
 exports.getEnviroment = getEnviroment;

@@ -34,10 +34,10 @@ function default_1(filename, asString) {
         filepath = _path.join(config_filed_constant_1.default.environmentRootDir, filename);
     }
     if (filepath == "") {
-        throw new Error("文件未找到");
+        throw new Error(`${filename} 文件未找到`);
     }
     if (asString) {
-        return _fs.readFileSync(filename, "utf8");
+        return _fs.readFileSync(filepath, "utf8");
     }
     return require(filepath);
 }

@@ -17,28 +17,25 @@ import _configFiledConstant from '../config-filed-constant'
  */
 
 export default function(filename:string, asString?:boolean):any{
-
   if(!filename){
     throw new Error(`获取文件名undefined`)
   }
-
   let env = _init.getEnviroment();
   let filepath = "";
   //存在运行环境下的文件返回运行环境下的文件内容
   if(_fs.existsSync(_path.join(env.enviromentDir, filename))){
-     filepath = _path.join(env.enviromentDir, filename)
+    filepath = _path.join(env.enviromentDir, filename)
   }else if(_fs.existsSync(_path.join(_configFiledConstant.normalEnviromentDir, filename))){
     //如果不存在 读取 通用环境目录下的内容
     filepath = _path.join(_configFiledConstant.normalEnviromentDir, filename)
   }else if(_fs.existsSync(_path.join(_configFiledConstant.environmentRootDir, filename))){
     filepath = _path.join(_configFiledConstant.environmentRootDir, filename)
   }
-
   if(filepath == ""){
-    throw new Error("文件未找到")
+    throw new Error(`${filename} 文件未找到`)
   }
   if(asString){
-    return _fs.readFileSync(filename, "utf8")
+    return _fs.readFileSync(filepath, "utf8")
   }
   return require(filepath)
 }
