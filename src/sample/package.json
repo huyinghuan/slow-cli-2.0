@@ -31,18 +31,7 @@
       "__stop": false,
       "__source": "./plugin/tar-send"
     },
-    "sp-mini":  {
-      "ignore": [
-        "(\\.min\\.js)$",
-        "(\\.min\\.css)$"
-      ],
-      "js": {},
-      "css": {},
-      "html": {
-        "js": true,
-        "css": true
-      }
-    },
+    "sp-mini": {},
     "hbs-ext": {
       "__stop": false,
       "__source": "./plugin/hbs-ext"
@@ -85,6 +74,7 @@
   "dependencies": {
     "sp-less": "1.0.0",
     "sp-merge": "1.0.0",
+    "sp-mini": "1.0.0",
     "sp-proxy": "1.0.0"
   }
 }
