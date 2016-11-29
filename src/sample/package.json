@@ -31,20 +31,16 @@
       "__stop": false,
       "__source": "./plugin/tar-send"
     },
-    "mini": {
-      "__stop": false,
-      "__source": "./plugin/mini",
-      "__setting": {
-        "ignore": [
-          "(\\.min\\.js)$",
-          "(\\.min\\.css)$"
-        ],
-        "js": {},
-        "css": {},
-        "html": {
-          "js": true,
-          "css": true
-        }
+    "sp-mini":  {
+      "ignore": [
+        "(\\.min\\.js)$",
+        "(\\.min\\.css)$"
+      ],
+      "js": {},
+      "css": {},
+      "html": {
+        "js": true,
+        "css": true
       }
     },
     "hbs-ext": {
