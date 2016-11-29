@@ -1,9 +1,9 @@
 {
-  "name": "slow-cli2",
+  "name": "silky-reborn",
   "version": "2.0.0",
   "description": "",
   "bin": {
-    "slow2": "./bin/index.js"
+    "silky": "./bin/index.js"
   },
   "dependencies": {
     "async": "^2.1.2",
