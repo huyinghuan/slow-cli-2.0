@@ -6,6 +6,9 @@ const _fs = require('fs');
 const _handlebars = require('handlebars');
 const _helper = require('./helper');
 const _fetchData = require('./fetch-data');
+const _getCompileContent = require('getCompileContent');
+const _prepareProcessDataConfig = require('./prepareProcessDataConfig');
+const _async = require('async')
 
 var _DefaultSetting = {
   "root": ".",
@@ -19,28 +22,15 @@ const isNeedCompile = (pathname)=>{
   return reg.test(pathname.toLowerCase())
 }
 
-//根据实际路径获取文件内容
-const getCompileContent = (realFilePath, data, cb)=>{
-  if(!_fs.existsSync(realFilePath)){
-    data.status = 404
-    return cb(null, data, null)
-  }
-  let fileContent = _fs.readFileSync(realFilePath, {encoding: 'utf8'})
-  try{
 
-    let template = _handlebars.compile(fileContent);
-    //编译成功，标记状态码
-    data.status = 200;
-    //这里可以添加数据获取逻辑 TODO
-    cb(null, data, template({}))
-  }catch(e){
-    cb(e)
-  }
-} 
+
 
 exports.registerPlugin = function(cli, options){
   //继承定义
   _.extend(_DefaultSetting, options);
+
+  //预处理数据配置
+  let _dataConfig = _prepareProcessDataConfig(cli, _DefaultSetting)
 
   //加载handlebars  helper
   _helper(_handlebars, cli.ext['hbs']);
@@ -53,11 +43,13 @@ exports.registerPlugin = function(cli, options){
     } 
     
     let templateRoot =  _DefaultSetting.root || "";
-    
-    let fakeFilePath = _path.join(process.cwd(), _DefaultSetting.root, pathname);
+    let fakeFilePath = _path.join(cli.cwd, templateRoot, pathname);
+
+    let relativeFilePath = _path.join(templateRoot, pathname);
+
     //替换路径为hbs
     let realFilePath = fakeFilePath.replace(/(html)$/,'hbs')
-    getCompileContent(realFilePath, data, (error, data, content)=>{
+    _getCompileContent(realFilePath, data, (error, data, content)=>{
       if(error){return cb(error)};
       //交给下一个处理器
       cb(null, data, content)
@@ -70,7 +62,7 @@ exports.registerPlugin = function(cli, options){
     if(!/(\.hbs)$/.test(inputFilePath)){
       return cb(null, data, content)
     }
-    getCompileContent(inputFilePath, data, (error, data, content)=>{
+    _getCompileContent(inputFilePath, data, (error, data, content)=>{
       if(error){return  cb(error);}
       if(data.status == 200){
         data.outputFilePath = data.outputFilePath.replace(/(\hbs)$/, "html")

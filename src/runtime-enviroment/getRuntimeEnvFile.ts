@@ -5,7 +5,7 @@ import * as _ from 'lodash'
 import _configFiledConstant from '../config-filed-constant'
 /**
  * desc:
- *   搜索顺序  指定的运行环境【默认:develop】 -->  通用目录搜索 -->  .silky根目录
+ *   搜索顺序  指定的运行环境【默认:develop】 -->  通用目录搜索
  * 
  * params:
  *    filename, 文件名称
@@ -37,7 +37,7 @@ export default function(filename:string, asString?:boolean):any{
   if(envFilepath == "" && normalFilePath == ""){
     throw new Error(`${filename} 文件未找到`)
   }
-  
+
   //作为文件内容读取顺序
   if(asString){
     //存在运行环境下的文件返回运行环境下的文件内容
