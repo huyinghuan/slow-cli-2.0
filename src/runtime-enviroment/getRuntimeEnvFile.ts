@@ -1,6 +1,7 @@
 import * as _init from '../init/index';
 import * as _fs from 'fs-extra';
 import * as _path from 'path';
+import * as _ from 'lodash'
 import _configFiledConstant from '../config-filed-constant'
 /**
  * desc:
@@ -21,21 +22,41 @@ export default function(filename:string, asString?:boolean):any{
     throw new Error(`获取文件名undefined`)
   }
   let env = _init.getEnviroment();
-  let filepath = "";
-  //存在运行环境下的文件返回运行环境下的文件内容
+  let envFilepath = "";
+  let normalFilePath = "";
+  
   if(_fs.existsSync(_path.join(env.enviromentDir, filename))){
-    filepath = _path.join(env.enviromentDir, filename)
-  }else if(_fs.existsSync(_path.join(_configFiledConstant.normalEnviromentDir, filename))){
-    //如果不存在 读取 通用环境目录下的内容
-    filepath = _path.join(_configFiledConstant.normalEnviromentDir, filename)
-  }else if(_fs.existsSync(_path.join(_configFiledConstant.environmentRootDir, filename))){
-    filepath = _path.join(_configFiledConstant.environmentRootDir, filename)
+    envFilepath = _path.join(env.enviromentDir, filename)
   }
-  if(filepath == ""){
+  
+  if(_fs.existsSync(_path.join(_configFiledConstant.normalEnviromentDir, filename))){
+    //如果不存在 读取 通用环境目录下的内容
+    normalFilePath = _path.join(_configFiledConstant.normalEnviromentDir, filename)
+  } 
+  
+  if(envFilepath == "" && normalFilePath == ""){
     throw new Error(`${filename} 文件未找到`)
   }
+  
+  //作为文件内容读取顺序
   if(asString){
-    return _fs.readFileSync(filepath, "utf8")
+    //存在运行环境下的文件返回运行环境下的文件内容
+    //如果不存在运行环境下的文件 读取通用环境目录下的内容
+    let filePath = !!envFilepath ? envFilepath : normalFilePath;
+    return _fs.readFileSync(filePath, "utf8")
+
   }
-  return require(filepath)
+  
+  let normalBase = {}
+  let envBase = {}
+  //作为数据读取顺序
+  if(!!normalFilePath){
+    normalBase = require(normalFilePath)
+  }
+
+  if(!!envFilepath){
+    envBase = require(envFilepath)
+  }
+
+  return  _.extend(normalBase, envBase)
 }
