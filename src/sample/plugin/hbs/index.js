@@ -33,7 +33,11 @@ exports.registerPlugin = function(cli, options){
 
   //预处理全局变量
   let globalVarName = _DefaultSetting["global-root"]
-  let globalVar = cli.runtime.getRuntimeEnvFile(_DefaultSetting.global)
+  
+  let globalVar = {};
+  if(_DefaultSetting.global && _DefaultSetting.global.replace(/ /g, "") !== ""){
+    globalVar = cli.runtime.getRuntimeEnvFile(_DefaultSetting.global)
+  }
   _dataConfig.globalData = {};
   _dataConfig.globalData[globalVarName] = globalVar
 

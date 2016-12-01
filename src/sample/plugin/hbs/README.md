@@ -28,6 +28,15 @@ module.exports = {
 <p>{{__global.globalVar}}</p>
 ```
 
+当然如果你觉得  `__global` 变量不好记，或者 觉得该变量名称可能会与页面配置的数据 冲突，覆盖掉页面配置的数据，那么可以通过
+
+```
+"sp-hbs":{
+  global: "hbs-global.js"
+}
+
+```
+
 
 ### 数据处理
 
