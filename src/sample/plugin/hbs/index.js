@@ -12,7 +12,9 @@ const _async = require('async')
 
 var _DefaultSetting = {
   "root": ".",
-  "regexp": "(\.html)$"
+  "regexp": "(\.html)$",
+  "global": "",
+  "global-root": "__global"
 }
 
 
@@ -26,8 +28,14 @@ exports.registerPlugin = function(cli, options){
   //继承定义
   _.extend(_DefaultSetting, options);
 
-  //预处理数据配置
+  //预处理页面数据配置
   let _dataConfig = _prepareProcessDataConfig(cli, _DefaultSetting)
+
+  //预处理全局变量
+  let globalVarName = _DefaultSetting["global-root"]
+  let globalVar = cli.runtime.getRuntimeEnvFile(_DefaultSetting.global)
+  _dataConfig.globalData = {};
+  _dataConfig.globalData[globalVarName] = globalVar
 
   //加载handlebars  helper
   _helper(_handlebars, cli.ext['hbs']);

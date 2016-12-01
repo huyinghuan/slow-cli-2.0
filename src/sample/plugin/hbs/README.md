@@ -1,14 +1,33 @@
 ## HBS编译
 
 ### 全局变量
-可以通过
+可以通过`global`字段来配置
 
 ```js
 "sp-hbs":{
-  global: "demo.js"
-  ...
+  global: "hbs-global.js"
 }
 ```
+
+在页面中可以通过`__global.xxx` 来使用全局变量
+
+如：
+
+hbs-global.js:
+
+```
+module.exports = {
+  "globalVar": "this is global var"
+}
+```
+
+在页面里面使用
+
+```handlebars
+....
+<p>{{__global.globalVar}}</p>
+```
+
 
 ### 数据处理
 

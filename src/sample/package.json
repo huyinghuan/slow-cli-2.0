@@ -9,7 +9,8 @@
       "__setting": {
         "root": "/template",
         "data-config": "hbs-data-config.js",
-        "global": "hbs-global.js"
+        "global": "hbs-global.js",
+        "global-root": "__global"
       }
     },
     "sp-less": {

@@ -2,7 +2,8 @@ const _fs = require('fs')
 const _handlebars = require('handlebars');
 const _async = require('async');
 const _fetchData = require('./fetch-data');
-const _path = require('path')
+const _path = require('path');
+const _ = require('lodash');
 /**
  * Desc: 根据实际路径获取文件内容
  * params <cli>
@@ -67,7 +68,8 @@ module.exports = (cli, crossData, inputFileRealPath, inputFileRelativePathname, 
       let template = _handlebars.compile(content);
       //编译成功，标记状态码
       crossData.status = 200;
-      //这里可以添加数据获取逻辑 TODO
+      //继承全局变量
+      _.extend(context, dataConfig.globalData)
       asyncNext(null, crossData, template(context))
     }catch(e){
       asyncNext(e)
