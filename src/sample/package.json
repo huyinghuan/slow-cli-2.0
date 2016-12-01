@@ -8,7 +8,8 @@
       "__source": "./plugin/hbs",
       "__setting": {
         "root": "/template",
-        "data-config": "hbs.js"
+        "data-config": "hbs-data-config.js",
+        "global": "hbs-global.js"
       }
     },
     "sp-less": {

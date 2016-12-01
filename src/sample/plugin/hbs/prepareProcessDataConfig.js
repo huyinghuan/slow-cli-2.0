@@ -8,8 +8,13 @@ module.exports = (cli, setting)=>{
     }
   }
 
-  let dataConfig = cli.runtime.getRuntimeEnvFile(options["data-config"])
-
+  let dataConfig = cli.runtime.getRuntimeEnvFile(setting["data-config"])
+  if(!dataConfig["dataMap"]){
+    dataConfig["dataMap"] = {}
+  }
+  if(!dataConfig['urlMap']){
+    dataConfig['urlMap'] = {}
+  }
   //修改data-map配置，使其同时满足 start和 build，主要在于是否设置了 hbs的root目录
   let hbsRoot = setting.root;
   if(hbsRoot){
@@ -19,7 +24,5 @@ module.exports = (cli, setting)=>{
     })
     dataConfig["dataMap"] = dataMap
   }
-  if(!dataConfig['urlMap']){
-    dataConfig['urlMap'] = {}
-  }
+  return dataConfig
 }

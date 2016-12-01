@@ -6,7 +6,7 @@ const _fs = require('fs');
 const _handlebars = require('handlebars');
 const _helper = require('./helper');
 const _fetchData = require('./fetch-data');
-const _getCompileContent = require('getCompileContent');
+const _getCompileContent = require('./getCompileContent');
 const _prepareProcessDataConfig = require('./prepareProcessDataConfig');
 const _async = require('async')
 
@@ -21,9 +21,6 @@ const isNeedCompile = (pathname)=>{
   let reg = new RegExp(_DefaultSetting.regexp)
   return reg.test(pathname.toLowerCase())
 }
-
-
-
 
 exports.registerPlugin = function(cli, options){
   //继承定义
@@ -49,7 +46,7 @@ exports.registerPlugin = function(cli, options){
 
     //替换路径为hbs
     let realFilePath = fakeFilePath.replace(/(html)$/,'hbs')
-    _getCompileContent(realFilePath, data, (error, data, content)=>{
+    _getCompileContent(cli, data, realFilePath,  relativeFilePath, _dataConfig, (error, data, content)=>{
       if(error){return cb(error)};
       //交给下一个处理器
       cb(null, data, content)
@@ -62,7 +59,7 @@ exports.registerPlugin = function(cli, options){
     if(!/(\.hbs)$/.test(inputFilePath)){
       return cb(null, data, content)
     }
-    _getCompileContent(inputFilePath, data, (error, data, content)=>{
+    _getCompileContent(cli, data, inputFilePath, data.inputFileRelativePath  ,_dataConfig, (error, data, content)=>{
       if(error){return  cb(error);}
       if(data.status == 200){
         data.outputFilePath = data.outputFilePath.replace(/(\hbs)$/, "html")

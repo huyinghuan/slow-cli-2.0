@@ -28,12 +28,11 @@ export default function(filename:string, asString?:boolean):any{
   if(_fs.existsSync(_path.join(env.enviromentDir, filename))){
     envFilepath = _path.join(env.enviromentDir, filename)
   }
-  
+  //是否存在 通用环境目录下的内容
   if(_fs.existsSync(_path.join(_configFiledConstant.normalEnviromentDir, filename))){
-    //如果不存在 读取 通用环境目录下的内容
     normalFilePath = _path.join(_configFiledConstant.normalEnviromentDir, filename)
-  } 
-  
+  }
+
   if(envFilepath == "" && normalFilePath == ""){
     throw new Error(`${filename} 文件未找到`)
   }

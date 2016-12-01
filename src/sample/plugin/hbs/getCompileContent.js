@@ -2,7 +2,7 @@ const _fs = require('fs')
 const _handlebars = require('handlebars');
 const _async = require('async');
 const _fetchData = require('./fetch-data');
-
+const _path = require('path')
 /**
  * Desc: 根据实际路径获取文件内容
  * params <cli>
@@ -11,15 +11,19 @@ const _fetchData = require('./fetch-data');
  * params <relativPpathname> string, 相对文件路径
  * params <dataConfig> JSONObject
  */
-module.exports = (cli, crossData, realPathname, relativPathname, dataConfig, callback)=>{
+module.exports = (cli, crossData, inputFileRealPath, inputFileRelativePathname, dataConfig, callback)=>{
+  if(!_fs.existsSync(inputFileRealPath)){
+    return callback(null, crossData, "");
+  }
 
   let queue = [];
+
   //是否在dataMap中配置了路径
   queue.push((asyncNext)=>{
     let dataMap = dataConfig['dataMap'];
-    let relativPathname = relativPathname.replace(_path.extname(relativPathname), "")
+    inputFileRelativePathname = inputFileRelativePathname.replace(_path.extname(inputFileRelativePathname), "")
     //数据路径映射
-    let dataUrl = dataMap[pathname];
+    let dataUrl = dataMap[inputFileRelativePathname];
     //如果没有数据路径映射 返回false
     if(!dataUrl){
       return asyncNext(null, false)
@@ -32,7 +36,7 @@ module.exports = (cli, crossData, realPathname, relativPathname, dataConfig, cal
   })
   //读取文件内容
   queue.push((context, asyncNext)=>{
-     let fileContent = _fs.readFile(realFilePath, {encoding: 'utf8'}, (error, content)=>{
+     let fileContent = _fs.readFile(inputFileRealPath, {encoding: 'utf8'}, (error, content)=>{
        asyncNext(error, context, content)
      })
   })
@@ -43,11 +47,11 @@ module.exports = (cli, crossData, realPathname, relativPathname, dataConfig, cal
     if(context !== false){
       return asyncNext(null, context, content)
     }
-    let reg = /\{\{\!\-\- \s* PAGE_DATA\s*[:：]\s*(\w+)\s*\-\-\}\}/g;
+    let reg = /\{\{\!\-\-\s*PAGE_DATA\s*[:]\s*(.+)\s*\-\-\}\}/g;
     let result = reg.exec(content)
     let dataUrlInContent = ""
     if(result && result[1]){
-      dataUrlInContent = result[1]
+      dataUrlInContent = result[1].replace(/ /g, "")
     }
     //如果没有配置，则直接编译文件
     if(!dataUrlInContent){

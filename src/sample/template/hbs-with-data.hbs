@@ -1,0 +1,16 @@
+{{!-- PAGE_DATA: {{server}}data.json --}}
+<html>
+  <head></head>
+  <body>
+    {{testData}}
+    {{{{raw}}}}
+      <script type="text/x-handlebars-template" id="my-template">
+          <ul>
+              {{#each items}}
+                  <li><a href="{{url}}" title="{{title}}">{{display}}</a></li>
+              {{/each}}
+          </ul>
+      </script>
+     {{{{/raw}}}}
+  </body>
+</html>

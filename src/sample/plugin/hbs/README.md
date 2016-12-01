@@ -1,5 +1,15 @@
 ## HBS编译
 
+### 全局变量
+可以通过
+
+```js
+"sp-hbs":{
+  global: "demo.js"
+  ...
+}
+```
+
 ### 数据处理
 
 0. 查看插件配置
@@ -43,25 +53,105 @@
 
 5. 若文中不含配置，那么不使用数据编译。
 
-### 页面数据配置 demo
+### 页面数据配置说明
+
+#### 通过文件配置数据
 
 `data-config:demo.js`:
 
 ```js
 
 module.exports = {
-  "cache": true
-  "dataMap": {
+  // -------- dataMap和baseUrl配合使用 组合为  baseUrl + dataMap[xxx] 然后用 urlMap 替换值
+  "dataMap": { //可选配置
+    "xxx": "xxx.json"
+  },
+  "baseUrl":"xxxx" //可选配置 仅到存在dataMap时有用
+  // ------- 
 
-  },
+  //用于替换 数据地址中的变量 。 比如  baseUrl + dataMap 中含有 {{xxx}} ， 或者页面数据配置中 {{!-- PAGE_DATA: {{xxx}}data.json--}} 含有 {{xxx}}, 那么将用  urlMap 里面的值替换 http
   "urlMap":{
-    main: baseUrl
+    xxx: "http://locahost:3000"
   },
+
+  //------- 共数据方式为 http模式使用
   //提供http head头，用于一些接口校验
   headers:{
-
+    xxxx:xxx
+  },
+  //提供http 通用查询参数
+  queryParams: {
+    xxxx:xxx
   }
+  //----------------
 }
 ```
 
+#### 通过页面配置数据
 
+在`hbs`头部通过`{{!-- PAGE_DATA: xxx --}}` 进行配置页面数据如：
+
+```handlebars
+
+{{!-- PAGE_DATA {{xxx}}/data.json --}}
+<html>
+xxx
+</html>
+
+```
+
+其中有效数据配置为 `{{xxx}}/data.json` 这个链接中包含的 `{{xxx}}` 变量将用 配置文件中 `urlMap` 中的数据替换。
+
+
+### 已包含的 helper
+
+#### raw
+
+用于你不想通过`silky` 编译的页面内容。使用方法
+
+```handlebars
+{{{{raw}}}}
+  <script type="text/x-handlebars-template" id="my-template">
+      <ul>
+          {{#each items}}
+              <li><a href="{{url}}" title="{{title}}">{{display}}</a></li>
+          {{/each}}
+      </ul>
+  </script>
+  {{{{/raw}}}}
+```
+
+编译后得到的页面时：
+
+```
+ <script type="text/x-handlebars-template" id="my-template">
+    <ul>
+        {{#each items}}
+            <li><a href="{{url}}" title="{{title}}">{{display}}</a></li>
+        {{/each}}
+    </ul>
+  </script>
+```
+
+
+### helper 扩展
+
+如果你在`silky`已有`help`基础上再次扩展自己的`helper` 请参考 [扩展文档](https://github.com/huyinghuan/slow-cli-2.0/blob/master/docs/dev-registerPluginExt.md)
+
+!!!Note!!!  
+
+1. 扩展的`node_modules` 名称必须符合规则: `sp-xxx-ext` 其中 `xxx` 自己定义
+
+2. 注册扩展时，本插件的扩展 注册名称必须为`hbs:xxx`  其中 `xxx` 自己定义
+
+这里展示一个demo：
+
+```
+exports.registerPluginExt = function(cli, options){
+  cli.registerExt('hbs:import', function(handlebars){
+    handlebars.registerHelper('import', (a, b)=>{
+      return a + b
+    })
+  })
+}
+```

@@ -2,7 +2,9 @@
 const _path = require('path');
 const _request = require('request');
 const _url = require('url')
-
+const _handlebars = require('handlebars');
+const _ = require('lodash');
+const _querystring = require('querystring');
 //从文件内容获取数据地址
 
 const getDataFromUrl = (url, dataConfig, cb)=>{
@@ -43,12 +45,15 @@ const isUrl = (url)=>{
 }
 
 module.exports = (cli, dataUrl, dataConfig, cb)=>{
+  let dataUrlTemplate = _handlebars.compile(dataUrl);
+  dataUrl = dataUrlTemplate(dataConfig.urlMap)
   if(isUrl(dataUrl)){
     return getDataFromUrl(dataUrl, dataConfig, cb)
   }
   try{
-    let context = cli.getRuntimeEnvFile(dataUrl);
-    cb(null, context)
+    //作为文件内容读取json，而不直接Require，避免缓存问题
+    let context = cli.runtime.getRuntimeEnvFile(dataUrl, true);
+    cb(null, JSON.parse(context))
   }catch(e){
     cb(e)
   }

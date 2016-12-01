@@ -27,8 +27,8 @@ function default_1(filename, asString) {
     if (_fs.existsSync(_path.join(env.enviromentDir, filename))) {
         envFilepath = _path.join(env.enviromentDir, filename);
     }
+    //是否存在 通用环境目录下的内容
     if (_fs.existsSync(_path.join(config_filed_constant_1.default.normalEnviromentDir, filename))) {
-        //如果不存在 读取 通用环境目录下的内容
         normalFilePath = _path.join(config_filed_constant_1.default.normalEnviromentDir, filename);
     }
     if (envFilepath == "" && normalFilePath == "") {
