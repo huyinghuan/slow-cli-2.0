@@ -29,7 +29,7 @@ export default function(_commander){
       _init.setStartParams(userInputArgs)
 
       if(program.additional){
-         _init.setBuildParams(program.additional)
+         _init.setStartParams(program.additional)
       }
       
       //检查启动参数是否合法

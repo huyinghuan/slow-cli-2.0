@@ -27,7 +27,7 @@ function default_1(_commander) {
         //设置用户自定义启动参数
         _init.setStartParams(userInputArgs);
         if (program.additional) {
-            _init.setBuildParams(program.additional);
+            _init.setStartParams(program.additional);
         }
         //检查启动参数是否合法
         if (!_init.checkStartArgs()) {
