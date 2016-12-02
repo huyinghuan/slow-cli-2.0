@@ -14,7 +14,7 @@ export default function(_commander){
       //检查cli 版本
       _project.checkCLIVersion();
       // 检查插件版本
-      let isMatchPluginVersion = _plugin.checkPluginVersion();
+      let pluginVersionList = _plugin.checkPluginVersion(true);
       
       if(program.fix){
         console.log('更新配置文件...')
@@ -25,6 +25,8 @@ export default function(_commander){
         _project.writeProjectPackageJSON(defaultConfig)
         _preparePrerequisiteDir()
         console.log('更新配置文件完成...')
+        console.log('开始安装插件...')
+        _plugin.install(pluginVersionList)
       }
     })
 }

@@ -22,13 +22,8 @@
         "(css/module/)"
       ]
     },
-    "autoprefix": {
-      "__stop": false,
-      "__source": "./plugin/autoprefixer"
-    },
-    "html-autoprefix": {
-      "__stop": false,
-      "__source": "./plugin/html-autoprefixer"
+    "sp-autoprefixer": {
+      "html": true
     },
     "tar-send": {
       "__stop": false,
@@ -71,6 +66,7 @@
   },
   "__registry": "https://registry.npmjs.com/",
   "dependencies": {
+    "sp-autoprefixer": "1.0.1",
     "sp-less": "1.0.0",
     "sp-merge": "1.0.0",
     "sp-mini": "1.0.0",

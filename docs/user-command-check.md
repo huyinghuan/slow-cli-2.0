@@ -10,7 +10,7 @@
 
 ```shell
 -l --log #见 command-common-params.md
--f --fix #修复silky 缺失的配置项，增加必备的文件夹
+-f --fix #修复silky 缺失的配置项，增加必备的文件夹, 安装缺失插件或者重新安装配置指定版本的插件
 ```
 
 ### 查看选项帮助说明
