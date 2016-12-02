@@ -26,7 +26,7 @@
       "html": true
     },
     "tar-send": {
-      "__stop": false,
+      "__stop": true,
       "__source": "./plugin/tar-send"
     },
     "sp-mini": {},
