@@ -35,10 +35,6 @@
       "__source": "./plugin/tar-send"
     },
     "sp-mini": {},
-    "hbs-ext": {
-      "__stop": false,
-      "__source": "./plugin/hbs-ext"
-    },
     "sp-merge": [
       {
         "_regexp": true,
