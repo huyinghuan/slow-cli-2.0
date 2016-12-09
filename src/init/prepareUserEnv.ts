@@ -4,11 +4,12 @@ import * as _fs from 'fs-extra';
 import * as _project from '../project';
 /**
  * 准备用户环境，配置等
+ * params <pure> boolean, 纯净模式，不加载任何插件
  */
-export default function prepareUserEnv(){
+export default function prepareUserEnv(pure?:boolean){
   let config = {}
   let defaultConfig = generatorDefaultConfig();
-  if(!_fs.existsSync(_configFiledConstant.CLIConfigFile)){
+  if(!_fs.existsSync(_configFiledConstant.CLIConfigFile) || pure){
     console.log(`非 ${_configFiledConstant.infinity} 项目， 仅启用静态服务器功能`);
     config = defaultConfig
   }else{

@@ -5,11 +5,12 @@ const _fs = require('fs-extra');
 const _project = require('../project');
 /**
  * 准备用户环境，配置等
+ * params <pure> boolean, 纯净模式，不加载任何插件
  */
-function prepareUserEnv() {
+function prepareUserEnv(pure) {
     let config = {};
     let defaultConfig = generatorDefaultConfig_1.default();
-    if (!_fs.existsSync(config_filed_constant_1.default.CLIConfigFile)) {
+    if (!_fs.existsSync(config_filed_constant_1.default.CLIConfigFile) || pure) {
         console.log(`非 ${config_filed_constant_1.default.infinity} 项目， 仅启用静态服务器功能`);
         config = defaultConfig;
     }

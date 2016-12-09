@@ -12,11 +12,12 @@ function default_1(_commander) {
         .option('-c, --check', '检测运行版本，和插件版本')
         .option('-e, --enviroment <value>', "运行时环境可选[develop, production，或其他] 默认develop")
         .option('-l, --log <value>', 'log日志,( 0[defaul]: show all; 1: show error, fail; 2: show error, fail, warn)', (value) => { log_1.default.setLevel(value); })
+        .option('-n, --noConfig', "无配置文件运行")
         .option('-A, --additional <items>', '额外的参数，格式 -A A=1[,B=xxx]', extraParamsParse_1.default)
         .allowUnknownOption()
         .action((program) => {
         //读取用户自定义配置
-        _init.prepareUserEnv();
+        _init.prepareUserEnv(program.noConfig);
         //读取运行时环境配置
         _init.prepareRuntimeEnv(program.enviroment);
         //运行时参数记录
