@@ -72,7 +72,12 @@ function compileFile(buildConfig, data, next){
     })
   })
 
-  _async.waterfall(queue, (error)=> next(error))
+  _async.waterfall(queue, (error)=>{
+    if(error){
+      console.log(`process error: ${data.inputFilePath}`.red)
+    }
+    next(error)
+  })
 
 }
 

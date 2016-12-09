@@ -64,7 +64,12 @@ function compileFile(buildConfig, data, next) {
             cb(null);
         });
     });
-    _async.waterfall(queue, (error) => next(error));
+    _async.waterfall(queue, (error) => {
+        if (error) {
+            console.log(`process error: ${data.inputFilePath}`.red);
+        }
+        next(error);
+    });
 }
 /**
  * 编译文件队列 */
