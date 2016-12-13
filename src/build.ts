@@ -65,17 +65,24 @@ function compileFile(buildConfig, data, next){
       if(error){return cb(error)}
 
       if(processResult.hasProcess){
-        return cb(null)
+        return cb(null, data)
       }
       _log.info(`忽略文件: ${processResult.inputFilePath}`);
-      cb(null)
+      cb(null, data)
     })
   })
 
-  _async.waterfall(queue, (error)=>{
+  _async.waterfall(queue, (error, data)=>{
     if(error){
       console.log(`process error: ${data.inputFilePath}`.red)
     }
+    if(!buildConfig.__extra){
+      buildConfig.__extra = []
+    }
+    if(data.__extra){
+      buildConfig.__extra = buildConfig.__extra.concat(data.__extra)
+    }
+
     next(error)
   })
 
@@ -94,6 +101,7 @@ function compilerFileQueue(buildConfig, fileQueue, next){
       inputFilePath: fileItem.filePath,
       outputFilePath: _path.join(buildConfig.outdir, fileItem.relativeDir, fileItem.fileName),
       outdir: buildConfig.outdir,
+      outRelativeDir: buildConfig.outRelativeDir,
       inputFileRelativePath:  _path.join(fileItem.relativeDir, fileItem.fileName),
       outputFileRelativePath: _path.join(buildConfig.outRelativeDir, fileItem.relativeDir, fileItem.fileName),
       fileName: fileItem.fileName,

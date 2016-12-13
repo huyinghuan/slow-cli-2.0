@@ -35,7 +35,7 @@ function loadPlugin(hookType, pluginName, pluginPath, options) {
                         priority = ~~priority > 0 ? ~~priority : 1;
                         registerHook_1.default(hookName, callback, priority);
                         if (pluginName) {
-                            log_1.default.success(`加载插件${pluginName}'s hook ${hookName} 成功`.blue);
+                            log_1.default.success(`加载插件${pluginName}'s hook  ${hookName} 成功! priority:${priority}`.blue);
                         }
                         return;
                     }

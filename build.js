@@ -58,16 +58,17 @@ function compileFile(buildConfig, data, next) {
                 return cb(error);
             }
             if (processResult.hasProcess) {
-                return cb(null);
+                return cb(null, data);
             }
             log_1.default.info(`忽略文件: ${processResult.inputFilePath}`);
-            cb(null);
+            cb(null, data);
         });
     });
-    _async.waterfall(queue, (error) => {
+    _async.waterfall(queue, (error, data) => {
         if (error) {
             console.log(`process error: ${data.inputFilePath}`.red);
         }
+        buildConfig.__extra = 1111;
         next(error);
     });
 }
@@ -112,6 +113,7 @@ function normalExecute() {
     });
     //endBuild gzip 发送
     queue.push((buildConfig, next) => {
+        console.log(buildConfig.__extra);
         _hook.triggerBuildEndHook(buildConfig, next);
     });
     _async.waterfall(queue, (error) => {
