@@ -15,11 +15,11 @@ function compileFile(buildConfig, data, next) {
     let queue = [];
     //编译工具编译
     queue.push((cb) => {
-        _hook.triggerBuildDoCompileHook(data, cb);
+        _hook.triggerBuildDoCompileHook(buildConfig, data, cb);
     });
     //内容加工
     queue.push((data, content, cb) => {
-        _hook.triggerBuildDidCompileHook(data, content, cb);
+        _hook.triggerBuildDidCompileHook(buildConfig, data, content, cb);
     });
     /**
      * 已经编译完成，写入文件。
@@ -34,11 +34,17 @@ function compileFile(buildConfig, data, next) {
         try {
             //如果一个内容要输出到多个文件
             outputFilePathArr.forEach((outputFilePath) => {
-                if (!appendFile || !_fs.existsSync(outputFilePath)) {
+                if (!appendFile) {
                     _fs.outputFileSync(outputFilePath, content);
                 }
                 else {
-                    _fs.appendFileSync(outputFilePath, content, { encoding: 'utf8' });
+                    log_1.default.info(`append ${data.inputFileRelativePath} to ${data.outputFileRelativePath}`);
+                    if (!_fs.existsSync(outputFilePath)) {
+                        _fs.outputFileSync(outputFilePath, content);
+                    }
+                    else {
+                        _fs.appendFileSync(outputFilePath, content, { encoding: 'utf8' });
+                    }
                 }
             });
         }
@@ -51,9 +57,9 @@ function compileFile(buildConfig, data, next) {
      如果没有写入文件， 那么默认copy[调用默认hook(plugin/default-plugin/build/*)]文件。*/
     queue.push((didWrite, data, cb) => {
         if (didWrite || data.ignore) {
-            return cb(null);
+            return cb(null, data);
         }
-        _hook.triggerBuildDoNothingHook(data, (error, processResult) => {
+        _hook.triggerBuildDoNothingHook(buildConfig, data, (error, processResult) => {
             if (error) {
                 return cb(error);
             }
@@ -66,9 +72,9 @@ function compileFile(buildConfig, data, next) {
     });
     _async.waterfall(queue, (error, data) => {
         if (error) {
+            console.log(error);
             console.log(`process error: ${data.inputFilePath}`.red);
         }
-        buildConfig.__extra = 1111;
         next(error);
     });
 }
@@ -85,6 +91,7 @@ function compilerFileQueue(buildConfig, fileQueue, next) {
             inputFilePath: fileItem.filePath,
             outputFilePath: _path.join(buildConfig.outdir, fileItem.relativeDir, fileItem.fileName),
             outdir: buildConfig.outdir,
+            outRelativeDir: buildConfig.outRelativeDir,
             inputFileRelativePath: _path.join(fileItem.relativeDir, fileItem.fileName),
             outputFileRelativePath: _path.join(buildConfig.outRelativeDir, fileItem.relativeDir, fileItem.fileName),
             fileName: fileItem.fileName,
@@ -102,6 +109,10 @@ function normalExecute() {
     let fileQueue = getAllFileInProject_1.default(false);
     //获取编译参数
     let buildConfig = _init.getBuildConfig();
+    //额外需要编译的文件
+    buildConfig.__extra = [];
+    //编译完成后需要删除掉冗余文件
+    buildConfig.__del = [];
     //将要编译了
     queue.push((next) => {
         _hook.triggerBuildWillDoHook(buildConfig, next);
@@ -111,9 +122,25 @@ function normalExecute() {
         //编译文件
         compilerFileQueue(buildConfig, fileQueue, next);
     });
+    /**/
+    //处理额外的文件， 比如html中提取出来的js src， css link等文件合并
+    queue.push((buildConfig, next) => {
+        _async.map(buildConfig.__extra, (fileData, cb) => {
+            compileFile(buildConfig, fileData, cb);
+        }, (error) => {
+            next(error, buildConfig);
+        });
+    });
+    //删除标记文件
+    queue.push((buildConfig, next) => {
+        buildConfig.__del.forEach((filepath) => {
+            _fs.removeSync(filepath);
+            log_1.default.info(`remove ${filepath}`);
+        });
+        next(null, buildConfig);
+    });
     //endBuild gzip 发送
     queue.push((buildConfig, next) => {
-        console.log(buildConfig.__extra);
         _hook.triggerBuildEndHook(buildConfig, next);
     });
     _async.waterfall(queue, (error) => {

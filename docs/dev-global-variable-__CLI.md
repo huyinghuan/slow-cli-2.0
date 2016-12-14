@@ -11,7 +11,8 @@ For Developer
   }
   buildConfig:{
     outdir: './build', //在检查完编译参数后，将会变成绝对路径
-    ignore: ['node_modules', "^(\\.)"]
+    ignore: ['node_modules', "^(\\.)"],
+    outRelativeDir: './build' ////在检查完编译参数后 自动添加
   },
   enviroment: "",
   enviromentDir: ""

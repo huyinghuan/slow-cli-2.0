@@ -9,8 +9,6 @@ import _log from './lib/log';
 
 
 import _getAllFileInProject from './lib/getAllFileInProject';
-import { ProcessFile } from './all';
-import { outputFile } from './hooks/utils';
 
 const _workspace = process.cwd();
 
@@ -23,12 +21,12 @@ function compileFile(buildConfig, data, next){
 
   //编译工具编译
   queue.push((cb)=>{
-    _hook.triggerBuildDoCompileHook(data, cb)
+    _hook.triggerBuildDoCompileHook(buildConfig, data, cb)
   })
 
   //内容加工
   queue.push((data, content, cb)=>{
-    _hook.triggerBuildDidCompileHook(data, content, cb)
+    _hook.triggerBuildDidCompileHook(buildConfig, data, content, cb)
   })
 
   /**
@@ -45,12 +43,19 @@ function compileFile(buildConfig, data, next){
     try{
       //如果一个内容要输出到多个文件
       outputFilePathArr.forEach((outputFilePath)=>{
-        if(!appendFile || !_fs.existsSync(outputFilePath)){
+
+        if(!appendFile){
           _fs.outputFileSync(outputFilePath, content)
         }else{
-          _fs.appendFileSync(outputFilePath, content, {encoding: 'utf8'})
+          _log.info(`append ${data.inputFileRelativePath} to ${data.outputFileRelativePath}`)
+          if(!_fs.existsSync(outputFilePath)){
+            _fs.outputFileSync(outputFilePath, content)
+          }else{
+            _fs.appendFileSync(outputFilePath, content, {encoding: 'utf8'})
+          }
         }
-      })
+      
+    })
     }catch(e){
       return cb(e)
     }
@@ -60,8 +65,8 @@ function compileFile(buildConfig, data, next){
   /* 未完成编译， 触发hook， hook如果已经写入文件，那么不做任何事情， 如果ignore为true也不做任何事情
    如果没有写入文件， 那么默认copy[调用默认hook(plugin/default-plugin/build/*)]文件。*/
   queue.push((didWrite, data, cb)=>{
-    if(didWrite || data.ignore){return cb(null)}
-    _hook.triggerBuildDoNothingHook(data, (error, processResult:any)=>{
+    if(didWrite || data.ignore){return cb(null, data)}
+    _hook.triggerBuildDoNothingHook(buildConfig, data, (error, processResult:any)=>{
       if(error){return cb(error)}
 
       if(processResult.hasProcess){
@@ -74,15 +79,9 @@ function compileFile(buildConfig, data, next){
 
   _async.waterfall(queue, (error, data)=>{
     if(error){
+      console.log(error)
       console.log(`process error: ${data.inputFilePath}`.red)
     }
-    if(!buildConfig.__extra){
-      buildConfig.__extra = []
-    }
-    if(data.__extra){
-      buildConfig.__extra = buildConfig.__extra.concat(data.__extra)
-    }
-
     next(error)
   })
 
@@ -120,7 +119,10 @@ function normalExecute(){
   let fileQueue:Array<Object> = _getAllFileInProject(false);
   //获取编译参数
   let buildConfig = _init.getBuildConfig()
-
+  //额外需要编译的文件
+  buildConfig.__extra = [];
+  //编译完成后需要删除掉冗余文件
+  buildConfig.__del = [];
   //将要编译了
   queue.push((next)=>{
     _hook.triggerBuildWillDoHook(buildConfig, next)
@@ -131,7 +133,25 @@ function normalExecute(){
     //编译文件
     compilerFileQueue(buildConfig, fileQueue, next)
   })
+  /**/
+  //处理额外的文件， 比如html中提取出来的js src， css link等文件合并
+  queue.push((buildConfig, next)=>{
+    _async.map(buildConfig.__extra, (fileData, cb)=>{
+      compileFile(buildConfig, fileData, cb)
+    }, (error)=>{
+      next(error, buildConfig)
+    })
+  })
 
+  //删除标记文件
+  queue.push((buildConfig, next)=>{
+    buildConfig.__del.forEach((filepath)=>{
+      _fs.removeSync(filepath);
+      _log.info(`remove ${filepath}`)
+    })
+    next(null, buildConfig)
+  })
+  
   //endBuild gzip 发送
   queue.push((buildConfig, next)=>{
     _hook.triggerBuildEndHook(buildConfig, next)

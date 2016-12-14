@@ -2,7 +2,7 @@ import * as _allDefined from '../all';
 import * as _ from 'lodash';
 import * as _hookMap from './map';
 
-export default function(data, callback: _allDefined.BuildDoNothingCallback){
+export default function(buildConfig, data, callback: _allDefined.BuildDoNothingCallback){
   let queue = _hookMap.HookQueue[_hookMap.build.doNothing] || [];
   let processFactoryList = [];
   _.forEach(queue, (hook)=>{processFactoryList.push(hook.fn)});
@@ -16,7 +16,7 @@ export default function(data, callback: _allDefined.BuildDoNothingCallback){
       return callback(null, data)
     }
 
-    processHandle(data, next)
+    processHandle(buildConfig, data, next)
   }
   
   next(null, data)

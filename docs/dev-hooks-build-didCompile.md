@@ -17,6 +17,7 @@ exports.registerPlugin = (cli, options)=>{
       inputFileRelativePath:  _path.join(fileItem.relativeDir, fileItem.fileName),
       outputFileRelativePath: _path.join(buildConfig.outRelativeDir, fileItem.relativeDir, fileItem.fileName),
       ignore: false 是否取消对该文件处理 不处理，不copy
+      appendTo: true
     }
     content 编译文件内容
 
@@ -27,7 +28,7 @@ exports.registerPlugin = (cli, options)=>{
       data.outputFilePath = xxx;
   */
 
-  cli.registerHook('build:didCompile', (data, content, cb)=>{
+  cli.registerHook('build:didCompile', (buildConfig, data, content, cb)=>{
     cb(error, data, content)
   })
 }

@@ -3,7 +3,7 @@ import * as _fs from 'fs';
 import * as _ from 'lodash';
 
 exports.registerPlugin = (cli, options)=>{
-  cli.registerHook('build:doNothing', function(data, cb){
+  cli.registerHook('build:doNothing', function(buildConfig, data, cb){
     if(!_.isString(data.outputFilePath)){
       return cb("禁止copy两个相同文件")
     }

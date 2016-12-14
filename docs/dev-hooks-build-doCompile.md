@@ -22,7 +22,7 @@ exports.registerPlugin = (cli, options)=>{
       data.outputFilePath = xxx;
   */
 
-  cli.registerHook('build:doCompile', (data, content, cb)=>{
+  cli.registerHook('build:doCompile', (buildConfig, data, content, cb)=>{
     cb(error, data, content)
   })
 }

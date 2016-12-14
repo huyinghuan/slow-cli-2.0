@@ -1,7 +1,7 @@
 "use strict";
 const _ = require('lodash');
 const _hookMap = require('./map');
-function default_1(data, callback) {
+function default_1(buildConfig, data, callback) {
     let queue = _hookMap.HookQueue[_hookMap.build.doCompile] || [];
     let processFactoryList = [];
     _.forEach(queue, (hook) => { processFactoryList.push(hook.fn); });
@@ -13,7 +13,7 @@ function default_1(data, callback) {
         if (!processHandle) {
             return callback(null, data, content);
         }
-        processHandle(data, content, next);
+        processHandle(buildConfig, data, content, next);
     };
     next(null, data, null);
 }
