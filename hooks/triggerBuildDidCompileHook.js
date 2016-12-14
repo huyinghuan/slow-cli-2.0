@@ -5,17 +5,17 @@ function default_1(buildConfig, data, content, callback) {
     let queue = _hookMap.HookQueue[_hookMap.build.didCompile] || [];
     let processFactoryList = [];
     _.forEach(queue, (hook) => { processFactoryList.push(hook.fn); });
-    let next = (error, data, content) => {
+    let next = (error, content) => {
         if (error) {
-            return callback(error, data, content);
+            return callback(error, content);
         }
         let processHandle = processFactoryList.shift();
         if (!processHandle) {
-            return callback(null, data, content);
+            return callback(null, content);
         }
         processHandle(buildConfig, data, content, next);
     };
-    next(null, data, content);
+    next(null, content);
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

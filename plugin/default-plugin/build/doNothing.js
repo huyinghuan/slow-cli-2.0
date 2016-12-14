@@ -17,7 +17,7 @@ exports.registerPlugin = (cli, options) => {
             }
             cli.log.info(`copy ${data.inputFileRelativePath} -> ${data.outputFileRelativePath} `);
             data.hasProcess = true;
-            cb(null, data);
+            cb(null);
         });
     }, 1000);
 };
