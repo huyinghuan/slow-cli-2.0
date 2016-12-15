@@ -81,7 +81,7 @@ export default ()=>{
     if(realPath == '/'){
       realPath = globalCLIConfig.index || "index.html"
     }
-    let data = {
+    let data:any = {
       status: 404,
       realPath: realPath
     }
@@ -92,16 +92,14 @@ export default ()=>{
   
     //TODO  min js,css, html, autoprefix 
     //対编译后内容的加工处理
-    queue.push((data, responseContent, cb)=>{
+    queue.push((responseContent, cb)=>{
       //route:willResponse
-      _hooks.triggerHttpWillResponseHook(req, data, responseContent, (error, processContent)=>{
-        cb(error, data, processContent)
-      })
+      _hooks.triggerHttpWillResponseHook(req, data, responseContent, cb)
       
     });
 
     // outout mime and responseContent
-    queue.push((data, responseContent, cb)=>{
+    queue.push((responseContent, cb)=>{
       //文件没有经过任何编译工具处理。
       if(data.status == 404){
         return cb(null)

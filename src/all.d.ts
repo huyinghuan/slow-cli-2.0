@@ -10,10 +10,9 @@ export interface RouterCallBack{
 export interface CompilerCallBack{
   /**
    * erorr  error信息
-   * status  采用http status code 类似使用规则， 200:处理成功， 404:未找到文件
-   * data  编译后的文件数据 
+   * content  编译后的文件数据 
    */
-  (error: Object, status: number, data):void
+  (error: Object,  content):void
 }
 
 export interface WillResponseCallBack{

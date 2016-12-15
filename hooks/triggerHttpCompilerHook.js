@@ -8,17 +8,17 @@ function default_1(req, data, callback) {
     let queue = _hookMap.HookQueue[_hookMap.route.didRequest] || [];
     let contentFactoryList = [];
     _.forEach(queue, (hook) => { contentFactoryList.push(hook.fn); });
-    let next = (error, data, responseContent) => {
+    let next = (error, responseContent) => {
         if (error) {
-            return callback(error, data, responseContent);
+            return callback(error, responseContent);
         }
         let compiler = contentFactoryList.shift();
         if (!compiler) {
-            return callback(null, data, responseContent);
+            return callback(null, responseContent);
         }
         compiler(req, data, responseContent, next);
     };
-    next(null, data, null);
+    next(null, null);
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

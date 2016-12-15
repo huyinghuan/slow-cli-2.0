@@ -19,14 +19,14 @@ exports.registerPlugin = function (cli, options) {
         let realPath = data.realPath;
         let filePath = _path.join(cli.cwd, realPath);
         if (!match(filePath)) {
-            return cb(null, data, content);
+            return cb(null, content);
         }
         if (!_fs.existsSync(filePath)) {
-            return cb(null, data, content);
+            return cb(null, content);
         }
         data.status = 200;
         _fs.readFile(filePath, 'utf8', (error, fileContent) => {
-            cb(error, data, fileContent);
+            cb(error, fileContent);
         });
     }, 0);
 };
