@@ -45,6 +45,9 @@ function compileFile(buildConfig, data, next) {
                         _fs.outputFileSync(outputFilePath, content);
                     }
                     else {
+                        if (data.appendFilePrefix) {
+                            content = data.appendFilePrefix + content;
+                        }
                         _fs.appendFileSync(outputFilePath, content, { encoding: 'utf8' });
                     }
                 }

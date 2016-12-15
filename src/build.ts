@@ -55,6 +55,9 @@ function compileFile(buildConfig, data, next){
           if(!_fs.existsSync(outputFilePath)){
             _fs.outputFileSync(outputFilePath, content)
           }else{
+            if(data.appendFilePrefix){
+              content = data.appendFilePrefix + content
+            }
             _fs.appendFileSync(outputFilePath, content, {encoding: 'utf8'})
           }
         }
