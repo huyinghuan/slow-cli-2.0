@@ -6,7 +6,8 @@ const _async = require('async');
 const _request = require('request');
 const getMD5_1 = require('../lib/getMD5');
 const executeCommand_1 = require('../lib/executeCommand');
-const _defConfigServer = "";
+const config_filed_constant_1 = require('../config-filed-constant');
+const _defConfigServer = config_filed_constant_1.default.configServer;
 //上传配置
 const updateload = function (project, options) {
     if (!project.name) {
@@ -75,12 +76,18 @@ const updateload = function (project, options) {
 };
 //下载配置
 const sync = function (project, options) {
+    let projectName = options.name || project.name;
+    let version = options.version || project.version;
+    if (!projectName) {
+        return console.log("Error: 未制定项目名称".red);
+    }
 };
 function default_1(_commander) {
     _commander.command('config <actionName>')
         .description('上传或者同步配置文件 up or sync ')
         .option('-u, --url <value>', '指定配置存储服务器地址')
-        .option('-n, --name <value>', "指定同步的项目名称和版本号，可选，默认为 package.json => name@version")
+        .option('-n, --name <value>', "指定同步的项目名称，可选，默认为 package.json => name")
+        .option('-v, --version <value>', "指定同步的项目版本号， 可选，默认为 package.json => name")
         .action((actionName, program) => {
         let packageJSON = _project.getProjectPackageJSON();
         switch (actionName) {

@@ -8,6 +8,7 @@ const _infinity = 'silky';
 //根目录
 const _root = process.cwd();
 const config = {
+    configServer: "",
     infinity: _infinity,
     pluginConfigField: `${_infinity}-plugin`,
     pluginVersionField: `${_infinity}-version`,

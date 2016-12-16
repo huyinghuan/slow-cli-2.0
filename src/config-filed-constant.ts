@@ -4,7 +4,7 @@ import * as _path from 'path';
 /**
  * 仅用于记录文件位置
  */
- 
+
 //工具名称
 const _infinity = 'silky';
 
@@ -12,6 +12,7 @@ const _infinity = 'silky';
 const _root = process.cwd();
 
 const config = {
+  configServer: "",
   infinity: _infinity,
   pluginConfigField: `${_infinity}-plugin`, //silky-plugin
   pluginVersionField: `${_infinity}-version`, //silky-version
