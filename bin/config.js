@@ -1,18 +1,95 @@
 "use strict";
 const _project = require('../project');
+const _fs = require('fs-extra');
+const _path = require('path');
+const _async = require('async');
+const _request = require('request');
+const getMD5_1 = require('../lib/getMD5');
+const executeCommand_1 = require('../lib/executeCommand');
+const _defConfigServer = "";
 //上传配置
-const updateload = function (projdectName) {
-    if (!projdectName) {
-        console.log('非silky项目无法上传');
+const updateload = function (project, options) {
+    if (!project.name) {
+        console.log('缺少package.json文件，无法上传');
     }
+    let tmpDirName = project.name + "-" + project.version + "-" + Date.now();
+    let tmpDirPath = _path.join(process.cwd(), tmpDirName);
+    let tmpTarFilePath = tmpDirPath + ".tar";
+    let commanderStr = `cd "${tmpDirPath}" && tar -cf "${tmpTarFilePath}" .`;
+    let queue = [];
+    queue.push((next) => {
+        try {
+            _fs.ensureDirSync(tmpDirPath);
+            _fs.copySync(_path.join(process.cwd(), 'package.json'), _path.join(tmpDirPath, 'package.json'));
+            if (_fs.existsSync(_path.join(process.cwd(), '.silky'))) {
+                _fs.copySync(_path.join(process.cwd(), '.silky'), _path.join(tmpDirPath, '.silky'));
+            }
+            next(null);
+        }
+        catch (e) {
+            next(e);
+        }
+    });
+    queue.push((next) => {
+        executeCommand_1.default(commanderStr, next);
+    });
+    queue.push((next) => {
+        getMD5_1.default(tmpTarFilePath, next);
+    });
+    queue.push((md5, next) => {
+        let serverIp = options.url || project["config-server"] || _defConfigServer;
+        if (!serverIp) {
+            return next(new Error('未指定配置服务器IP'));
+        }
+        _request({
+            uri: `/api/p/${project.name}/v/${project.version}/h/${md5}`,
+            baseUrl: serverIp,
+            method: 'PUT',
+            formData: {
+                config: _fs.createReadStream(tmpTarFilePath)
+            }
+        }, (error, resp, body) => {
+            console.log(md5);
+            if (error) {
+                return next(error);
+            }
+            console.log(body);
+            if (resp.statusCode != 200) {
+                next(`http code: ${resp.statusCode}`);
+            }
+            else {
+                next();
+            }
+        });
+    });
+    _async.waterfall(queue, (error) => {
+        _fs.removeSync(tmpDirPath);
+        _fs.removeSync(tmpTarFilePath);
+        if (error) {
+            console.log("上传失败, 错误信息：".red);
+            console.log(error);
+            return;
+        }
+        console.log('上传成功！');
+    });
+};
+//下载配置
+const sync = function (project, options) {
 };
 function default_1(_commander) {
     _commander.command('config <actionName>')
         .description('上传或者同步配置文件 up or sync ')
-        .option('-u, --url', '指定配置存储服务器地址')
+        .option('-u, --url <value>', '指定配置存储服务器地址')
+        .option('-n, --name <value>', "指定同步的项目名称和版本号，可选，默认为 package.json => name@version")
         .action((actionName, program) => {
-        let packageJSOn = _project.getProjectPackageJSON();
-        if (actionName == "up") {
+        let packageJSON = _project.getProjectPackageJSON();
+        switch (actionName) {
+            case "up":
+                updateload(packageJSON, program);
+                break;
+            case "sync":
+                sync(packageJSON, program);
+                break;
         }
     });
 }

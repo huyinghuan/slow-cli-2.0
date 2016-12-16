@@ -5,7 +5,8 @@ import _init from './init'
 import _check from './check';
 import _build from './build';
 import _install from './install';
-import _info from './info'
+import _info from './info';
+import _config from './config';
 import * as _project from '../project';
 import _configFiledConstant from '../config-filed-constant';
 //import * as colors from 'colors' 坑, 全应用引用， 其他module无须重复引用
@@ -26,5 +27,6 @@ _check(_commander);
 _build(_commander);
 _install(_commander);
 _info(_commander);
+_config(_commander);
 
 _commander.version(versionDesc).parse(process.argv);

@@ -7,6 +7,7 @@ const check_1 = require('./check');
 const build_1 = require('./build');
 const install_1 = require('./install');
 const info_1 = require('./info');
+const config_1 = require('./config');
 const _project = require('../project');
 const config_filed_constant_1 = require('../config-filed-constant');
 //import * as colors from 'colors' 坑, 全应用引用， 其他module无须重复引用
@@ -23,4 +24,5 @@ check_1.default(_commander);
 build_1.default(_commander);
 install_1.default(_commander);
 info_1.default(_commander);
+config_1.default(_commander);
 _commander.version(versionDesc).parse(process.argv);
