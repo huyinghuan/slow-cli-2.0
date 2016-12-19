@@ -81,6 +81,29 @@ const sync = function (project, options) {
     if (!projectName) {
         return console.log("Error: 未制定项目名称".red);
     }
+    let serverIp = options.url || project["config-server"] || _defConfigServer;
+    let queue = [];
+    let file = _path.join(process.cwd(), "test.tar");
+    queue.push((next) => {
+        _request({
+            uri: `/api/p/${project.name}/v/${project.version}`,
+            baseUrl: serverIp,
+            method: 'GET',
+        }, (error, resp, body) => {
+            console.log(resp.headers);
+            let fws = _fs.createWriteStream(file);
+            resp.pipe(fws);
+            resp.on('end', () => {
+                next(null);
+            });
+        });
+    });
+    queue.push((next) => {
+        getMD5_1.default(file, next);
+    });
+    _async.waterfall(queue, (error, md5) => {
+        console.log(md5);
+    });
 };
 function default_1(_commander) {
     _commander.command('config <actionName>')
