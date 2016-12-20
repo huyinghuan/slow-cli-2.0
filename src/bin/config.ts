@@ -87,32 +87,61 @@ const sync = function(project, options){
   }
   let serverIp =  options.url || project["config-server"] || _defConfigServer;
   let queue = [];
-  let file = _path.join(process.cwd(), "test.tar")
+  let file = "";
+  let fileHash = "";
   queue.push((next)=>{
-    _request({
+    let req = _request({
       uri: `/api/p/${project.name}/v/${project.version}`,
       baseUrl: serverIp,
       method: 'GET',
-    }, (error, resp, body)=>{
+    })
+    req.on('response', (resp)=>{
       if(resp.statusCode !== 200){
         return next(new Error('http code ' + resp.statusCode))
       }
-      console.log(resp.headers)
+      fileHash = resp.headers['content-disposition'];
+      file = _path.join(process.cwd(), fileHash + ".tar");
       let fws =_fs.createWriteStream(file);
       resp.pipe(fws)
       resp.on('end', ()=>{
         next(null)
       })
     })
+    req.on('error', (error)=>{next(error)})
   })
-
+  //获取文件hash值
   queue.push((next)=>{
-    _getMD5(file, next)
+    _getMD5(file, (next))
+  });
+  //对比服务器端hash值
+  queue.push((md5, next)=>{
+    console.log(md5, fileHash)
+    if(md5 !== fileHash){
+      return next(new Error('文件下载错误，请重新下载！'))
+    }
+    next(null)
+  });
+
+  //解压文件并删除文件
+  queue.push((next)=>{
+    let commandStr = `tar -xf ${file}`;
+     _executeCommand(commandStr, (error)=>{
+      if(error){
+        console.log(`解压失败，请手动解压文件 ${file} 到项目根目录`)
+        return next(error)
+      }
+      _fs.removeSync(file);
+      next(null)
+    })
   })
 
-  _async.waterfall(queue, (error, md5)=>{
-    console.log(error)
-    console.log(md5)
+
+  _async.waterfall(queue, (error)=>{
+    if(error){
+      console.log(error)
+    }else{
+      console.log('同步配置文件成功！')
+    }
   })
 
 
