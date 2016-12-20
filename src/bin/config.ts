@@ -13,12 +13,12 @@ const _defConfigServer =  _config.configServer;
 
 //上传配置
 const updateload = function(project, options){
-  let projectName = options.name || project.name;
-  let version = options.version || project.version || "";
+  let projectName = options.projectName || project.name;
+  let version = options.projectVersion || project.version || "";
 
   if(!projectName){console.log('缺少配置文件名称，无法上传，请使用 -n 指定')}
   if(!version){console.log('缺少配置文件版本，无法上传，请使用 -v 指定')}
-  let tmpDirName = projectName + "-" + version + "-" + Date.now();
+  let tmpDirName = projectName + "-" + version;
   let tmpDirPath = _path.join(process.cwd(), tmpDirName)
   let tmpTarFilePath = tmpDirPath + ".tar"
   let commanderStr = `cd "${tmpDirPath}" && tar -cf "${tmpTarFilePath}" .`;
@@ -52,7 +52,7 @@ const updateload = function(project, options){
       return next(new Error('未指定配置服务器IP'));
     }
     _request({
-      uri: `/api/p/${projectName}/v/${project.version}/h/${md5}`,
+      uri: `/api/p/${projectName}/v/${version}/h/${md5}`,
       baseUrl: serverIp,
       method: 'PUT',
       formData: {
@@ -78,14 +78,14 @@ const updateload = function(project, options){
       console.log(error)
       return
     }
-    console.log('上传成功！')
+    console.log(`上传 ${projectName}-${version} 成功！`)
   })
 }
 
 //下载配置
 const sync = function(project, options){
-  let projectName = options.name || project.name;
-  let version = options.version || project.version;
+  let projectName = options.projectName || project.name;
+  let version = options.projectVersion || project.version;
   if(!projectName){
     return console.log("Error: 未制定项目名称".red)
   }
@@ -93,8 +93,10 @@ const sync = function(project, options){
   let queue = [];
   let file = "";
   let fileHash = "";
+  console.log('开始同步...')
   queue.push((next)=>{
     _fs.removeSync(_path.join(process.cwd(), ".silky"))
+    next(null)
   })
   queue.push((next)=>{
     let req = _request({
@@ -155,8 +157,8 @@ export default function(_commander){
   _commander.command('config <actionName>')
     .description('上传或者同步配置文件 up or sync ')
     .option('-u, --url <value>', '指定配置存储服务器地址')
-    .option('-n, --name <value>', "指定同步的项目名称，可选，默认为 package.json => name")
-    .option('-v, --version <value>', "指定同步的项目版本号， 可选，默认为 package.json => name")
+    .option('-n, --projectName <value>', "指定同步的项目名称，可选，默认为 package.json => name")
+    .option('-v, --projectVersion <value>', "指定同步的项目版本号， 可选，默认为 package.json => version")
     .action((actionName, program)=>{
       let packageJSON = _project.getProjectPackageJSON();
       switch(actionName){
