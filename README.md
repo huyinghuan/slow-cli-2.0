@@ -16,6 +16,8 @@
 
 [silky install](docs/user-command-install.md)
 
+[silky config](docs/user-command-config.md)
+
 ## 配置文件可配置项
 
 配置文件： package.json

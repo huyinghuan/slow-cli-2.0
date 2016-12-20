@@ -13,8 +13,12 @@ const _defConfigServer =  _config.configServer;
 
 //上传配置
 const updateload = function(project, options){
-  if(!project.name){console.log('缺少package.json文件，无法上传')}
-  let tmpDirName = project.name + "-" + project.version + "-" + Date.now();
+  let projectName = options.name || project.name;
+  let version = options.version || project.version || "";
+
+  if(!projectName){console.log('缺少配置文件名称，无法上传，请使用 -n 指定')}
+  if(!version){console.log('缺少配置文件版本，无法上传，请使用 -v 指定')}
+  let tmpDirName = projectName + "-" + version + "-" + Date.now();
   let tmpDirPath = _path.join(process.cwd(), tmpDirName)
   let tmpTarFilePath = tmpDirPath + ".tar"
   let commanderStr = `cd "${tmpDirPath}" && tar -cf "${tmpTarFilePath}" .`;
@@ -48,7 +52,7 @@ const updateload = function(project, options){
       return next(new Error('未指定配置服务器IP'));
     }
     _request({
-      uri: `/api/p/${project.name}/v/${project.version}/h/${md5}`,
+      uri: `/api/p/${projectName}/v/${project.version}/h/${md5}`,
       baseUrl: serverIp,
       method: 'PUT',
       formData: {
@@ -89,6 +93,9 @@ const sync = function(project, options){
   let queue = [];
   let file = "";
   let fileHash = "";
+  queue.push((next)=>{
+    _fs.removeSync(_path.join(process.cwd(), ".silky"))
+  })
   queue.push((next)=>{
     let req = _request({
       uri: `/api/p/${project.name}/v/${project.version}`,
@@ -135,16 +142,13 @@ const sync = function(project, options){
     })
   })
 
-
   _async.waterfall(queue, (error)=>{
     if(error){
       console.log(error)
     }else{
-      console.log('同步配置文件成功！')
+      console.log('同步配置文件成功！请允许 silky install 安装插件。')
     }
   })
-
-
 }
 
 export default function(_commander){
