@@ -89,18 +89,21 @@ const sync = function(project, options){
   let queue = [];
   let file = _path.join(process.cwd(), "test.tar")
   queue.push((next)=>{
-      _request({
-        uri: `/api/p/${project.name}/v/${project.version}`,
-        baseUrl: serverIp,
-        method: 'GET',
-      }, (error, resp, body)=>{
-        console.log(resp.headers)
-        let fws =_fs.createWriteStream(file);
-        resp.pipe(fws)
-        resp.on('end', ()=>{
-          next(null)
-        })
+    _request({
+      uri: `/api/p/${project.name}/v/${project.version}`,
+      baseUrl: serverIp,
+      method: 'GET',
+    }, (error, resp, body)=>{
+      if(resp.statusCode !== 200){
+        return next(new Error('http code ' + resp.statusCode))
+      }
+      console.log(resp.headers)
+      let fws =_fs.createWriteStream(file);
+      resp.pipe(fws)
+      resp.on('end', ()=>{
+        next(null)
       })
+    })
   })
 
   queue.push((next)=>{
@@ -108,6 +111,7 @@ const sync = function(project, options){
   })
 
   _async.waterfall(queue, (error, md5)=>{
+    console.log(error)
     console.log(md5)
   })
 

@@ -90,6 +90,9 @@ const sync = function (project, options) {
             baseUrl: serverIp,
             method: 'GET',
         }, (error, resp, body) => {
+            if (resp.statusCode !== 200) {
+                return next(new Error('http code ' + resp.statusCode));
+            }
             console.log(resp.headers);
             let fws = _fs.createWriteStream(file);
             resp.pipe(fws);
@@ -102,6 +105,7 @@ const sync = function (project, options) {
         getMD5_1.default(file, next);
     });
     _async.waterfall(queue, (error, md5) => {
+        console.log(error);
         console.log(md5);
     });
 };
