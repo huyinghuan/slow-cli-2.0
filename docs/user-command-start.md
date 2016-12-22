@@ -1,6 +1,6 @@
 ## commander start
 
-启动静态服务器. e.g.  
+启动静态服务器. e.g.
 
 ```shell
 silky start -p 3002 -c
@@ -14,6 +14,7 @@ silky start -p 3002 -c
 -e --enviroment #指定运行环境，使插件读取相应环境等配置 optional:【develop, production】
 -l --log #见 command-common-params.md
 -A --additional #见command-common-params.md
+-n --noConfig  #无配置文件运行
 ```
 
 ### 查看选项帮助说明

@@ -5,7 +5,7 @@ import _getFullPluginName from './getFullPluginName';
 import * as _plugin from '../plugin/index';
 import _loadPlugin from './loadPlugin';
 import _getAllFileInDir from '../lib/getAllFileInDir';
-
+import _log from '../lib/log';
 //扫描加载内置插件
 function scanDefaultPlugins(hookType:string){
   //指定类型的hook
@@ -37,6 +37,7 @@ function getDevPluginPath(source):string{
  * 扫描Hooks插件, 仅加载指定hook
 */
 export default function scanPlugins(hookType:string){
+  let __startTime = Date.now();
   let pluginsConfig = _plugin.getPluginConfig();
   if(!pluginsConfig){
     console.log(`没有配置任何插件`.red)
@@ -44,7 +45,7 @@ export default function scanPlugins(hookType:string){
   }
   let plugins = [];
   let pluginExts = [];
-  
+
   Object.keys(pluginsConfig).forEach((key)=>{
     if(/^(__)/.test(key)){
       return;
@@ -67,9 +68,14 @@ export default function scanPlugins(hookType:string){
     }
 
     //从自定义路径或插件目录获取插件路径
-    let pluginPath = getDevPluginPath(pluginsConfig[pluginName].__source) || _path.join(_configFiledConstant.pluginDir, _getFullPluginName(pluginName)); 
+    let pluginPath = getDevPluginPath(pluginsConfig[pluginName].__source) || _path.join(_configFiledConstant.pluginDir, _getFullPluginName(pluginName));
+    let __loadStart = Date.now();
     _loadPlugin(hookType, pluginName, pluginPath, pluginsConfig[pluginName])
+    _log.info(`加载 ${pluginName} 用时 ${Date.now() - __loadStart}ms`)
   });
+
+  _log.info(`加载插件用时 ${Date.now() - __startTime}ms`)
+
   //内置插件
   scanDefaultPlugins(hookType)
 }

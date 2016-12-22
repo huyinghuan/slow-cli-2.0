@@ -4,7 +4,7 @@
 
 ```js
 exports.registerPlugin = (cli, options)=>{
-  cli.registerHook('build:end', (buildConfig, data, cb)=>{
+  cli.registerHook('build:end', (buildConfig, cb)=>{
     let outdir = buildConfig.outdir;
     let packageJSON = require(_path.join(process.cwd(), 'package.json'));
     let tarFile = _path.join(process.cwd(), `${packageJSON.name}@${packageJSON.version}.tar`);
@@ -14,7 +14,7 @@ exports.registerPlugin = (cli, options)=>{
         return cb(error);
       }
       console.log("文件打包完成")
-      cb(null, data)
+      cb(null)
     })
   }, 1)
 }

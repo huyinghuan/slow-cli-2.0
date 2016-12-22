@@ -26,8 +26,6 @@ function compileFile(buildConfig, data, next) {
      * 如果没有任何内容，则跳过, 如果ignore为true也跳过
     */
     queue.push((content, cb) => {
-        if (/hbs/.test(data.inputFilePath)) {
-        }
         if (!content || data.ignore) {
             return cb(null, false);
         }
@@ -108,7 +106,7 @@ function compilerFileQueue(buildConfig, fileQueue, next) {
         next(error, buildConfig);
     });
 }
-function normalExecute() {
+function normalExecute(finish) {
     let queue = [];
     //获取所有待编译文件
     let fileQueue = getAllFileInProject_1.default(false);
@@ -156,9 +154,11 @@ function normalExecute() {
             return process.exit(1);
         }
         console.log("build success".green);
+        finish();
     });
 }
 function default_1() {
+    let __starTime = Date.now();
     //加载插件
     _plugin.scanPlugins('build');
     let queue = [];
@@ -174,7 +174,9 @@ function default_1() {
         if (stop) {
             return;
         }
-        normalExecute();
+        normalExecute(() => {
+            console.log(`编译用时: ${Date.now() - __starTime}ms`);
+        });
     });
 }
 Object.defineProperty(exports, "__esModule", { value: true });
