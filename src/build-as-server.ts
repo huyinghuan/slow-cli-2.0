@@ -28,8 +28,7 @@ const startBuildServer = (port)=>{
   //主要做一些接口认证的事
   _hook.triggerBuildServerFilterHook(router)
 
-  //编译所有
-  router.get('/all', (req, resp)=>{
+  router.get(/^\/((single)|(all)).?/, (req, resp, next)=>{
     let outdir = req.query.outdir;
     if(!outdir){
       resp.status(403);
@@ -48,6 +47,17 @@ const startBuildServer = (port)=>{
       resp.send({error:"目录不可创建"})
       return
     }
+    console.log(outdir)
+    next()
+  })
+
+  router.get('/single', (req, resp)=>{
+    resp.sendStatus(200)
+  });
+
+  //编译所有
+  router.get('/all', (req, resp)=>{
+    let outdir = req.query.outdir;
     let buildConfig = _init.getBuildConfig();
     buildConfig.outdir = outdir;
     _build.normalExecute(buildConfig, (error)=>{
@@ -72,6 +82,18 @@ const startBuildServer = (port)=>{
 export default function(port){
   //加载插件
   _plugin.scanPlugins('build');
+  _hook.triggerBuildInitHook((error, stop)=>{
+    if(error){
+      _log.error(error)
+      process.exit(1)
+      return
+    }
+    if(stop){
+      _log.info(`该项目已被插件接管编译功能，编译服务不适用于该项目`)
+      process.exit(0)
+      return
+    }
+    startBuildServer(port)
+  })
 
-  startBuildServer(port)
 }

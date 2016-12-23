@@ -163,6 +163,32 @@ function normalExecute(buildConfig, finish){
   })
 }
 
+/**
+ * 编译单个文件
+ */
+function singleBuild(buildConfig, filepath, finish){
+  //确保编译目录存在
+  _fs.ensureDirSync(buildConfig.outdir);
+  let realPath = _path.join(_workspace, filepath);
+  if(!_fs.existsSync(realPath) || realPath.indexOf(_workspace) == -1){
+    return finish(new Error('编译文件在项目中找不到'))
+  }
+  let fileName = realPath.split(_path.sep).pop();
+
+  let fileData = {
+    inputFilePath: realPath,
+    outputFilePath: _path.join(buildConfig.outdir, filepath),
+    outdir: buildConfig.outdir,
+    outRelativeDir: buildConfig.outRelativeDir,
+    inputFileRelativePath:  filepath,
+    outputFileRelativePath: _path.join(buildConfig.outRelativeDir, filepath),
+    fileName: fileName,
+    appendFile: false,
+    ignore: false
+  }
+  compileFile(buildConfig, fileData, finish)
+}
+
 export function once(){
   let __starTime = Date.now();
   //加载插件
