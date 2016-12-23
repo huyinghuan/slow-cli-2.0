@@ -38,7 +38,7 @@ function setStartParams(userInputAgruments) {
 exports.setStartParams = setStartParams;
 //获取编译设置
 function getBuildConfig() {
-    return global.__CLI.buildConfig;
+    return _.extend({}, global.__CLI.buildConfig);
 }
 exports.getBuildConfig = getBuildConfig;
 // 仅为全局变量

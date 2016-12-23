@@ -1,10 +1,11 @@
 "use strict";
 const _init = require('../init/index');
-const build_1 = require('../build');
+const _build = require('../build');
 const _project = require('../project');
 const _plugin = require('../plugin/index');
 const extraParamsParse_1 = require('./extraParamsParse');
 const log_1 = require('../lib/log');
+const build_as_server_1 = require('../build-as-server');
 function default_1(_commander) {
     _commander.command('build')
         .description('编译')
@@ -13,6 +14,8 @@ function default_1(_commander) {
         .option('-e, --enviroment <value>', "运行时环境可选[develop, production，或其他] 默认production")
         .option('-l, --log <value>', 'log日志,( 0[defaul]: show all; 1: show error, fail; 2: show error, fail, warn)', (value) => { log_1.default.setLevel(value); })
         .option('-A, --additional <items>', '额外的参数，格式 -A A=1[,B=xxx] 或者指定唯一值  -A value', extraParamsParse_1.default)
+        .option('-h, --httpServer', '作为http server启动')
+        .option('-p, --port <value>', '仅当存在-h选项时，该配置起作用，用来指定http server端口，默认为 14423')
         .allowUnknownOption()
         .action((program) => {
         //读取用户自定义配置
@@ -39,7 +42,12 @@ function default_1(_commander) {
         if (!_init.checkBuildArgs()) {
             return process.exit(1);
         }
-        build_1.default();
+        if (program.httpServer) {
+            build_as_server_1.default(program.port || 14423);
+        }
+        else {
+            _build.once();
+        }
     });
 }
 Object.defineProperty(exports, "__esModule", { value: true });

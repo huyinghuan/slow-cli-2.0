@@ -10,7 +10,7 @@ expors.registerPlugin = (cli, options)=>{
   cli.registerHook('build:willBuild', (buildConfig, cb)=>{
     buildConfig.test = "xxx";
     console.log("build will do 2: ", buildConfig)
-    cb(null, buildConfig)
+    cb(null)
   }, 1)
 }
 

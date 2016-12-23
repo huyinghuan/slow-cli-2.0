@@ -1,21 +1,19 @@
 import * as _allDefined from '../all';
 import * as _ from 'lodash';
 import * as _hookMap from './map';
+import * as _async from 'async';
 
 export default function(buildConfig, callback: _allDefined.BuildWillDoCallBack){
   let queue = _hookMap.HookQueue[_hookMap.build.willBuild] || [];
-  
-  let processFactoryList = [];
-  _.forEach(queue, (hook)=>{processFactoryList.push(hook.fn)});
-  let next = (error, buildConfig)=>{
-    if(error){
-      return callback(error, buildConfig)
-    }
-    let processHandle = processFactoryList.shift();
-    if(!processHandle){
-      return callback(null, buildConfig)
-    }
-    processHandle(buildConfig, next)
+  if(!queue.length){
+    callback(null, buildConfig)
+    return
   }
-  next(null, buildConfig)
+  _async.mapSeries(queue, (hook, next)=>{
+    (hook as any).fn(buildConfig, (error)=>{
+      next(error, null)
+    })
+  }, (error)=>{
+    callback(error, buildConfig)
+  })
 }

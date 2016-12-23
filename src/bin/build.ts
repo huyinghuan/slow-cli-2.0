@@ -1,10 +1,11 @@
 import * as _init from '../init/index'
-import _build from '../build';
+import * as _build from '../build';
 import * as _project from '../project';
-import * as _plugin from '../plugin/index' 
+import * as _plugin from '../plugin/index'
 import * as _path from 'path';
 import _extraParamsParse from './extraParamsParse';
 import _log from '../lib/log'
+import _buildServer from '../build-as-server';
 
 export default function(_commander){
   _commander.command('build')
@@ -14,6 +15,8 @@ export default function(_commander){
     .option('-e, --enviroment <value>', "运行时环境可选[develop, production，或其他] 默认production")
     .option('-l, --log <value>', 'log日志,( 0[defaul]: show all; 1: show error, fail; 2: show error, fail, warn)',(value)=>{_log.setLevel(value)})
     .option('-A, --additional <items>', '额外的参数，格式 -A A=1[,B=xxx] 或者指定唯一值  -A value', _extraParamsParse)
+    .option('-h, --httpServer', '作为http server启动')
+    .option('-p, --port <value>', '仅当存在-h选项时，该配置起作用，用来指定http server端口，默认为 14423')
     .allowUnknownOption()
     .action((program)=>{
       //读取用户自定义配置
@@ -36,7 +39,7 @@ export default function(_commander){
 
       //更新全局变量下的编译参数。
       _init.setBuildParams(userInputArgs)
-      
+
       if(program.additional){
          _init.setBuildParams(program.additional)
       }
@@ -45,6 +48,12 @@ export default function(_commander){
       if(!_init.checkBuildArgs()){
         return process.exit(1)
       }
-      _build()
+
+      if(program.httpServer){
+        _buildServer(program.port || 14423)
+      }else{
+        _build.once()
+      }
+
     })
 }

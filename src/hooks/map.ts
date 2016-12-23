@@ -21,7 +21,8 @@ export const build = {
 //  willMake: 'build:willMake',
 //  didMake: 'build:didMake',
   endBuild: "build:end", //
-  error: 'build:error'
+  error: 'build:error',
+  serverFilter: 'build:filter'
 }
 export const plugin = {
   run: 'plugin:run'

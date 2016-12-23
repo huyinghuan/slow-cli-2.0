@@ -106,12 +106,14 @@ function compilerFileQueue(buildConfig, fileQueue, next) {
         next(error, buildConfig);
     });
 }
-function normalExecute(finish) {
+/**
+ * @params: buildConfig <Object> 编译参数
+ * @params: finish <Function> 回调函数， 接收一个参数
+*/
+function normalExecute(buildConfig, finish) {
     let queue = [];
     //获取所有待编译文件
     let fileQueue = getAllFileInProject_1.default(false);
-    //获取编译参数
-    let buildConfig = _init.getBuildConfig();
     //额外需要编译的文件
     buildConfig.__extra = [];
     //编译完成后需要删除掉冗余文件
@@ -142,22 +144,15 @@ function normalExecute(finish) {
         });
         next(null, buildConfig);
     });
-    //endBuild gzip 发送
     queue.push((buildConfig, next) => {
         _hook.triggerBuildEndHook(buildConfig, next);
     });
     _async.waterfall(queue, (error) => {
-        if (error) {
-            log_1.default.error(error);
-            log_1.default.error("build fail".red);
-            _hook.triggerBuildErrorHook(error);
-            return process.exit(1);
-        }
-        console.log("build success".green);
-        finish();
+        finish(error);
     });
 }
-function default_1() {
+exports.normalExecute = normalExecute;
+function once() {
     let __starTime = Date.now();
     //加载插件
     _plugin.scanPlugins('build');
@@ -174,10 +169,19 @@ function default_1() {
         if (stop) {
             return;
         }
-        normalExecute(() => {
-            console.log(`编译用时: ${Date.now() - __starTime}ms`);
+        normalExecute(_init.getBuildConfig(), (error) => {
+            //编译成功
+            if (!error) {
+                console.log("build success".green);
+                return console.log(`编译用时: ${Date.now() - __starTime}ms`);
+            }
+            //编译失败
+            log_1.default.error(error);
+            log_1.default.error("build fail".red);
+            _hook.triggerBuildErrorHook(error);
+            //是否需要退出进程
+            process.exit(1);
         });
     });
 }
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = default_1;
+exports.once = once;

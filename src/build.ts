@@ -1,17 +1,16 @@
 import * as _async from 'async';
 import * as _fs from 'fs-extra';
 import * as _path from 'path';
+
 import * as _init from './init/index';
 import * as _hook from './hooks/index';
 import * as _plugin from './plugin/index';
 import * as _hookMap from './hooks/map';
 import _log from './lib/log';
 
-
 import _getAllFileInProject from './lib/getAllFileInProject';
 
 const _workspace = process.cwd();
-
 
 /**
  * 编译单个文件
@@ -113,12 +112,15 @@ function compilerFileQueue(buildConfig, fileQueue, next){
   })
 }
 
-function normalExecute(finish){
+/**
+ * @params: buildConfig <Object> 编译参数
+ * @params: finish <Function> 回调函数， 接收一个参数
+*/
+function normalExecute(buildConfig, finish){
   let queue = [];
   //获取所有待编译文件
   let fileQueue:Array<Object> = _getAllFileInProject(false);
-  //获取编译参数
-  let buildConfig = _init.getBuildConfig()
+
   //额外需要编译的文件
   buildConfig.__extra = [];
   //编译完成后需要删除掉冗余文件
@@ -152,24 +154,16 @@ function normalExecute(finish){
     next(null, buildConfig)
   })
 
-  //endBuild gzip 发送
   queue.push((buildConfig, next)=>{
     _hook.triggerBuildEndHook(buildConfig, next)
   })
 
   _async.waterfall(queue, (error)=>{
-    if(error){
-      _log.error(error);
-      _log.error("build fail".red);
-      _hook.triggerBuildErrorHook(error);
-      return process.exit(1)
-    }
-    console.log("build success".green)
-    finish()
+    finish(error)
   })
 }
 
-export default function(){
+export function once(){
   let __starTime = Date.now();
   //加载插件
   _plugin.scanPlugins('build')
@@ -179,7 +173,6 @@ export default function(){
   queue.push((cb)=>{_hook.triggerBuildInitHook(cb);});
 
   _async.waterfall(queue, (error, stop)=>{
-
     if(error){
       _log.error(error);
       _log.fail('build 初始化失败'.red);
@@ -187,8 +180,20 @@ export default function(){
       return;
     }
     if(stop){return}
-    normalExecute(()=>{
-      console.log(`编译用时: ${Date.now() - __starTime}ms`)
+    normalExecute(_init.getBuildConfig(), (error)=>{
+      //编译成功
+      if(!error){
+        console.log("build success".green)
+        return console.log(`编译用时: ${Date.now() - __starTime}ms`)
+      }
+      //编译失败
+      _log.error(error);
+      _log.error("build fail".red);
+      _hook.triggerBuildErrorHook(error);
+      //是否需要退出进程
+      process.exit(1)
     })
   })
 }
+
+export {normalExecute as normalExecute}

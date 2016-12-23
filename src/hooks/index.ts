@@ -10,8 +10,9 @@ import _triggerBuildDoCompileHook from './triggerBuildDoCompileHook';
 import _triggerBuildDidCompileHook from './triggerBuildDidCompileHook';
 import _triggerBuildDoNothingHook from './triggerBuildDoNothingHook';
 import _triggerBuildEndHook from './triggerBuildEndHook';
+import _triggerBuildServerFilterHook from './triggerBuildServerFilterHook'
 export {
-  _triggerHttpCompilerHook as triggerHttpCompilerHook, 
+  _triggerHttpCompilerHook as triggerHttpCompilerHook,
   _triggerHttpRouterHook as triggerHttpRouterHook,
   _triggerHttpWillResponseHook as triggerHttpWillResponseHook,
   _triggerHttpDidResponseHook as triggerHttpDidResponseHook,
@@ -22,5 +23,6 @@ export {
   _triggerBuildDoCompileHook as triggerBuildDoCompileHook,
   _triggerBuildDidCompileHook as triggerBuildDidCompileHook,
   _triggerBuildDoNothingHook as triggerBuildDoNothingHook,
-  _triggerBuildEndHook as triggerBuildEndHook
-} 
+  _triggerBuildEndHook as triggerBuildEndHook,
+  _triggerBuildServerFilterHook as triggerBuildServerFilterHook
+}

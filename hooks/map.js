@@ -22,7 +22,8 @@ exports.build = {
     //  willMake: 'build:willMake',
     //  didMake: 'build:didMake',
     endBuild: "build:end",
-    error: 'build:error'
+    error: 'build:error',
+    serverFilter: 'build:filter'
 };
 exports.plugin = {
     run: 'plugin:run'
