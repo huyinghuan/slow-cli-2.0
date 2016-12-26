@@ -158,6 +158,7 @@ exports.normalExecute = normalExecute;
 function singleBuild(buildConfig, filepath, finish) {
     //确保编译目录存在
     _fs.ensureDirSync(buildConfig.outdir);
+    _fs.emptyDirSync(buildConfig.outdir);
     let realPath = _path.join(_workspace, filepath);
     if (!_fs.existsSync(realPath) || realPath.indexOf(_workspace) == -1) {
         return finish(new Error('编译文件在项目中找不到'));
@@ -174,8 +175,45 @@ function singleBuild(buildConfig, filepath, finish) {
         appendFile: false,
         ignore: false
     };
-    compileFile(buildConfig, fileData, finish);
+    //compileFile(buildConfig, fileData, finish)
+    let queue = [];
+    queue.push((next) => {
+        compileFile(buildConfig, fileData, (error) => {
+            next(error);
+        });
+    });
+    //编译额外的文件
+    queue.push((next) => {
+        _async.map(buildConfig.__extra, (fileData, cb) => {
+            compileFile(buildConfig, fileData, cb);
+        }, (error) => {
+            next(error);
+        });
+    });
+    //删除标记文件
+    queue.push((next) => {
+        try {
+            buildConfig.__del.forEach((filepath) => {
+                _fs.removeSync(filepath);
+                log_1.default.info(`remove ${filepath}`);
+            });
+            next(null);
+        }
+        catch (e) {
+            next(e);
+        }
+    });
+    _async.waterfall(queue, (error) => {
+        if (error) {
+            finish(error);
+        }
+        else {
+            console.log("编译完成");
+            finish(null);
+        }
+    });
 }
+exports.singleBuild = singleBuild;
 function once() {
     let __starTime = Date.now();
     //加载插件

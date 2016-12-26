@@ -8,6 +8,8 @@ import * as _build from './build';
 import * as _path from 'path';
 import * as _init from './init/index';
 import * as _fse from 'fs-extra';
+import * as _async from 'async';
+
 
 const startBuildServer = (port)=>{
   let app = _express()
@@ -47,12 +49,36 @@ const startBuildServer = (port)=>{
       resp.send({error:"目录不可创建"})
       return
     }
-    console.log(outdir)
     next()
   })
 
   router.get('/single', (req, resp)=>{
-    resp.sendStatus(200)
+
+    let filepath = req.query.filepath;
+    let outdir = req.query.outdir;
+
+    if(!filepath){
+      resp.status(403)
+      return resp.send({msg: "缺少查询参数"})
+    }
+
+    let buildConfig = _init.getBuildConfig();
+    buildConfig.outdir = outdir;
+    //额外需要编译的文件
+    buildConfig.__extra = [];
+    //编译完成后需要删除掉冗余文件
+    buildConfig.__del = [];
+    _build.singleBuild(buildConfig, filepath, (error)=>{
+      if(error){
+        console.log(error);
+        resp.status(500)
+        resp.send({msg: "编译错误"})
+      }else{
+        resp.sendStatus(200)
+      }
+    })
+
+
   });
 
   //编译所有
