@@ -111,7 +111,7 @@ const startBuildServer = (port)=>{
       }else{
         resp.status(200);
         console.log(`编译完成`)
-        resp.send({msg: "编译成功！"})
+        resp.send({msg: "编译成功！", time: Date.now() - (req as any).__acceptTime})
       }
     })
   })

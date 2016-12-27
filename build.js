@@ -215,6 +215,10 @@ function singleBuild(buildConfig, filepath, finish) {
     });
 }
 exports.singleBuild = singleBuild;
+/**
+ * 用于一次性编译
+ * 编译完成后即推出进程
+ * */
 function once() {
     let __starTime = Date.now();
     //加载插件
@@ -249,7 +253,6 @@ function once() {
             log_1.default.error(error);
             log_1.default.error("build fail".red);
             _hook.triggerBuildErrorHook(error);
-            //是否需要退出进程
             process.exit(1);
         });
     });
