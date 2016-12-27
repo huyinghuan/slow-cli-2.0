@@ -107,7 +107,7 @@ const startBuildServer = (port) => {
     });
     app.use(router);
     let _server = _http.createServer(app);
-    log_1.default.info(`Build Server listen at port ${port}`.green);
+    console.log(`Build Server listen at port ${port}`.green);
     _server.listen(app.listen(port));
 };
 function default_1(port) {

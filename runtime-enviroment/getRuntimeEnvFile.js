@@ -41,15 +41,28 @@ function default_1(filename, asString) {
         let filePath = !!envFilepath ? envFilepath : normalFilePath;
         return _fs.readFileSync(filePath, "utf8");
     }
-    let normalBase = {};
-    let envBase = {};
-    //作为数据读取顺序
+    let normalBase = null;
+    let envBase = null;
+    //作为module读取
     if (!!normalFilePath) {
         normalBase = require(normalFilePath);
     }
     if (!!envFilepath) {
         envBase = require(envFilepath);
     }
+    //moudle 是否为函数 如果环境变量为函数，则不用继承直接返回
+    if (_.isFunction(envBase)) {
+        return envBase;
+    }
+    //如果环境变量不存在， 通用变量存在则直接扔通用变量
+    if (!envBase && normalBase) {
+        return normalBase;
+    }
+    if ((_.isPlainObject(envBase) && _.isFunction(normalBase)) || (_.isPlainObject(normalBase) && _.isFunction(envBase))) {
+        throw new Error(`环境变量和通用变量类型不一致 ${filename}`);
+    }
+    envBase = envBase || {};
+    normalBase = normalBase || {};
     Object.keys(envBase).forEach((key) => {
         //避免误解
         if (normalBase[key] === null || normalBase[key] === undefined) {

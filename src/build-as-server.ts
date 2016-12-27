@@ -118,7 +118,7 @@ const startBuildServer = (port)=>{
   app.use(router)
 
   let _server = _http.createServer(app)
-  _log.info(`Build Server listen at port ${port}`.green)
+  console.log(`Build Server listen at port ${port}`.green)
   _server.listen(app.listen(port));
 }
 
