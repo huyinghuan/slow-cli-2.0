@@ -4,6 +4,8 @@
 
 # 用户手册
 
+## 安装
+
 ## 启动命令及参数说明
 
 [silky start](docs/user-command-start.md)
