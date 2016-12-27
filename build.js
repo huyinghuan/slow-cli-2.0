@@ -6,6 +6,7 @@ const _init = require('./init/index');
 const _hook = require('./hooks/index');
 const _plugin = require('./plugin/index');
 const log_1 = require('./lib/log');
+const getGithash_1 = require('./lib/getGithash');
 const getAllFileInProject_1 = require('./lib/getAllFileInProject');
 const _workspace = process.cwd();
 /**
@@ -219,8 +220,15 @@ function once() {
     //加载插件
     _plugin.scanPlugins('build');
     let queue = [];
+    let gitHash = null;
     //build初始化HOOK
     queue.push((cb) => { _hook.triggerBuildInitHook(cb); });
+    queue.push((stop, cb) => {
+        getGithash_1.default((error, hash) => {
+            gitHash = hash;
+            cb(error, stop);
+        });
+    });
     _async.waterfall(queue, (error, stop) => {
         if (error) {
             log_1.default.error(error);
@@ -231,7 +239,7 @@ function once() {
         if (stop) {
             return;
         }
-        normalExecute(_init.getBuildConfig(), (error) => {
+        normalExecute(_init.getBuildConfig({ gitHash: gitHash }), (error) => {
             //编译成功
             if (!error) {
                 console.log("build success".green);

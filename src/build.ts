@@ -7,6 +7,7 @@ import * as _hook from './hooks/index';
 import * as _plugin from './plugin/index';
 import * as _hookMap from './hooks/map';
 import _log from './lib/log';
+import _getGitHash from './lib/getGithash';
 
 import _getAllFileInProject from './lib/getAllFileInProject';
 
@@ -232,9 +233,15 @@ export function once(){
   _plugin.scanPlugins('build')
 
   let queue = [];
+  let gitHash = null;
   //build初始化HOOK
   queue.push((cb)=>{_hook.triggerBuildInitHook(cb);});
-
+  queue.push((stop, cb)=>{
+    _getGitHash((error, hash)=>{
+      gitHash = hash
+      cb(error, stop)
+    })
+  })
   _async.waterfall(queue, (error, stop)=>{
     if(error){
       _log.error(error);
@@ -243,7 +250,7 @@ export function once(){
       return;
     }
     if(stop){return}
-    normalExecute(_init.getBuildConfig(), (error)=>{
+    normalExecute(_init.getBuildConfig({gitHash:gitHash}), (error)=>{
       //编译成功
       if(!error){
         console.log("build success".green)

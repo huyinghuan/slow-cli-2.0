@@ -8,6 +8,8 @@ const _build = require('./build');
 const _path = require('path');
 const _init = require('./init/index');
 const _fse = require('fs-extra');
+const _async = require('async');
+const getGitHash_1 = require('./lib/getGitHash');
 const startBuildServer = (port) => {
     let app = _express();
     let router = _express.Router();
@@ -54,13 +56,20 @@ const startBuildServer = (port) => {
             resp.status(403);
             return resp.send({ msg: "缺少查询参数" });
         }
-        let buildConfig = _init.getBuildConfig();
-        buildConfig.outdir = outdir;
-        //额外需要编译的文件
-        buildConfig.__extra = [];
-        //编译完成后需要删除掉冗余文件
-        buildConfig.__del = [];
-        _build.singleBuild(buildConfig, filepath, (error) => {
+        let queue = [];
+        queue.push((next) => {
+            getGitHash_1.default(next);
+        });
+        queue.push((gitHash, next) => {
+            let buildConfig = _init.getBuildConfig({ gitHash: gitHash });
+            buildConfig.outdir = outdir;
+            //额外需要编译的文件
+            buildConfig.__extra = [];
+            //编译完成后需要删除掉冗余文件
+            buildConfig.__del = [];
+            _build.singleBuild(buildConfig, filepath, next);
+        });
+        _async.waterfall(queue, (error) => {
             if (error) {
                 console.log(error);
                 resp.status(500);
@@ -74,9 +83,16 @@ const startBuildServer = (port) => {
     //编译所有
     router.get('/all', (req, resp) => {
         let outdir = req.query.outdir;
-        let buildConfig = _init.getBuildConfig();
-        buildConfig.outdir = outdir;
-        _build.normalExecute(buildConfig, (error) => {
+        let queue = [];
+        queue.push((next) => {
+            getGitHash_1.default(next);
+        });
+        queue.push((gitHash, next) => {
+            let buildConfig = _init.getBuildConfig({ gitHash: gitHash });
+            buildConfig.outdir = outdir;
+            _build.normalExecute(buildConfig, next);
+        });
+        _async.waterfall(queue, (error) => {
             if (error) {
                 console.log(error);
                 resp.status(500);

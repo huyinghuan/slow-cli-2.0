@@ -48,12 +48,10 @@ export default function(_commander){
       if(!_init.checkBuildArgs()){
         return process.exit(1)
       }
-
       if(program.httpServer){
         _buildServer(program.port || 14423)
       }else{
         _build.once()
       }
-
     })
 }

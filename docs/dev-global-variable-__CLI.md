@@ -13,6 +13,7 @@ For Developer
     outdir: './build', //在检查完编译参数后，将会变成绝对路径
     ignore: ['node_modules', "^(\\.)"],
     outRelativeDir: './build' ////在检查完编译参数后 自动添加
+    gitHash: "xxx" //如果当前项目是git项目，且有一次提交，那么该值为当前commit的hash,如果非git项目，或者没有commit该值为null
   },
   enviroment: "",
   enviromentDir: ""
