@@ -57,13 +57,13 @@ function loadPlugin(hookType, pluginName, pluginPath, options) {
                 options: _init.getFullConfig(),
                 utils: _utils,
                 log: log_1.default,
-                cwd: cwd
+                cwd: () => { return config_filed_constant_1.default.getWorkspace(); }
             }, options);
         }
     }
     catch (error) {
         log_1.default.fail(error);
-        log_1.default.success(`加载插件 ${pluginName} 失败`.red);
+        log_1.default.error(`加载插件 ${pluginName} 失败`.red);
         process.exit(1);
     }
 }

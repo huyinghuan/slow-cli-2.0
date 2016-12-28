@@ -10,7 +10,7 @@ const _init = require("../init/index");
  * 用于一次性编译
  * 编译完成后即推出进程
  * */
-function default_1() {
+function default_1(finish) {
     let __starTime = Date.now();
     //加载插件
     _plugin.scanPlugins('build');
@@ -38,13 +38,14 @@ function default_1() {
             //编译成功
             if (!error) {
                 console.log("build success".green);
-                return console.log(`编译用时: ${Date.now() - __starTime}ms`);
+                console.log(`编译用时: ${Date.now() - __starTime}ms`);
             }
-            //编译失败
-            log_1.default.error(error);
-            log_1.default.error("build fail".red);
-            _hook.triggerBuildErrorHook(error);
-            process.exit(1);
+            else {
+                log_1.default.error(error);
+                log_1.default.error("build fail".red);
+                _hook.triggerBuildErrorHook(error);
+            }
+            finish(error);
         });
     });
 }

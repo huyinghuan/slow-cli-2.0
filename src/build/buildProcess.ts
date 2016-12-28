@@ -12,7 +12,7 @@ import * as _init from '../init/index';
  * 用于一次性编译
  * 编译完成后即推出进程
  * */
-export default function(){
+export default function(finish){
   let __starTime = Date.now();
   //加载插件
   _plugin.scanPlugins('build')
@@ -39,13 +39,13 @@ export default function(){
       //编译成功
       if(!error){
         console.log("build success".green)
-        return console.log(`编译用时: ${Date.now() - __starTime}ms`)
+        console.log(`编译用时: ${Date.now() - __starTime}ms`)
+      }else{
+        _log.error(error);
+        _log.error("build fail".red);
+        _hook.triggerBuildErrorHook(error);
       }
-      //编译失败
-      _log.error(error);
-      _log.error("build fail".red);
-      _hook.triggerBuildErrorHook(error);
-      process.exit(1)
+      finish(error)
     })
   })
 }

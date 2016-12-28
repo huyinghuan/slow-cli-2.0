@@ -5,7 +5,7 @@ const _project = require("../project");
 const _plugin = require("../plugin/index");
 const extraParamsParse_1 = require("./extraParamsParse");
 const log_1 = require("../lib/log");
-function execute(program) {
+function execute(program, finish) {
     //读取用户自定义配置
     _init.prepareUserEnv(program.workspace);
     _init.prepareRuntimeEnv(program.enviroment || "production");
@@ -34,7 +34,7 @@ function execute(program) {
         _build.buildServer(program.port || 14423);
     }
     else {
-        _build.buildProcess();
+        _build.buildProcess(finish);
     }
 }
 exports.execute = execute;
@@ -50,6 +50,8 @@ function commander(_commander) {
         .option('-h, --httpServer', '作为http server启动')
         .option('-p, --port <value>', '仅当存在-h选项时，该配置起作用，用来指定http server端口，默认为 14423')
         .allowUnknownOption()
-        .action(execute);
+        .action((program) => {
+        execute(program, () => { process.exit(1); });
+    });
 }
 exports.commander = commander;

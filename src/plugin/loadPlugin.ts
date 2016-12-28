@@ -58,13 +58,13 @@ export default function loadPlugin(hookType:string, pluginName:string, pluginPat
         options: _init.getFullConfig(),
         utils: _utils, //一些默认工具函数，大多插件可以使用得到
         log: _log,
-        cwd: cwd
+        cwd: ()=>{return _configFiledConstant.getWorkspace()}
       }, options)
     }
 
   } catch (error) {
     _log.fail(error)
-    _log.success(`加载插件 ${pluginName} 失败`.red)
+    _log.error(`加载插件 ${pluginName} 失败`.red)
     process.exit(1)
   }
 }

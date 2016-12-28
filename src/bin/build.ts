@@ -7,7 +7,7 @@ import _extraParamsParse from './extraParamsParse';
 import _log from '../lib/log'
 
 
-export function execute(program){
+export function execute(program, finish){
   //读取用户自定义配置
   _init.prepareUserEnv(program.workspace);
 
@@ -41,7 +41,7 @@ export function execute(program){
   if(program.httpServer){
     _build.buildServer(program.port || 14423)
   }else{
-    _build.buildProcess()
+    _build.buildProcess(finish)
   }
 }
 
@@ -57,6 +57,8 @@ export function commander(_commander){
     .option('-h, --httpServer', '作为http server启动')
     .option('-p, --port <value>', '仅当存在-h选项时，该配置起作用，用来指定http server端口，默认为 14423')
     .allowUnknownOption()
-    .action(execute)
+    .action((program)=>{
+      execute(program, ()=>{process.exit(1)})
+    })
 }
 
