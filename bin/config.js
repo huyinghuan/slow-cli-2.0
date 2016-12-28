@@ -12,7 +12,8 @@ const _init = require("../init");
 const updateload = function (project, options) {
     let projectName = options.projectName || project.name;
     let version = options.projectVersion || project.version || "";
-    let defConfigServerIP = config_filed_constant_1.default.get().configServer;
+    let configFiledConstant = config_filed_constant_1.default.get();
+    let defConfigServerIP = configFiledConstant.configServer;
     if (!projectName) {
         console.log('缺少配置文件名称，无法上传，请使用 -n 指定');
     }
@@ -20,16 +21,16 @@ const updateload = function (project, options) {
         console.log('缺少配置文件版本，无法上传，请使用 -v 指定');
     }
     let tmpDirName = projectName + "-" + version;
-    let tmpDirPath = _path.join(process.cwd(), tmpDirName);
+    let tmpDirPath = _path.join(config_filed_constant_1.default.getWorkspace(), tmpDirName);
     let tmpTarFilePath = tmpDirPath + ".tar";
     let commanderStr = `cd "${tmpDirPath}" && tar -cf "${tmpTarFilePath}" .`;
     let queue = [];
     queue.push((next) => {
         try {
             _fs.ensureDirSync(tmpDirPath);
-            _fs.copySync(_path.join(process.cwd(), 'package.json'), _path.join(tmpDirPath, 'package.json'));
-            if (_fs.existsSync(_path.join(process.cwd(), '.silky'))) {
-                _fs.copySync(_path.join(process.cwd(), '.silky'), _path.join(tmpDirPath, '.silky'));
+            _fs.copySync(configFiledConstant.CLIConfigFile, _path.join(tmpDirPath, 'package.json'));
+            if (_fs.existsSync(configFiledConstant.environmentRootDir)) {
+                _fs.copySync(configFiledConstant.environmentRootDir, _path.join(tmpDirPath, '.silky'));
             }
             next(null);
         }
@@ -84,17 +85,17 @@ const updateload = function (project, options) {
 const sync = function (project, options) {
     let projectName = options.projectName || project.name;
     let version = options.projectVersion || project.version;
-    let defConfigServerIP = config_filed_constant_1.default.get().configServer;
+    let configFiledConstant = config_filed_constant_1.default.get();
     if (!projectName) {
         return console.log("Error: 未制定项目名称".red);
     }
-    let serverIp = options.url || project["config-server"] || defConfigServerIP;
+    let serverIp = options.url || project["config-server"] || configFiledConstant.configServer;
     let queue = [];
     let file = "";
     let fileHash = "";
     console.log('开始同步...');
     queue.push((next) => {
-        _fs.removeSync(_path.join(process.cwd(), ".silky"));
+        _fs.removeSync(configFiledConstant.CLIConfigFile);
         next(null);
     });
     queue.push((next) => {
@@ -108,7 +109,7 @@ const sync = function (project, options) {
                 return next(new Error('http code ' + resp.statusCode));
             }
             fileHash = resp.headers['content-disposition'];
-            file = _path.join(process.cwd(), fileHash + ".tar");
+            file = _path.join(config_filed_constant_1.default.getWorkspace(), fileHash + ".tar");
             let fws = _fs.createWriteStream(file);
             resp.pipe(fws);
             resp.on('end', () => {

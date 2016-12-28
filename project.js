@@ -27,6 +27,6 @@ function writeProjectPackageJSON(packageJSON) {
 exports.writeProjectPackageJSON = writeProjectPackageJSON;
 //获取项目所在文件夹的文件夹名称
 function getProjectDirectoryName() {
-    return process.cwd().split(_path.sep).pop();
+    return config_filed_constant_1.default.getWorkspace().split(_path.sep).pop();
 }
 exports.getProjectDirectoryName = getProjectDirectoryName;

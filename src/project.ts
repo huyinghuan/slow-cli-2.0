@@ -26,7 +26,7 @@ export function writeProjectPackageJSON(packageJSON){
 
 //获取项目所在文件夹的文件夹名称
 export function getProjectDirectoryName():string{
-  return process.cwd().split(_path.sep).pop();
+  return _configFiledConstant.getWorkspace().split(_path.sep).pop();
 }
 
 export {getCLIVersion as getCLIVersion}

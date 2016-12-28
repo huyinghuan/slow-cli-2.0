@@ -3,7 +3,9 @@
 "use strict";
 const _path = require("path");
 const _init = require("./index");
+const config_filed_constant_1 = require("../config-filed-constant");
 function checkOutDir() {
+    let workspace = config_filed_constant_1.default.getWorkspace();
     let outdir = _init.getBuildConfig().outdir;
     let outRelativeDir = outdir;
     if (!outdir) {
@@ -11,9 +13,9 @@ function checkOutDir() {
     }
     if (!_path.isAbsolute(outdir)) {
         outRelativeDir = outdir;
-        outdir = _path.join(process.cwd(), outdir);
+        outdir = _path.join(workspace, outdir);
     }
-    if (process.cwd() == outdir) {
+    if (workspace == outdir) {
         console.log("编译目录不能和项目跟目录为同一个");
         return false;
     }

@@ -18,9 +18,10 @@ class ConstantFiled {
   private prerequisiteEnvironment = ['production', 'develop', 'normal'];
   private normalEnviromentDir = _path.join(this.cwd, `.${this.infinity}`, 'normal')
   constructor(){}
+  getWorkspace(){return this.cwd}
   setWorkspace(workspace){
     if(!workspace) return;
-    this.cwd = process.cwd();
+    this.cwd = workspace;
     this.update();
   }
   update(){

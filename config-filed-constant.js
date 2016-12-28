@@ -17,10 +17,11 @@ class ConstantFiled {
         this.prerequisiteEnvironment = ['production', 'develop', 'normal'];
         this.normalEnviromentDir = _path.join(this.cwd, `.${this.infinity}`, 'normal');
     }
+    getWorkspace() { return this.cwd; }
     setWorkspace(workspace) {
         if (!workspace)
             return;
-        this.cwd = process.cwd();
+        this.cwd = workspace;
         this.update();
     }
     update() {

@@ -4,11 +4,12 @@ const _fs = require("fs-extra");
 const _async = require("async");
 const compileFile_1 = require("./compileFile");
 const log_1 = require("../lib/log");
+const config_filed_constant_1 = require("../config-filed-constant");
 /**
  * 编译单个文件
  */
 function default_1(buildConfig, filepath, finish) {
-    let _workspace = process.cwd();
+    let _workspace = config_filed_constant_1.default.getWorkspace();
     //确保编译目录存在
     _fs.ensureDirSync(buildConfig.outdir);
     _fs.emptyDirSync(buildConfig.outdir);

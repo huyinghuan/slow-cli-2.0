@@ -29,7 +29,7 @@ function getDevPluginPath(source) {
         return source;
     }
     //是否设置了根目录 没有设置 取执行目录为根目录
-    let pluginRootDir = _plugin.getPluginConfig().__root || process.cwd();
+    let pluginRootDir = _plugin.getPluginConfig().__root || config_filed_constant_1.default.getWorkspace();
     return _path.join(pluginRootDir, source);
 }
 /**

@@ -7,6 +7,7 @@ import * as _allDefined from '../all';
 import _log from '../lib/log';
 import * as _hookMap from '../hooks/map';
 import * as _runtime from '../runtime-enviroment/index';
+import _configFiledConstant from '../config-filed-constant';
 /**
  * 加载指定类型hooks
  * hookType  hook类型，如start只用到了route 类型， build只用了build类型， 加载所有用 all
@@ -15,7 +16,6 @@ import * as _runtime from '../runtime-enviroment/index';
  * option 插件配置
  *  */
 export default function loadPlugin(hookType:string, pluginName:string, pluginPath:string, options:any){
-  const cwd = process.cwd()
   try {
     if(_.isPlainObject(options)){
       if(options.__stop){
@@ -44,7 +44,7 @@ export default function loadPlugin(hookType:string, pluginName:string, pluginPat
         options: _init.getFullConfig(),
         utils: _utils, //一些默认工具函数，大多插件可以使用得到
         log: _log,
-        cwd: cwd,
+        cwd: ()=>{return _configFiledConstant.getWorkspace()},
         runtime: _runtime
       }, options)
     }

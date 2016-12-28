@@ -31,7 +31,7 @@ export function execute(program){
   _init.setBuildParams(userInputArgs)
 
   if(program.additional){
-      _init.setBuildParams(program.additional)
+    _init.setBuildParams(program.additional)
   }
 
   //检查编译参数

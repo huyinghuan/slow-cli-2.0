@@ -3,11 +3,13 @@ import * as _fs from 'fs-extra';
 import * as _async from 'async'
 import _compileFile from './compileFile'
 import _log from '../lib/log';
+
+import _configFiledConstant from '../config-filed-constant';
 /**
  * 编译单个文件
  */
 export default function (buildConfig, filepath, finish){
-  let _workspace = process.cwd();
+  let _workspace = _configFiledConstant.getWorkspace();
   //确保编译目录存在
   _fs.ensureDirSync(buildConfig.outdir);
   _fs.emptyDirSync(buildConfig.outdir);

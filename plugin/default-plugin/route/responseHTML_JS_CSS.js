@@ -17,7 +17,7 @@ function match(realPath) {
 exports.registerPlugin = function (cli, options) {
     cli.registerHook('route:didRequest', (req, data, content, cb) => {
         let realPath = data.realPath;
-        let filePath = _path.join(cli.cwd, realPath);
+        let filePath = _path.join(cli.cwd(), realPath);
         if (!match(filePath)) {
             return cb(null, content);
         }

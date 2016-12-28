@@ -7,6 +7,7 @@ const _init = require("../init/index");
 const log_1 = require("../lib/log");
 const _hookMap = require("../hooks/map");
 const _runtime = require("../runtime-enviroment/index");
+const config_filed_constant_1 = require("../config-filed-constant");
 /**
  * 加载指定类型hooks
  * hookType  hook类型，如start只用到了route 类型， build只用了build类型， 加载所有用 all
@@ -15,7 +16,6 @@ const _runtime = require("../runtime-enviroment/index");
  * option 插件配置
  *  */
 function loadPlugin(hookType, pluginName, pluginPath, options) {
-    const cwd = process.cwd();
     try {
         if (_.isPlainObject(options)) {
             if (options.__stop) {
@@ -44,7 +44,7 @@ function loadPlugin(hookType, pluginName, pluginPath, options) {
                 options: _init.getFullConfig(),
                 utils: _utils,
                 log: log_1.default,
-                cwd: cwd,
+                cwd: () => { return config_filed_constant_1.default.getWorkspace(); },
                 runtime: _runtime
             }, options);
         }

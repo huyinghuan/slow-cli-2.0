@@ -2,10 +2,11 @@ import _getAllFileInDir from './getAllFileInDir';
 import * as _init from '../init/index'
 import * as _allDefine from '../all.d';
 
+import _configFiledConstant from '../config-filed-constant';
 /**
  * 是否应该处理该文件。
  * filename: string, filepath
- * return boolean. 
+ * return boolean.
  * 如果忽略 返回false
  * 如果处理 返回true
  */
@@ -26,10 +27,9 @@ function shouldInclude(filename, filepath):boolean{
   return true
 }
 
-
 /* 获取项目目录下的所有文件，除编译目录外*/
 const getAllFileInProject = (justFilePath:boolean):Array<any>=>{
-  let arr = _getAllFileInDir(process.cwd(), [], '.', shouldInclude)
+  let arr = _getAllFileInDir(_configFiledConstant.getWorkspace(), [], '.', shouldInclude)
   if(!justFilePath){return arr}
   let queue = [];
   arr.forEach((item)=>{queue.push(item.filePath)})
