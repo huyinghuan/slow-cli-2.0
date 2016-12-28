@@ -2,9 +2,9 @@
 const config_filed_constant_1 = require("../config-filed-constant");
 const _fs = require("fs-extra");
 const _path = require("path");
-const pluginRootDir = config_filed_constant_1.default.pluginDir;
 //获取实际已安装插件的版本好 （node_modules/xx）
 function default_1(pluginName) {
+    let pluginRootDir = config_filed_constant_1.default.get().pluginDir;
     if (!_fs.existsSync(_path.join(pluginRootDir, pluginName))) {
         return -1;
     }

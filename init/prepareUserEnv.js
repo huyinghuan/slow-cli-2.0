@@ -7,11 +7,14 @@ const _project = require("../project");
  * 准备用户环境，配置等
  * params <pure> boolean, 纯净模式，不加载任何插件
  */
-function prepareUserEnv(pure) {
+function prepareUserEnv(workspace, pure) {
+    //设置工作根目录
+    config_filed_constant_1.default.setWorkspace(workspace);
     let config = {};
     let defaultConfig = generatorDefaultConfig_1.default();
-    if (!_fs.existsSync(config_filed_constant_1.default.CLIConfigFile) || pure) {
-        console.log(`非 ${config_filed_constant_1.default.infinity} 项目， 仅启用静态服务器功能`);
+    let configFiledConstant = config_filed_constant_1.default.get();
+    if (!_fs.existsSync(configFiledConstant.CLIConfigFile) || pure) {
+        console.log(`非 ${configFiledConstant.infinity} 项目， 仅启用静态服务器功能`);
         config = defaultConfig;
     }
     else {
@@ -20,9 +23,9 @@ function prepareUserEnv(pure) {
         config = _project.getProjectPackageJSON();
     }
     //如果package.json里面没有相关配置，那么则使用默认配置。
-    global.__CLI = config[config_filed_constant_1.default.infinity] || defaultConfig[config_filed_constant_1.default.infinity];
-    global.__CLI.pluginsConfig = config[config_filed_constant_1.default.pluginConfigField];
-    global.__CLI.buildConfig = config[config_filed_constant_1.default.buildField] || defaultConfig[config_filed_constant_1.default.buildField];
+    global.__CLI = config[configFiledConstant.infinity] || defaultConfig[configFiledConstant.infinity];
+    global.__CLI.pluginsConfig = config[configFiledConstant.pluginConfigField];
+    global.__CLI.buildConfig = config[configFiledConstant.buildField] || defaultConfig[configFiledConstant.buildField];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = prepareUserEnv;

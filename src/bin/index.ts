@@ -19,7 +19,7 @@ require('colors');
 
 const versionDesc = _project.getCLIVersion();
 
-console.log(`${_configFiledConstant.infinity} version is ${versionDesc}`.green)
+console.log(`${_configFiledConstant.get().infinity} version is ${versionDesc}`.green)
 
 _start.commander(_commander);
 _init.commander(_commander);

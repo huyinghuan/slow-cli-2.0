@@ -37,6 +37,7 @@ function getDevPluginPath(source):string{
  * 扫描Hooks插件, 仅加载指定hook
 */
 export default function scanPlugins(hookType:string){
+  let configFiledConstant = _configFiledConstant.get()
   let __startTime = Date.now();
   let pluginsConfig = _plugin.getPluginConfig();
   if(!pluginsConfig){
@@ -68,7 +69,7 @@ export default function scanPlugins(hookType:string){
     }
 
     //从自定义路径或插件目录获取插件路径
-    let pluginPath = getDevPluginPath(pluginsConfig[pluginName].__source) || _path.join(_configFiledConstant.pluginDir, _getFullPluginName(pluginName));
+    let pluginPath = getDevPluginPath(pluginsConfig[pluginName].__source) || _path.join(configFiledConstant.pluginDir, _getFullPluginName(pluginName));
     let __loadStart = Date.now();
     _loadPlugin(hookType, pluginName, pluginPath, pluginsConfig[pluginName])
     _log.info(`加载 ${pluginName} 用时 ${Date.now() - __loadStart}ms`)

@@ -14,12 +14,13 @@ export default function(){
   let result:any = {};
   result.name = _project.getProjectDirectoryName();
   result.version = '1.0';
-  result[_configFiledConstant.pluginVersionField] = _project.getCLIVersion();
-  result[_configFiledConstant.pluginConfigField] = {};
-  result[_configFiledConstant.infinity] = {
+  let configFiledConstant = _configFiledConstant.get()
+  result[configFiledConstant.pluginVersionField] = _project.getCLIVersion();
+  result[configFiledConstant.pluginConfigField] = {};
+  result[configFiledConstant.infinity] = {
     port: 14422, index: 'index.html'
   };
-  result[_configFiledConstant.buildField] = {
+  result[configFiledConstant.buildField] = {
     outdir: './build',
     ignore: ["node_modules", "(\\/\\.[^/]+)$"],
   };

@@ -18,6 +18,7 @@ import _configFiledConstant from '../config-filed-constant'
  */
 
 export default function(filename:string, asString?:boolean):any{
+  let configFiledConstant = _configFiledConstant.get();
   if(!filename){
     throw new Error(`获取文件名undefined`)
   }
@@ -29,8 +30,8 @@ export default function(filename:string, asString?:boolean):any{
     envFilepath = _path.join(env.enviromentDir, filename)
   }
   //是否存在 通用环境目录下的内容
-  if(_fs.existsSync(_path.join(_configFiledConstant.normalEnviromentDir, filename))){
-    normalFilePath = _path.join(_configFiledConstant.normalEnviromentDir, filename)
+  if(_fs.existsSync(_path.join(configFiledConstant.normalEnviromentDir, filename))){
+    normalFilePath = _path.join(configFiledConstant.normalEnviromentDir, filename)
   }
 
   if(envFilepath == "" && normalFilePath == ""){

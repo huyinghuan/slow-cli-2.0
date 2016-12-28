@@ -6,7 +6,7 @@ function default_1(value) {
     value = value || 'develop';
     _init.setEnviroment({
         enviroment: value,
-        enviromentDir: _path.join(config_filed_constant_1.default.environmentRootDir, value)
+        enviromentDir: _path.join(config_filed_constant_1.default.get().environmentRootDir, value)
     });
 }
 Object.defineProperty(exports, "__esModule", { value: true });

@@ -4,8 +4,10 @@ const _initUtils = require("../init/index");
 const _plugin = require("../plugin/index");
 const _ = require("lodash");
 const _project = require("../project");
+const _init = require("../init/index");
 function execute(plugins, program) {
-    _initUtils.prepareUserEnv();
+    //读取用户自定义配置
+    _init.prepareUserEnv(program.workspace);
     let packageJSON = _project.getProjectPackageJSON();
     //如果指定了项目
     if (program.pluginListName) {
@@ -58,6 +60,7 @@ exports.execute = execute;
 function commander(_commander) {
     _commander.command('install [plugins...]')
         .description('安装插件')
+        .option('-w, --workspace <value>', '指定工作目录')
         .option('-l, --log <value>', 'log日志,( 0[defaul]: show all; 1: show error, fail; 2: show error, fail, warn)', (value) => { log_1.default.setLevel(value); })
         .option('-p, --pluginListName <value>', '根据插件列表名称获取插件列表')
         .option('-f, --force', '强制重新安装')

@@ -7,7 +7,7 @@ import _log from '../lib/log';
 
 export function execute(program){
   //读取用户自定义配置
-  _init.prepareUserEnv(program.noConfig);
+  _init.prepareUserEnv(program.workspace, program.noConfig);
   //读取运行时环境配置
   _init.prepareRuntimeEnv(program.enviroment)
   //运行时参数记录
@@ -42,6 +42,7 @@ export function execute(program){
 export function commander(_commander){
   _commander.command('start')
     .description('启动http服务')
+    .option('-w, --workspace <value>', '指定工作目录')
     .option('-p, --port <n>', '指定运行端口')
     .option('-c, --check', '检测运行版本，和插件版本')
     .option('-e, --enviroment <value>', "运行时环境可选[develop, production，或其他] 默认develop")

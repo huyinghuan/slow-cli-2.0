@@ -18,6 +18,7 @@ const config_filed_constant_1 = require("../config-filed-constant");
  * throw Error
  */
 function default_1(filename, asString) {
+    let configFiledConstant = config_filed_constant_1.default.get();
     if (!filename) {
         throw new Error(`获取文件名undefined`);
     }
@@ -28,8 +29,8 @@ function default_1(filename, asString) {
         envFilepath = _path.join(env.enviromentDir, filename);
     }
     //是否存在 通用环境目录下的内容
-    if (_fs.existsSync(_path.join(config_filed_constant_1.default.normalEnviromentDir, filename))) {
-        normalFilePath = _path.join(config_filed_constant_1.default.normalEnviromentDir, filename);
+    if (_fs.existsSync(_path.join(configFiledConstant.normalEnviromentDir, filename))) {
+        normalFilePath = _path.join(configFiledConstant.normalEnviromentDir, filename);
     }
     if (envFilepath == "" && normalFilePath == "") {
         throw new Error(`${filename} 文件未找到`);

@@ -8,14 +8,13 @@ import * as _request from 'request';
 import _getMD5 from '../lib/getMD5';
 import _executeCommand from '../lib/executeCommand';
 import _config from '../config-filed-constant';
-
-const _defConfigServer =  _config.configServer;
+import * as _init from '../init'
 
 //上传配置
 const updateload = function(project, options){
   let projectName = options.projectName || project.name;
   let version = options.projectVersion || project.version || "";
-
+  let defConfigServerIP = _config.get().configServer;
   if(!projectName){console.log('缺少配置文件名称，无法上传，请使用 -n 指定')}
   if(!version){console.log('缺少配置文件版本，无法上传，请使用 -v 指定')}
   let tmpDirName = projectName + "-" + version;
@@ -47,7 +46,7 @@ const updateload = function(project, options){
   })
 
   queue.push((md5, next)=>{
-    let serverIp =  options.url || project["config-server"] || _defConfigServer;
+    let serverIp =  options.url || project["config-server"] || defConfigServerIP;
     if(!serverIp){
       return next(new Error('未指定配置服务器IP'));
     }
@@ -86,10 +85,11 @@ const updateload = function(project, options){
 const sync = function(project, options){
   let projectName = options.projectName || project.name;
   let version = options.projectVersion || project.version;
+  let defConfigServerIP = _config.get().configServer;
   if(!projectName){
     return console.log("Error: 未制定项目名称".red)
   }
-  let serverIp =  options.url || project["config-server"] || _defConfigServer;
+  let serverIp =  options.url || project["config-server"] || defConfigServerIP;
   let queue = [];
   let file = "";
   let fileHash = "";
@@ -154,6 +154,9 @@ const sync = function(project, options){
 }
 
 export function execute(actionName, program){
+  //读取用户自定义配置
+  _init.prepareUserEnv(program.workspace);
+
   let packageJSON = _project.getProjectPackageJSON();
   switch(actionName){
     case "up": updateload(packageJSON, program); break;
@@ -164,6 +167,7 @@ export function execute(actionName, program){
 export function commander(_commander){
   _commander.command('config <actionName>')
     .description('上传或者同步配置文件 up or sync ')
+    .option('-w, --workspace <value>', '指定工作目录')
     .option('-u, --url <value>', '指定配置存储服务器地址')
     .option('-n, --projectName <value>', "指定同步的项目名称，可选，默认为 package.json => name")
     .option('-v, --projectVersion <value>', "指定同步的项目版本号， 可选，默认为 package.json => version")

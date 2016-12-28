@@ -4,8 +4,10 @@ const _path = require("path");
 const _fs = require("fs-extra");
 const _TerminalRenderer = require("marked-terminal");
 const _marked = require("marked");
-function execute(pluginName) {
-    let pluginDir = _path.join(config_filed_constant_1.default.pluginDir, pluginName);
+const _init = require("../init");
+function execute(pluginName, program) {
+    _init.prepareUserEnv(program.workspace);
+    let pluginDir = _path.join(config_filed_constant_1.default.get().pluginDir, pluginName);
     if (!_fs.existsSync(pluginDir)) {
         console.log(`${pluginName} 未安装！`);
         return;
@@ -30,6 +32,7 @@ exports.execute = execute;
 function commander(_commander) {
     _commander.command('info <pluginName>')
         .description('获取插件帮助信息')
+        .option('-w, --workspace <value>', '指定工作目录')
         .action(execute);
 }
 exports.commander = commander;

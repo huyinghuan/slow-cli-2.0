@@ -9,7 +9,8 @@ import _log from '../lib/log'
 
 export function execute(program){
   //读取用户自定义配置
-  _init.prepareUserEnv();
+  _init.prepareUserEnv(program.workspace);
+
   _init.prepareRuntimeEnv(program.enviroment || "production")
   //build 强制进行版本检查
   let checkResult = _project.checkCLIVersion() && _plugin.checkPluginVersion();

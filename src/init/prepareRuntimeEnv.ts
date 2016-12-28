@@ -5,6 +5,6 @@ export default function(value){
   value = value || 'develop';
   _init.setEnviroment({
     enviroment: value,
-    enviromentDir: _path.join(_configFiledConstant.environmentRootDir, value)
+    enviromentDir: _path.join(_configFiledConstant.get().environmentRootDir, value)
   })
 }

@@ -36,6 +36,7 @@ function getDevPluginPath(source) {
  * 扫描Hooks插件, 仅加载指定hook
 */
 function scanPlugins(hookType) {
+    let configFiledConstant = config_filed_constant_1.default.get();
     let __startTime = Date.now();
     let pluginsConfig = _plugin.getPluginConfig();
     if (!pluginsConfig) {
@@ -66,7 +67,7 @@ function scanPlugins(hookType) {
             console.log(`警告！！ ${pluginName} 加载方式为 开发者模式`.red);
         }
         //从自定义路径或插件目录获取插件路径
-        let pluginPath = getDevPluginPath(pluginsConfig[pluginName].__source) || _path.join(config_filed_constant_1.default.pluginDir, getFullPluginName_1.default(pluginName));
+        let pluginPath = getDevPluginPath(pluginsConfig[pluginName].__source) || _path.join(configFiledConstant.pluginDir, getFullPluginName_1.default(pluginName));
         let __loadStart = Date.now();
         loadPlugin_1.default(hookType, pluginName, pluginPath, pluginsConfig[pluginName]);
         log_1.default.info(`加载 ${pluginName} 用时 ${Date.now() - __loadStart}ms`);

@@ -6,7 +6,7 @@ const _ = require("lodash");
 const preparePrerequisiteDir_1 = require("../init/preparePrerequisiteDir");
 function execute(program) {
     //读取用户自定义配置
-    _init.prepareUserEnv();
+    _init.prepareUserEnv(program.workspace);
     //检查cli 版本
     _project.checkCLIVersion();
     // 检查插件版本
@@ -28,6 +28,7 @@ exports.execute = execute;
 function commander(_commander) {
     _commander.command('check')
         .description('检查版本信息和插件信息')
+        .option('-w, --workspace <value>', '指定工作目录')
         .option('-f, --fix', '修复相关配置文件')
         .action(execute);
 }

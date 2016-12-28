@@ -4,9 +4,12 @@ import * as _path from 'path';
 import * as _fs from 'fs-extra';
 import * as _TerminalRenderer from 'marked-terminal';
 import * as _marked from 'marked';
+import * as _init from '../init'
 
-export function execute(pluginName){
-  let pluginDir = _path.join(_configFiledConstant.pluginDir, pluginName)
+export function execute(pluginName, program){
+   _init.prepareUserEnv(program.workspace);
+
+  let pluginDir = _path.join(_configFiledConstant.get().pluginDir, pluginName)
   if(!_fs.existsSync(pluginDir)){
     console.log(`${pluginName} 未安装！`)
     return
@@ -32,5 +35,6 @@ export function execute(pluginName){
 export function commander(_commander){
   _commander.command('info <pluginName>')
     .description('获取插件帮助信息')
+    .option('-w, --workspace <value>', '指定工作目录')
     .action(execute)
 }

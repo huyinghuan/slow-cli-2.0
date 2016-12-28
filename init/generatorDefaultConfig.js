@@ -15,12 +15,13 @@ function default_1() {
     let result = {};
     result.name = _project.getProjectDirectoryName();
     result.version = '1.0';
-    result[config_filed_constant_1.default.pluginVersionField] = _project.getCLIVersion();
-    result[config_filed_constant_1.default.pluginConfigField] = {};
-    result[config_filed_constant_1.default.infinity] = {
+    let configFiledConstant = config_filed_constant_1.default.get();
+    result[configFiledConstant.pluginVersionField] = _project.getCLIVersion();
+    result[configFiledConstant.pluginConfigField] = {};
+    result[configFiledConstant.infinity] = {
         port: 14422, index: 'index.html'
     };
-    result[config_filed_constant_1.default.buildField] = {
+    result[configFiledConstant.buildField] = {
         outdir: './build',
         ignore: ["node_modules", "(\\/\\.[^/]+)$"],
     };

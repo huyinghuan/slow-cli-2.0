@@ -14,15 +14,15 @@ function getProjectPackageJSONField(fieldName) {
 exports.getProjectPackageJSONField = getProjectPackageJSONField;
 //返回packageJson内容
 function getProjectPackageJSON(fieldName) {
-    if (!_fs.existsSync(config_filed_constant_1.default.CLIConfigFile)) {
+    if (!_fs.existsSync(config_filed_constant_1.default.get().CLIConfigFile)) {
         return {};
     }
-    return _fs.readJSONSync(config_filed_constant_1.default.CLIConfigFile); //require(_configFiledConstant.CLIConfigFile)
+    return _fs.readJSONSync(config_filed_constant_1.default.get().CLIConfigFile); //require(_configFiledConstant.CLIConfigFile)
 }
 exports.getProjectPackageJSON = getProjectPackageJSON;
 //写入package.json文件
 function writeProjectPackageJSON(packageJSON) {
-    _fs.outputJSONSync(config_filed_constant_1.default.CLIConfigFile, packageJSON);
+    _fs.outputJSONSync(config_filed_constant_1.default.get().CLIConfigFile, packageJSON);
 }
 exports.writeProjectPackageJSON = writeProjectPackageJSON;
 //获取项目所在文件夹的文件夹名称
