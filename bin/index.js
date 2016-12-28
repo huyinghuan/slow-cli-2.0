@@ -1,15 +1,15 @@
 #! /usr/bin/env node --harmony
 "use strict";
-const _commander = require('commander');
-const start_1 = require('./start');
-const init_1 = require('./init');
-const check_1 = require('./check');
-const build_1 = require('./build');
-const install_1 = require('./install');
-const info_1 = require('./info');
-const config_1 = require('./config');
-const _project = require('../project');
-const config_filed_constant_1 = require('../config-filed-constant');
+const _commander = require("commander");
+const _start = require("./start");
+const _init = require("./init");
+const _check = require("./check");
+const _build = require("./build");
+const _install = require("./install");
+const _info = require("./info");
+const _config = require("./config");
+const _project = require("../project");
+const config_filed_constant_1 = require("../config-filed-constant");
 //import * as colors from 'colors' 坑, 全应用引用， 其他module无须重复引用
 require('colors');
 /**
@@ -18,11 +18,11 @@ require('colors');
 global.__CLI = {};
 const versionDesc = _project.getCLIVersion();
 console.log(`${config_filed_constant_1.default.infinity} version is ${versionDesc}`.green);
-start_1.default(_commander);
-init_1.default(_commander);
-check_1.default(_commander);
-build_1.default(_commander);
-install_1.default(_commander);
-info_1.default(_commander);
-config_1.default(_commander);
+_start.commander(_commander);
+_init.commander(_commander);
+_check.commander(_commander);
+_build.commander(_commander);
+_install.commander(_commander);
+_info.commander(_commander);
+_config.commander(_commander);
 _commander.version(versionDesc).parse(process.argv);

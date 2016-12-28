@@ -1,8 +1,8 @@
 /**
  *校验build参数 */
 "use strict";
-const _path = require('path');
-const _init = require('./index');
+const _path = require("path");
+const _init = require("./index");
 function checkOutDir() {
     let outdir = _init.getBuildConfig().outdir;
     let outRelativeDir = outdir;

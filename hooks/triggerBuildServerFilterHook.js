@@ -1,5 +1,5 @@
 "use strict";
-const _hookMap = require('./map');
+const _hookMap = require("./map");
 function default_1(route) {
     let queue = _hookMap.HookQueue[_hookMap.build.serverFilter] || [];
     let processFactoryList = [];

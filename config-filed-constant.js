@@ -1,5 +1,5 @@
 "use strict";
-const _path = require('path');
+const _path = require("path");
 /**
  * 仅用于记录文件位置
  */

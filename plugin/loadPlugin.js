@@ -1,12 +1,12 @@
 "use strict";
-const _ = require('lodash');
-const registerHook_1 = require('../hooks/registerHook');
-const registerHookExt_1 = require('../hooks/registerHookExt');
-const _utils = require('../hooks/utils');
-const _init = require('../init/index');
-const log_1 = require('../lib/log');
-const _hookMap = require('../hooks/map');
-const _runtime = require('../runtime-enviroment/index');
+const _ = require("lodash");
+const registerHook_1 = require("../hooks/registerHook");
+const registerHookExt_1 = require("../hooks/registerHookExt");
+const _utils = require("../hooks/utils");
+const _init = require("../init/index");
+const log_1 = require("../lib/log");
+const _hookMap = require("../hooks/map");
+const _runtime = require("../runtime-enviroment/index");
 /**
  * 加载指定类型hooks
  * hookType  hook类型，如start只用到了route 类型， build只用了build类型， 加载所有用 all

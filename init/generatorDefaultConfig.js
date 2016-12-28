@@ -1,6 +1,6 @@
 "use strict";
-const _project = require('../project');
-const config_filed_constant_1 = require('../config-filed-constant');
+const _project = require("../project");
+const config_filed_constant_1 = require("../config-filed-constant");
 /**
  * 用户写入到项目目录下的package.json文件中。
  * 必须包含的信息

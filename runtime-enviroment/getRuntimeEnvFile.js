@@ -1,9 +1,9 @@
 "use strict";
-const _init = require('../init/index');
-const _fs = require('fs-extra');
-const _path = require('path');
-const _ = require('lodash');
-const config_filed_constant_1 = require('../config-filed-constant');
+const _init = require("../init/index");
+const _fs = require("fs-extra");
+const _path = require("path");
+const _ = require("lodash");
+const config_filed_constant_1 = require("../config-filed-constant");
 /**
  * desc:
  *   搜索顺序  指定的运行环境【默认:develop】 -->  通用目录搜索

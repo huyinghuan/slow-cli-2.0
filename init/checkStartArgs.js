@@ -1,7 +1,7 @@
 /**
  *校验build参数 */
 "use strict";
-const _init = require('./index');
+const _init = require("./index");
 function checkPort() {
     let port = ~~_init.getFullConfig().port;
     if (port > 65535) {

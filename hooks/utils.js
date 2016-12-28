@@ -1,8 +1,8 @@
 "use strict";
-const _ = require('lodash');
-const _fs = require('fs-extra');
-const executeCommand_1 = require('../lib/executeCommand');
-const getAllFileInProject_1 = require('../lib/getAllFileInProject');
+const _ = require("lodash");
+const _fs = require("fs-extra");
+const executeCommand_1 = require("../lib/executeCommand");
+const getAllFileInProject_1 = require("../lib/getAllFileInProject");
 /**
  *lodash.extend
  */

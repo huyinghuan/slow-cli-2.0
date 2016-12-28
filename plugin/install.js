@@ -1,8 +1,8 @@
 "use strict";
-const _project = require('../project');
-const executeCommand_1 = require('../lib/executeCommand');
-const log_1 = require('../lib/log');
-const getFullPluginName_1 = require('./getFullPluginName');
+const _project = require("../project");
+const executeCommand_1 = require("../lib/executeCommand");
+const log_1 = require("../lib/log");
+const getFullPluginName_1 = require("./getFullPluginName");
 const _registry = "http://npm.hunantv.com";
 function installPlugin(pluginName, cb) {
     let registry = _project.getProjectPackageJSONField('__registry') || _registry;

@@ -1,10 +1,10 @@
 "use strict";
-const _plugin = require('../plugin/index');
-const _project = require('../project');
-const _path = require('path');
-const config_filed_constant_1 = require('../config-filed-constant');
-const getFullPluginName_1 = require('./getFullPluginName');
-const _fs = require('fs-extra');
+const _plugin = require("../plugin/index");
+const _project = require("../project");
+const _path = require("path");
+const config_filed_constant_1 = require("../config-filed-constant");
+const getFullPluginName_1 = require("./getFullPluginName");
+const _fs = require("fs-extra");
 //检查对比插件版本
 function default_1(needAppointVersion) {
     needAppointVersion = needAppointVersion ? true : false;

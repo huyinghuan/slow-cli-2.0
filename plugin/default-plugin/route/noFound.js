@@ -1,7 +1,7 @@
 "use strict";
-const _path = require('path');
-const _ = require('lodash');
-const _fs = require('fs');
+const _path = require("path");
+const _ = require("lodash");
+const _fs = require("fs");
 exports.registerPlugin = function (cli) {
     cli.registerHook('route:notFound', function (req, resp, cb) {
         let path = req.path;

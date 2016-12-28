@@ -1,15 +1,16 @@
 "use strict";
-const _express = require('express');
-const _http = require('http');
-const _hook = require('./hooks/index');
-const _plugin = require('./plugin/index');
-const log_1 = require('./lib/log');
-const _build = require('./build');
-const _path = require('path');
-const _init = require('./init/index');
-const _fse = require('fs-extra');
-const _async = require('async');
-const getGitHash_1 = require('./lib/getGitHash');
+const _express = require("express");
+const _http = require("http");
+const _path = require("path");
+const _hook = require("../hooks/index");
+const _plugin = require("../plugin/index");
+const log_1 = require("../lib/log");
+const _init = require("../init/index");
+const _fse = require("fs-extra");
+const _async = require("async");
+const getGitHash_1 = require("../lib/getGitHash");
+const executeProjectCompile_1 = require("./executeProjectCompile");
+const excuteFileCompile_1 = require("./excuteFileCompile");
 const startBuildServer = (port) => {
     let app = _express();
     let router = _express.Router();
@@ -67,7 +68,7 @@ const startBuildServer = (port) => {
             buildConfig.__extra = [];
             //编译完成后需要删除掉冗余文件
             buildConfig.__del = [];
-            _build.singleBuild(buildConfig, filepath, next);
+            excuteFileCompile_1.default(buildConfig, filepath, next);
         });
         _async.waterfall(queue, (error) => {
             if (error) {
@@ -90,7 +91,7 @@ const startBuildServer = (port) => {
         queue.push((gitHash, next) => {
             let buildConfig = _init.getBuildConfig({ gitHash: gitHash });
             buildConfig.outdir = outdir;
-            _build.normalExecute(buildConfig, next);
+            executeProjectCompile_1.default(buildConfig, next);
         });
         _async.waterfall(queue, (error) => {
             if (error) {

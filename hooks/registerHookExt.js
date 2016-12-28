@@ -1,5 +1,5 @@
 "use strict";
-const _hookMap = require('./map');
+const _hookMap = require("./map");
 function default_1(extName, fn) {
     extName = extName.split(':')[0];
     if (!_hookMap.HookExtQueue[extName]) {

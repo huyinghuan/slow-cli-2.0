@@ -1,6 +1,6 @@
 "use strict";
-const _ = require('lodash');
-const _hookMap = require('./map');
+const _ = require("lodash");
+const _hookMap = require("./map");
 /**
  * route:didRequest
  */

@@ -1,11 +1,11 @@
 "use strict";
-const _express = require('express');
-const _http = require('http');
-const _async = require('async');
-const _hooks = require('./hooks/index');
-const getMime_1 = require('./lib/getMime');
-const _init = require('./init/index');
-const _plugin = require('./plugin/index');
+const _express = require("express");
+const _http = require("http");
+const _async = require("async");
+const _hooks = require("./hooks/index");
+const getMime_1 = require("./lib/getMime");
+const _init = require("./init/index");
+const _plugin = require("./plugin/index");
 const startServer = function (app, cli, router) {
     app.use(router);
     let _server = _http.createServer(app);
@@ -22,6 +22,9 @@ const startServer = function (app, cli, router) {
     _server.listen(app.listen(port));
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * 启动静态服务
+ */
 exports.default = () => {
     //加载插件
     _plugin.scanPlugins('route');

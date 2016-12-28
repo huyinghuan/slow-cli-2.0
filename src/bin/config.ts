@@ -153,17 +153,19 @@ const sync = function(project, options){
   })
 }
 
-export default function(_commander){
+export function execute(actionName, program){
+  let packageJSON = _project.getProjectPackageJSON();
+  switch(actionName){
+    case "up": updateload(packageJSON, program); break;
+    case "sync": sync(packageJSON, program); break;
+  }
+}
+
+export function commander(_commander){
   _commander.command('config <actionName>')
     .description('上传或者同步配置文件 up or sync ')
     .option('-u, --url <value>', '指定配置存储服务器地址')
     .option('-n, --projectName <value>', "指定同步的项目名称，可选，默认为 package.json => name")
     .option('-v, --projectVersion <value>', "指定同步的项目版本号， 可选，默认为 package.json => version")
-    .action((actionName, program)=>{
-      let packageJSON = _project.getProjectPackageJSON();
-      switch(actionName){
-        case "up": updateload(packageJSON, program); break;
-        case "sync": sync(packageJSON, program); break;
-      }
-    })
+    .action(execute)
 }

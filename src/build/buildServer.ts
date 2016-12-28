@@ -1,15 +1,17 @@
 import * as _express from 'express';
 import * as _http from 'http';
-import * as _hook from './hooks/index';
-import * as _plugin from './plugin/index';
-import * as _hookMap from './hooks/map';
-import _log from './lib/log';
-import * as _build from './build';
 import * as _path from 'path';
-import * as _init from './init/index';
+import * as _hook from '../hooks/index';
+import * as _plugin from '../plugin/index';
+import * as _hookMap from '../hooks/map';
+import _log from '../lib/log';
+
+import * as _init from '../init/index';
 import * as _fse from 'fs-extra';
 import * as _async from 'async';
-import _getGitHash from './lib/getGitHash';
+import _getGitHash from '../lib/getGitHash';
+import _executeProjectCompile from './executeProjectCompile'
+import _excuteFileCompile from './excuteFileCompile'
 
 const startBuildServer = (port)=>{
   let app = _express()
@@ -74,7 +76,7 @@ const startBuildServer = (port)=>{
       buildConfig.__extra = [];
       //编译完成后需要删除掉冗余文件
       buildConfig.__del = [];
-      _build.singleBuild(buildConfig, filepath, next)
+      _excuteFileCompile(buildConfig, filepath, next)
     })
 
     _async.waterfall(queue, (error)=>{
@@ -100,7 +102,7 @@ const startBuildServer = (port)=>{
     queue.push((gitHash, next)=>{
       let buildConfig = _init.getBuildConfig({gitHash:gitHash});
       buildConfig.outdir = outdir;
-      _build.normalExecute(buildConfig, next)
+      _executeProjectCompile(buildConfig, next)
     })
 
     _async.waterfall(queue, (error)=>{
@@ -138,5 +140,4 @@ export default function(port){
     }
     startBuildServer(port)
   })
-
 }

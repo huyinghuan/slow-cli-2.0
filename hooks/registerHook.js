@@ -1,6 +1,6 @@
 "use strict";
-const _ = require('lodash');
-const _hookMap = require('./map');
+const _ = require("lodash");
+const _hookMap = require("./map");
 //排序 升序 越小先执行
 function sortHook(hookName) {
     _hookMap.HookQueue[hookName] = _.orderBy(_hookMap.HookQueue[hookName], 'priority');

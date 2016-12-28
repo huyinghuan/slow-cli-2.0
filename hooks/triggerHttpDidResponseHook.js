@@ -1,7 +1,7 @@
 "use strict";
 /**定义http response 即将响应完之后的hook */
-const _hookMap = require('./map');
-const _ = require('lodash');
+const _hookMap = require("./map");
+const _ = require("lodash");
 /**
  * route:didResponse
  */

@@ -1,5 +1,5 @@
 "use strict";
-const _hookMap = require('./map');
+const _hookMap = require("./map");
 /**
 *触发RouterHook, 可用于自定义路由操作
 * 返回 true 停止其他hook，

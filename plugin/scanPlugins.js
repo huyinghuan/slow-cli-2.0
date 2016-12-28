@@ -1,11 +1,11 @@
 "use strict";
-const _path = require('path');
-const config_filed_constant_1 = require('../config-filed-constant');
-const getFullPluginName_1 = require('./getFullPluginName');
-const _plugin = require('../plugin/index');
-const loadPlugin_1 = require('./loadPlugin');
-const getAllFileInDir_1 = require('../lib/getAllFileInDir');
-const log_1 = require('../lib/log');
+const _path = require("path");
+const config_filed_constant_1 = require("../config-filed-constant");
+const getFullPluginName_1 = require("./getFullPluginName");
+const _plugin = require("../plugin/index");
+const loadPlugin_1 = require("./loadPlugin");
+const getAllFileInDir_1 = require("../lib/getAllFileInDir");
+const log_1 = require("../lib/log");
 //扫描加载内置插件
 function scanDefaultPlugins(hookType) {
     //指定类型的hook

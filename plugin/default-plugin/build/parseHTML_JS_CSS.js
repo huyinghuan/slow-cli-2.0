@@ -1,5 +1,5 @@
 "use strict";
-const _fs = require('fs');
+const _fs = require("fs");
 exports.registerPlugin = function (cli, options) {
     cli.registerHook('build:doCompile', (buildConfig, data, content, cb) => {
         let inputFilePath = data.inputFilePath;

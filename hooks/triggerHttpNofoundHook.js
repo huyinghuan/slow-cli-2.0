@@ -1,5 +1,5 @@
 "use strict";
-const _hookMap = require('./map');
+const _hookMap = require("./map");
 /**
  * route:noFound
  */

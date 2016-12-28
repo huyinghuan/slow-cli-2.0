@@ -1,12 +1,12 @@
 "use strict";
-const _project = require('../project');
-const _fs = require('fs-extra');
-const _path = require('path');
-const _async = require('async');
-const _request = require('request');
-const getMD5_1 = require('../lib/getMD5');
-const executeCommand_1 = require('../lib/executeCommand');
-const config_filed_constant_1 = require('../config-filed-constant');
+const _project = require("../project");
+const _fs = require("fs-extra");
+const _path = require("path");
+const _async = require("async");
+const _request = require("request");
+const getMD5_1 = require("../lib/getMD5");
+const executeCommand_1 = require("../lib/executeCommand");
+const config_filed_constant_1 = require("../config-filed-constant");
 const _defConfigServer = config_filed_constant_1.default.configServer;
 //上传配置
 const updateload = function (project, options) {
@@ -148,23 +148,24 @@ const sync = function (project, options) {
         }
     });
 };
-function default_1(_commander) {
+function execute(actionName, program) {
+    let packageJSON = _project.getProjectPackageJSON();
+    switch (actionName) {
+        case "up":
+            updateload(packageJSON, program);
+            break;
+        case "sync":
+            sync(packageJSON, program);
+            break;
+    }
+}
+exports.execute = execute;
+function commander(_commander) {
     _commander.command('config <actionName>')
         .description('上传或者同步配置文件 up or sync ')
         .option('-u, --url <value>', '指定配置存储服务器地址')
         .option('-n, --projectName <value>', "指定同步的项目名称，可选，默认为 package.json => name")
         .option('-v, --projectVersion <value>', "指定同步的项目版本号， 可选，默认为 package.json => version")
-        .action((actionName, program) => {
-        let packageJSON = _project.getProjectPackageJSON();
-        switch (actionName) {
-            case "up":
-                updateload(packageJSON, program);
-                break;
-            case "sync":
-                sync(packageJSON, program);
-                break;
-        }
-    });
+        .action(execute);
 }
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = default_1;
+exports.commander = commander;

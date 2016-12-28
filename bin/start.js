@@ -1,11 +1,42 @@
 "use strict";
-const _init = require('../init/index');
-const _project = require('../project');
-const _utils = require('../plugin/index');
-const app_1 = require('../app');
-const extraParamsParse_1 = require('./extraParamsParse');
-const log_1 = require('../lib/log');
-function default_1(_commander) {
+const _init = require("../init/index");
+const _project = require("../project");
+const _utils = require("../plugin/index");
+const app_1 = require("../app");
+const extraParamsParse_1 = require("./extraParamsParse");
+const log_1 = require("../lib/log");
+function execute(program) {
+    //读取用户自定义配置
+    _init.prepareUserEnv(program.noConfig);
+    //读取运行时环境配置
+    _init.prepareRuntimeEnv(program.enviroment);
+    //运行时参数记录
+    let userInputArgs = {};
+    if (program.port) {
+        userInputArgs.port = program.port;
+    }
+    //设置用户自定义启动参数
+    _init.setStartParams(userInputArgs);
+    if (program.additional) {
+        _init.setStartParams(program.additional);
+    }
+    //检查启动参数是否合法
+    if (!_init.checkStartArgs()) {
+        process.exit(1);
+    }
+    ;
+    if (program.check) {
+        //检查cli 版本
+        // 检查插件版本
+        if (!_utils.checkPluginVersion() || !_project.checkCLIVersion()) {
+            process.exit(1);
+        }
+    }
+    //启动http服务
+    app_1.default();
+}
+exports.execute = execute;
+function commander(_commander) {
     _commander.command('start')
         .description('启动http服务')
         .option('-p, --port <n>', '指定运行端口')
@@ -15,36 +46,6 @@ function default_1(_commander) {
         .option('-n, --noConfig', "无配置文件运行")
         .option('-A, --additional <items>', '额外的参数，格式 -A A=1[,B=xxx]', extraParamsParse_1.default)
         .allowUnknownOption()
-        .action((program) => {
-        //读取用户自定义配置
-        _init.prepareUserEnv(program.noConfig);
-        //读取运行时环境配置
-        _init.prepareRuntimeEnv(program.enviroment);
-        //运行时参数记录
-        let userInputArgs = {};
-        if (program.port) {
-            userInputArgs.port = program.port;
-        }
-        //设置用户自定义启动参数
-        _init.setStartParams(userInputArgs);
-        if (program.additional) {
-            _init.setStartParams(program.additional);
-        }
-        //检查启动参数是否合法
-        if (!_init.checkStartArgs()) {
-            process.exit(1);
-        }
-        ;
-        if (program.check) {
-            //检查cli 版本
-            // 检查插件版本
-            if (!_utils.checkPluginVersion() || !_project.checkCLIVersion()) {
-                process.exit(1);
-            }
-        }
-        //启动http服务
-        app_1.default();
-    });
+        .action(execute);
 }
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = default_1;
+exports.commander = commander;

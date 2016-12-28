@@ -1,6 +1,6 @@
 'use strict';
-const _fs = require('fs');
-const _ = require('lodash');
+const _fs = require("fs");
+const _ = require("lodash");
 exports.registerPlugin = (cli, options) => {
     cli.registerHook('build:doNothing', function (buildConfig, data, cb) {
         if (!_.isString(data.outputFilePath)) {

@@ -1,11 +1,11 @@
 "use strict";
-const _fs = require('fs-extra');
-const config_filed_constant_1 = require('./config-filed-constant');
-const getCLIVersion_1 = require('./lib/getCLIVersion');
+const _fs = require("fs-extra");
+const config_filed_constant_1 = require("./config-filed-constant");
+const getCLIVersion_1 = require("./lib/getCLIVersion");
 exports.getCLIVersion = getCLIVersion_1.default;
-const checkCLIVersion_1 = require('./lib/checkCLIVersion');
+const checkCLIVersion_1 = require("./lib/checkCLIVersion");
 exports.checkCLIVersion = checkCLIVersion_1.default;
-const _path = require('path');
+const _path = require("path");
 //获取package.json某个字段的值
 function getProjectPackageJSONField(fieldName) {
     let json = getProjectPackageJSON();

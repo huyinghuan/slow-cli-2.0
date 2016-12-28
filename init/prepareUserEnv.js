@@ -1,8 +1,8 @@
 "use strict";
-const generatorDefaultConfig_1 = require('./generatorDefaultConfig');
-const config_filed_constant_1 = require('../config-filed-constant');
-const _fs = require('fs-extra');
-const _project = require('../project');
+const generatorDefaultConfig_1 = require("./generatorDefaultConfig");
+const config_filed_constant_1 = require("../config-filed-constant");
+const _fs = require("fs-extra");
+const _project = require("../project");
 /**
  * 准备用户环境，配置等
  * params <pure> boolean, 纯净模式，不加载任何插件

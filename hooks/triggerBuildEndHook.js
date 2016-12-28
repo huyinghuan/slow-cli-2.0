@@ -1,6 +1,6 @@
 "use strict";
-const _ = require('lodash');
-const _hookMap = require('./map');
+const _ = require("lodash");
+const _hookMap = require("./map");
 function default_1(buildConfig, callback) {
     let queue = _hookMap.HookQueue[_hookMap.build.endBuild] || [];
     let processFactoryList = [];

@@ -1,7 +1,7 @@
 "use strict";
-const config_filed_constant_1 = require('../config-filed-constant');
-const _init = require('./index');
-const _path = require('path');
+const config_filed_constant_1 = require("../config-filed-constant");
+const _init = require("./index");
+const _path = require("path");
 function default_1(value) {
     value = value || 'develop';
     _init.setEnviroment({

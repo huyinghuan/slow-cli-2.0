@@ -1,6 +1,6 @@
 "use strict";
-const _fs = require('fs');
-const _path = require('path');
+const _fs = require("fs");
+const _path = require("path");
 const regList = [
     /(\.js)$/,
     /(\.css)$/,
