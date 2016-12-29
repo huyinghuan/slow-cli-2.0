@@ -1,9 +1,9 @@
 /**
  *校验build参数 */
 "use strict";
-const _init = require("./index");
+const config_filed_constant_1 = require("../config-filed-constant");
 function checkPort() {
-    let port = ~~_init.getFullConfig().port;
+    let port = ~~config_filed_constant_1.default.getGlobal('port');
     if (port > 65535) {
         console.log("port 设置值超过系统最大值 65535".red);
         return false;

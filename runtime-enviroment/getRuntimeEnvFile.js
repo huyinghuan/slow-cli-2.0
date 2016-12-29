@@ -1,5 +1,4 @@
 "use strict";
-const _init = require("../init/index");
 const _fs = require("fs-extra");
 const _path = require("path");
 const _ = require("lodash");
@@ -22,7 +21,7 @@ function default_1(filename, asString) {
     if (!filename) {
         throw new Error(`获取文件名undefined`);
     }
-    let env = _init.getEnviroment();
+    let env = config_filed_constant_1.default.getEnviroment();
     let envFilepath = "";
     let normalFilePath = "";
     if (_fs.existsSync(_path.join(env.enviromentDir, filename))) {

@@ -5,7 +5,9 @@ import _app from '../app'
 import _extraParamsParse from './extraParamsParse'
 import _log from '../lib/log';
 
-export function execute(program){
+import _configFiledConstant from '../config-filed-constant';
+
+export function getHttpServer(program){
   //读取用户自定义配置
   _init.prepareUserEnv(program.workspace, program.noConfig);
   //读取运行时环境配置
@@ -17,10 +19,10 @@ export function execute(program){
     userInputArgs.port = program.port
   }
   //设置用户自定义启动参数
-  _init.setStartParams(userInputArgs)
+  _configFiledConstant.setGlobal(userInputArgs)
 
   if(program.additional){
-      _init.setStartParams(program.additional)
+      _configFiledConstant.setGlobal(program.additional)
   }
 
   //检查启动参数是否合法
@@ -36,9 +38,10 @@ export function execute(program){
     }
   }
   //启动http服务
-  _app()
+  return _app()
 }
 
+/* istanbul ignore next  */
 export function commander(_commander){
   _commander.command('start')
     .description('启动http服务')
@@ -50,5 +53,10 @@ export function commander(_commander){
     .option('-n, --noConfig', "无配置文件运行")
     .option('-A, --additional <items>', '额外的参数，格式 -A A=1[,B=xxx]', _extraParamsParse)
     .allowUnknownOption()
-    .action(execute)
+    .action((program)=>{
+      let server = getHttpServer(program)
+      let port = program.port || _configFiledConstant.getGlobal('port')
+      server.listen(port);
+      console.log(`silky listen on ${port}`.red)
+    })
 }

@@ -29,7 +29,7 @@ function getDevPluginPath(source):string{
     return source;
   }
   //是否设置了根目录 没有设置 取执行目录为根目录
-  let pluginRootDir = _plugin.getPluginConfig().__root || _configFiledConstant.getWorkspace()
+  let pluginRootDir = _configFiledConstant.getPluginConfig('__root') || _configFiledConstant.getWorkspace()
   return _path.join(pluginRootDir, source)
 }
 
@@ -39,7 +39,7 @@ function getDevPluginPath(source):string{
 export default function scanPlugins(hookType:string){
   let configFiledConstant = _configFiledConstant.get()
   let __startTime = Date.now();
-  let pluginsConfig = _plugin.getPluginConfig();
+  let pluginsConfig = _configFiledConstant.getPluginConfig();
   if(!pluginsConfig){
     console.log(`没有配置任何插件`.red)
     return

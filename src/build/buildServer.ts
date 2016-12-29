@@ -6,14 +6,14 @@ import * as _plugin from '../plugin/index';
 import * as _hookMap from '../hooks/map';
 import _log from '../lib/log';
 
-import * as _init from '../init/index';
+import _configFiledConstant from '../config-filed-constant';
 import * as _fse from 'fs-extra';
 import * as _async from 'async';
 import _getGitHash from '../lib/getGitHash';
 import _executeProjectCompile from './executeProjectCompile'
 import _excuteFileCompile from './excuteFileCompile'
 
-const startBuildServer = (port)=>{
+const buildServer = function():_express.Express{
   let app = _express()
   let router = _express.Router();
 
@@ -70,12 +70,12 @@ const startBuildServer = (port)=>{
     })
 
     queue.push((gitHash, next)=>{
-      let buildConfig = _init.getBuildConfig({gitHash:gitHash});
-      buildConfig.outdir = outdir;
-      //额外需要编译的文件
-      buildConfig.__extra = [];
-      //编译完成后需要删除掉冗余文件
-      buildConfig.__del = [];
+      let buildConfig = _configFiledConstant.getBuildConfig({
+        gitHash:gitHash,
+        outdir: outdir,
+        __extra: [],//额外需要编译的文件
+        __del: [] //编译完成后需要删除掉冗余文件
+      });
       _excuteFileCompile(buildConfig, filepath, next)
     })
 
@@ -100,8 +100,10 @@ const startBuildServer = (port)=>{
     })
 
     queue.push((gitHash, next)=>{
-      let buildConfig = _init.getBuildConfig({gitHash:gitHash});
-      buildConfig.outdir = outdir;
+      let buildConfig = _configFiledConstant.getBuildConfig({
+        gitHash:gitHash,
+        outdir: outdir
+      });
       _executeProjectCompile(buildConfig, next)
     })
 
@@ -119,12 +121,11 @@ const startBuildServer = (port)=>{
   })
   app.use(router)
 
-  let _server = _http.createServer(app)
-  console.log(`Build Server listen at port ${port}`.green)
-  _server.listen(app.listen(port));
+  return app
 }
 
-export default function(port){
+export default function(prepareFn:Function):_express.Express{
+  prepareFn()
   //加载插件
   _plugin.scanPlugins('build');
   _hook.triggerBuildInitHook((error, stop)=>{
@@ -138,6 +139,6 @@ export default function(port){
       process.exit(0)
       return
     }
-    startBuildServer(port)
   })
+  return buildServer()
 }

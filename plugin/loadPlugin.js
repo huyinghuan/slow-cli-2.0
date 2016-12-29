@@ -3,7 +3,6 @@ const _ = require("lodash");
 const registerHook_1 = require("../hooks/registerHook");
 const registerHookExt_1 = require("../hooks/registerHookExt");
 const _utils = require("../hooks/utils");
-const _init = require("../init/index");
 const log_1 = require("../lib/log");
 const _hookMap = require("../hooks/map");
 const _runtime = require("../runtime-enviroment/index");
@@ -41,7 +40,7 @@ function loadPlugin(hookType, pluginName, pluginPath, options) {
                     }
                 },
                 ext: _hookMap.HookExtQueue,
-                options: _init.getFullConfig(),
+                options: config_filed_constant_1.default.getGlobal(),
                 utils: _utils,
                 log: log_1.default,
                 cwd: () => { return config_filed_constant_1.default.getWorkspace(); },
@@ -54,7 +53,7 @@ function loadPlugin(hookType, pluginName, pluginPath, options) {
                     registerHookExt_1.default(extName, fn);
                     log_1.default.success(`加载插件扩展 ${extName} 成功`.blue);
                 },
-                options: _init.getFullConfig(),
+                options: config_filed_constant_1.default.getGlobal(),
                 utils: _utils,
                 log: log_1.default,
                 cwd: () => { return config_filed_constant_1.default.getWorkspace(); }

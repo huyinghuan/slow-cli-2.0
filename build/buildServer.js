@@ -1,17 +1,16 @@
 "use strict";
 const _express = require("express");
-const _http = require("http");
 const _path = require("path");
 const _hook = require("../hooks/index");
 const _plugin = require("../plugin/index");
 const log_1 = require("../lib/log");
-const _init = require("../init/index");
+const config_filed_constant_1 = require("../config-filed-constant");
 const _fse = require("fs-extra");
 const _async = require("async");
 const getGitHash_1 = require("../lib/getGitHash");
 const executeProjectCompile_1 = require("./executeProjectCompile");
 const excuteFileCompile_1 = require("./excuteFileCompile");
-const startBuildServer = (port) => {
+const buildServer = function () {
     let app = _express();
     let router = _express.Router();
     router.all('*', (req, resp, next) => {
@@ -62,12 +61,12 @@ const startBuildServer = (port) => {
             getGitHash_1.default(next);
         });
         queue.push((gitHash, next) => {
-            let buildConfig = _init.getBuildConfig({ gitHash: gitHash });
-            buildConfig.outdir = outdir;
-            //额外需要编译的文件
-            buildConfig.__extra = [];
-            //编译完成后需要删除掉冗余文件
-            buildConfig.__del = [];
+            let buildConfig = config_filed_constant_1.default.getBuildConfig({
+                gitHash: gitHash,
+                outdir: outdir,
+                __extra: [],
+                __del: [] //编译完成后需要删除掉冗余文件
+            });
             excuteFileCompile_1.default(buildConfig, filepath, next);
         });
         _async.waterfall(queue, (error) => {
@@ -89,8 +88,10 @@ const startBuildServer = (port) => {
             getGitHash_1.default(next);
         });
         queue.push((gitHash, next) => {
-            let buildConfig = _init.getBuildConfig({ gitHash: gitHash });
-            buildConfig.outdir = outdir;
+            let buildConfig = config_filed_constant_1.default.getBuildConfig({
+                gitHash: gitHash,
+                outdir: outdir
+            });
             executeProjectCompile_1.default(buildConfig, next);
         });
         _async.waterfall(queue, (error) => {
@@ -107,11 +108,10 @@ const startBuildServer = (port) => {
         });
     });
     app.use(router);
-    let _server = _http.createServer(app);
-    console.log(`Build Server listen at port ${port}`.green);
-    _server.listen(app.listen(port));
+    return app;
 };
-function default_1(port) {
+function default_1(prepareFn) {
+    prepareFn();
     //加载插件
     _plugin.scanPlugins('build');
     _hook.triggerBuildInitHook((error, stop) => {
@@ -125,8 +125,8 @@ function default_1(port) {
             process.exit(0);
             return;
         }
-        startBuildServer(port);
     });
+    return buildServer();
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

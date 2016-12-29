@@ -6,12 +6,15 @@ import * as _ from 'lodash';
 import * as _project from '../project';
 import * as _init from '../init/index'
 
+import _configFiledConstant from '../config-filed-constant';
+
 export function execute(plugins, program){
   //读取用户自定义配置
   _init.prepareUserEnv(program.workspace);
 
   let packageJSON = _project.getProjectPackageJSON();
   //如果指定了项目
+  /* istanbul ignore if  */
   if(program.pluginListName){
     _initUtils.getRemoteServerProjectPluginConfig(program.pluginListName, (pluginConfig)=>{
       _plugin.writePluginConfigToConfigFile(pluginConfig)
@@ -27,7 +30,7 @@ export function execute(plugins, program){
     _plugin.install(plugins)
   }else{
     //没有指定，安装所有
-    let pluginConfig = _plugin.getPluginConfig();
+    let pluginConfig = _configFiledConstant.getPluginConfig();
     let pluginNameArr = [];
     let versionDependencies = _project.getProjectPackageJSONField('dependencies')
 

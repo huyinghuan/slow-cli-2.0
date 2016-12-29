@@ -23,9 +23,9 @@ function prepareUserEnv(workspace, pure) {
         config = _project.getProjectPackageJSON();
     }
     //如果package.json里面没有相关配置，那么则使用默认配置。
-    global.__CLI = config[configFiledConstant.infinity] || defaultConfig[configFiledConstant.infinity];
-    global.__CLI.pluginsConfig = config[configFiledConstant.pluginConfigField];
-    global.__CLI.buildConfig = config[configFiledConstant.buildField] || defaultConfig[configFiledConstant.buildField];
+    config_filed_constant_1.default.setGlobal(config[configFiledConstant.infinity] || defaultConfig[configFiledConstant.infinity]);
+    config_filed_constant_1.default.setGlobal({ pluginsConfig: config[configFiledConstant.pluginConfigField] });
+    config_filed_constant_1.default.setGlobal({ buildConfig: config[configFiledConstant.buildField] || defaultConfig[configFiledConstant.buildField] });
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = prepareUserEnv;

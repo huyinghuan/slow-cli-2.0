@@ -1,5 +1,4 @@
 "use strict";
-const _plugin = require("../plugin/index");
 const _project = require("../project");
 const _path = require("path");
 const config_filed_constant_1 = require("../config-filed-constant");
@@ -11,7 +10,7 @@ function default_1(needAppointVersion) {
     needAppointVersion = needAppointVersion ? true : false;
     let needAppointVersionList = [];
     //获取插件配置
-    let pluginConfig = _plugin.getPluginConfig();
+    let pluginConfig = config_filed_constant_1.default.getPluginConfig();
     //搜集需要对比的插件。开发版本将跳过。
     let pluginList = [];
     Object.keys(pluginConfig).forEach((pluginName) => {

@@ -5,7 +5,8 @@ const _project = require("../project");
 const _plugin = require("../plugin/index");
 const extraParamsParse_1 = require("./extraParamsParse");
 const log_1 = require("../lib/log");
-function execute(program, finish) {
+const config_filed_constant_1 = require("../config-filed-constant");
+function prepare(program) {
     //读取用户自定义配置
     _init.prepareUserEnv(program.workspace);
     _init.prepareRuntimeEnv(program.enviroment || "production");
@@ -22,23 +23,36 @@ function execute(program, finish) {
         userInputArgs.outdir = program.outdir;
     }
     //更新全局变量下的编译参数。
-    _init.setBuildParams(userInputArgs);
+    config_filed_constant_1.default.setBuildParams(userInputArgs);
     if (program.additional) {
-        _init.setBuildParams(program.additional);
+        config_filed_constant_1.default.setBuildParams(program.additional);
     }
     //检查编译参数
     if (!_init.checkBuildArgs()) {
         return process.exit(1);
     }
+}
+exports.prepare = prepare;
+//单独提出来时为了方便单元测试
+function getBuildServer(program) {
+    return _build.buildServer(function () { prepare(program); });
+}
+exports.getBuildServer = getBuildServer;
+function execute(program, finish) {
+    /* istanbul ignore if  */
     if (program.httpServer) {
-        _build.buildServer(program.port || 14423);
+        let app = getBuildServer(program);
+        let port = program.port || 14423;
+        app.listen(port);
+        console.log(`Build Server listen at port ${port}`.green);
     }
     else {
-        _build.buildProcess(finish);
+        _build.buildProcess(function () { prepare(program); }, finish);
     }
 }
 exports.execute = execute;
 function commander(_commander) {
+    /* istanbul ignore next  */
     _commander.command('build')
         .description('编译')
         .option('-w, --workspace <value>', '指定工作目录')

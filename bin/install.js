@@ -5,11 +5,13 @@ const _plugin = require("../plugin/index");
 const _ = require("lodash");
 const _project = require("../project");
 const _init = require("../init/index");
+const config_filed_constant_1 = require("../config-filed-constant");
 function execute(plugins, program) {
     //读取用户自定义配置
     _init.prepareUserEnv(program.workspace);
     let packageJSON = _project.getProjectPackageJSON();
     //如果指定了项目
+    /* istanbul ignore if  */
     if (program.pluginListName) {
         _initUtils.getRemoteServerProjectPluginConfig(program.pluginListName, (pluginConfig) => {
             _plugin.writePluginConfigToConfigFile(pluginConfig);
@@ -27,7 +29,7 @@ function execute(plugins, program) {
     }
     else {
         //没有指定，安装所有
-        let pluginConfig = _plugin.getPluginConfig();
+        let pluginConfig = config_filed_constant_1.default.getPluginConfig();
         let pluginNameArr = [];
         let versionDependencies = _project.getProjectPackageJSONField('dependencies');
         Object.keys(pluginConfig).forEach((key) => {

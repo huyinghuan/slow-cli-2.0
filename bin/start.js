@@ -5,7 +5,8 @@ const _utils = require("../plugin/index");
 const app_1 = require("../app");
 const extraParamsParse_1 = require("./extraParamsParse");
 const log_1 = require("../lib/log");
-function execute(program) {
+const config_filed_constant_1 = require("../config-filed-constant");
+function getHttpServer(program) {
     //读取用户自定义配置
     _init.prepareUserEnv(program.workspace, program.noConfig);
     //读取运行时环境配置
@@ -16,9 +17,9 @@ function execute(program) {
         userInputArgs.port = program.port;
     }
     //设置用户自定义启动参数
-    _init.setStartParams(userInputArgs);
+    config_filed_constant_1.default.setGlobal(userInputArgs);
     if (program.additional) {
-        _init.setStartParams(program.additional);
+        config_filed_constant_1.default.setGlobal(program.additional);
     }
     //检查启动参数是否合法
     if (!_init.checkStartArgs()) {
@@ -33,9 +34,10 @@ function execute(program) {
         }
     }
     //启动http服务
-    app_1.default();
+    return app_1.default();
 }
-exports.execute = execute;
+exports.getHttpServer = getHttpServer;
+/* istanbul ignore next  */
 function commander(_commander) {
     _commander.command('start')
         .description('启动http服务')
@@ -47,6 +49,11 @@ function commander(_commander) {
         .option('-n, --noConfig', "无配置文件运行")
         .option('-A, --additional <items>', '额外的参数，格式 -A A=1[,B=xxx]', extraParamsParse_1.default)
         .allowUnknownOption()
-        .action(execute);
+        .action((program) => {
+        let server = getHttpServer(program);
+        let port = program.port || config_filed_constant_1.default.getGlobal('port');
+        server.listen(port);
+        console.log(`silky listen on ${port}`.red);
+    });
 }
 exports.commander = commander;

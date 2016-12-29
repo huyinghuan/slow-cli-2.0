@@ -5,15 +5,19 @@ const _plugin = require("../plugin/index");
 const getGithash_1 = require("../lib/getGithash");
 const log_1 = require("../lib/log");
 const executeProjectCompile_1 = require("./executeProjectCompile");
-const _init = require("../init/index");
+const config_filed_constant_1 = require("../config-filed-constant");
 /**
  * 用于一次性编译
  * 编译完成后即推出进程
  * */
-function default_1(finish) {
+function default_1(prepareFn, finish, needLoadPlugin) {
+    prepareFn();
     let __starTime = Date.now();
     //加载插件
-    _plugin.scanPlugins('build');
+    /* istanbul ignore if */
+    if (needLoadPlugin != false) {
+        _plugin.scanPlugins('build');
+    }
     let queue = [];
     let gitHash = null;
     //build初始化HOOK
@@ -34,7 +38,7 @@ function default_1(finish) {
         if (stop) {
             return;
         }
-        executeProjectCompile_1.default(_init.getBuildConfig({ gitHash: gitHash }), (error) => {
+        executeProjectCompile_1.default(config_filed_constant_1.default.getBuildConfig({ gitHash: gitHash }), (error) => {
             //编译成功
             if (!error) {
                 console.log("build success".green);

@@ -2,7 +2,6 @@
 const _path = require("path");
 const config_filed_constant_1 = require("../config-filed-constant");
 const getFullPluginName_1 = require("./getFullPluginName");
-const _plugin = require("../plugin/index");
 const loadPlugin_1 = require("./loadPlugin");
 const getAllFileInDir_1 = require("../lib/getAllFileInDir");
 const log_1 = require("../lib/log");
@@ -29,7 +28,7 @@ function getDevPluginPath(source) {
         return source;
     }
     //是否设置了根目录 没有设置 取执行目录为根目录
-    let pluginRootDir = _plugin.getPluginConfig().__root || config_filed_constant_1.default.getWorkspace();
+    let pluginRootDir = config_filed_constant_1.default.getPluginConfig('__root') || config_filed_constant_1.default.getWorkspace();
     return _path.join(pluginRootDir, source);
 }
 /**
@@ -38,7 +37,7 @@ function getDevPluginPath(source) {
 function scanPlugins(hookType) {
     let configFiledConstant = config_filed_constant_1.default.get();
     let __startTime = Date.now();
-    let pluginsConfig = _plugin.getPluginConfig();
+    let pluginsConfig = config_filed_constant_1.default.getPluginConfig();
     if (!pluginsConfig) {
         console.log(`没有配置任何插件`.red);
         return;

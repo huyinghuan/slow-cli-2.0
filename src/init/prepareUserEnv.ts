@@ -22,7 +22,7 @@ export default function prepareUserEnv(workspace, pure?:boolean){
     config = _project.getProjectPackageJSON()
   }
   //如果package.json里面没有相关配置，那么则使用默认配置。
-  (global as any).__CLI = config[configFiledConstant.infinity] || defaultConfig[configFiledConstant.infinity];
-  (global as any).__CLI.pluginsConfig = config[configFiledConstant.pluginConfigField];
-  (global as any).__CLI.buildConfig = config[configFiledConstant.buildField] || defaultConfig[configFiledConstant.buildField];
+  _configFiledConstant.setGlobal(config[configFiledConstant.infinity] || defaultConfig[configFiledConstant.infinity]);
+  _configFiledConstant.setGlobal({pluginsConfig: config[configFiledConstant.pluginConfigField]});
+  _configFiledConstant.setGlobal({buildConfig: config[configFiledConstant.buildField] || defaultConfig[configFiledConstant.buildField]});
 }

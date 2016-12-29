@@ -2,11 +2,10 @@
  *校验build参数 */
 "use strict";
 const _path = require("path");
-const _init = require("./index");
 const config_filed_constant_1 = require("../config-filed-constant");
-function checkOutDir() {
+function default_1() {
     let workspace = config_filed_constant_1.default.getWorkspace();
-    let outdir = _init.getBuildConfig().outdir;
+    let outdir = config_filed_constant_1.default.getBuildConfig('outdir');
     let outRelativeDir = outdir;
     if (!outdir) {
         return false;
@@ -19,11 +18,8 @@ function checkOutDir() {
         console.log("编译目录不能和项目跟目录为同一个");
         return false;
     }
-    _init.setBuildParams({ outdir: outdir, outRelativeDir: outRelativeDir });
+    config_filed_constant_1.default.setBuildParams({ outdir: outdir, outRelativeDir: outRelativeDir });
     return true;
-}
-function default_1() {
-    return checkOutDir();
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

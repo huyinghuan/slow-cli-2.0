@@ -12,7 +12,7 @@ export default function (needAppointVersion?:boolean):any{
   needAppointVersion = needAppointVersion ? true : false;
   let needAppointVersionList = [];
   //获取插件配置
-  let pluginConfig = _plugin.getPluginConfig();
+  let pluginConfig = _configFiledConstant.getPluginConfig();
   //搜集需要对比的插件。开发版本将跳过。
   let pluginList = [];
   Object.keys(pluginConfig).forEach((pluginName)=>{

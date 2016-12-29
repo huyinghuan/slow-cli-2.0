@@ -2,10 +2,10 @@
  *校验build参数 */
 
 import * as _path from 'path';
-import * as _init from './index'
+import _configFiledConstant from '../config-filed-constant';
 
 function checkPort():boolean{
-  let port = ~~_init.getFullConfig().port;
+  let port = ~~_configFiledConstant.getGlobal('port');
   if(port > 65535){
     console.log("port 设置值超过系统最大值 65535".red)
     return false

@@ -4,23 +4,8 @@ const _http = require("http");
 const _async = require("async");
 const _hooks = require("./hooks/index");
 const getMime_1 = require("./lib/getMime");
-const _init = require("./init/index");
+const config_filed_constant_1 = require("./config-filed-constant");
 const _plugin = require("./plugin/index");
-const startServer = function (app, cli, router) {
-    app.use(router);
-    let _server = _http.createServer(app);
-    _server.on('error', (error) => {
-        if (error.code == 'EADDRINUSE') {
-            console.log("端口冲突，请使用其它端口".red);
-            return process.exit(1);
-        }
-        console.log(error);
-        return process.exit(1);
-    });
-    let port = cli.port;
-    console.log(`server listen at port ${port}`.green);
-    _server.listen(app.listen(port));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 启动静态服务
@@ -28,10 +13,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = () => {
     //加载插件
     _plugin.scanPlugins('route');
-    let cli = _init.getFullConfig();
     let app = _express();
     let router = _express.Router();
-    let globalCLIConfig = _init.getFullConfig();
+    let globalCLIConfig = config_filed_constant_1.default.getGlobal();
     //启动静态服务器
     //增加一些基础信息
     router.all('*', function (req, resp, next) {
@@ -65,7 +49,7 @@ exports.default = () => {
     if (_hooks.triggerHttpRouterHook(router)) {
         return;
     }
-    //拦截GET请求，并且加载编译其他hooks 
+    //拦截GET请求，并且加载编译其他hooks
     router.get('*', function (req, resp, next) {
         let queue = [];
         let realPath = req.path;
@@ -80,7 +64,7 @@ exports.default = () => {
             //route:didRequest
             _hooks.triggerHttpCompilerHook(req, data, cb);
         });
-        //TODO  min js,css, html, autoprefix 
+        //TODO  min js,css, html, autoprefix
         //対编译后内容的加工处理
         queue.push((responseContent, cb) => {
             //route:willResponse
@@ -119,5 +103,15 @@ exports.default = () => {
             }
         });
     });
-    startServer(app, cli, router);
+    app.use(router);
+    let _server = _http.createServer(app);
+    _server.on('error', (error) => {
+        if (error.code == 'EADDRINUSE') {
+            console.log("端口冲突，请使用其它端口".red);
+            return process.exit(1);
+        }
+        console.log(error);
+        return process.exit(1);
+    });
+    return _server;
 };

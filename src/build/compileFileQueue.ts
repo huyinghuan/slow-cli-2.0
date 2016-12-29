@@ -2,6 +2,7 @@ import * as _fs from 'fs-extra';
 import * as _async from 'async';
 import * as _path from 'path';
 import _compileFile from './compileFile'
+import _configFiledConstant from '../config-filed-constant';
 /**
  * 编译文件队列 */
 export default function(buildConfig, fileQueue, next){

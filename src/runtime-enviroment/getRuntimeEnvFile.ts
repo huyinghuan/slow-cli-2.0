@@ -1,4 +1,3 @@
-import * as _init from '../init/index';
 import * as _fs from 'fs-extra';
 import * as _path from 'path';
 import * as _ from 'lodash'
@@ -22,7 +21,7 @@ export default function(filename:string, asString?:boolean):any{
   if(!filename){
     throw new Error(`获取文件名undefined`)
   }
-  let env = _init.getEnviroment();
+  let env = _configFiledConstant.getEnviroment();
   let envFilepath = "";
   let normalFilePath = "";
 

@@ -7,15 +7,19 @@ import * as _plugin from '../plugin/index';
 import _getGitHash from '../lib/getGithash';
 import _log from '../lib/log';
 import _executeProjectCompile from './executeProjectCompile';
-import * as _init from '../init/index';
+import _configFiledConstant from '../config-filed-constant';
 /**
  * 用于一次性编译
  * 编译完成后即推出进程
  * */
-export default function(finish){
+export default function(prepareFn:Function, finish, needLoadPlugin?){
+  prepareFn();
   let __starTime = Date.now();
   //加载插件
-  _plugin.scanPlugins('build')
+  /* istanbul ignore if */
+  if(needLoadPlugin != false){
+    _plugin.scanPlugins('build')
+  }
 
   let queue = [];
   let gitHash = null;
@@ -35,7 +39,7 @@ export default function(finish){
       return;
     }
     if(stop){return}
-    _executeProjectCompile(_init.getBuildConfig({gitHash:gitHash}), (error)=>{
+    _executeProjectCompile(_configFiledConstant.getBuildConfig({gitHash:gitHash}), (error)=>{
       //编译成功
       if(!error){
         console.log("build success".green)

@@ -2,7 +2,6 @@ import * as _ from 'lodash';
 import _registerHook from '../hooks/registerHook';
 import _registerHookExt from '../hooks/registerHookExt';
 import * as _utils from '../hooks/utils';
-import * as _init from '../init/index';
 import * as _allDefined from '../all';
 import _log from '../lib/log';
 import * as _hookMap from '../hooks/map';
@@ -41,7 +40,7 @@ export default function loadPlugin(hookType:string, pluginName:string, pluginPat
           }
         },
         ext: _hookMap.HookExtQueue,
-        options: _init.getFullConfig(),
+        options: _configFiledConstant.getGlobal(),
         utils: _utils, //一些默认工具函数，大多插件可以使用得到
         log: _log,
         cwd: ()=>{return _configFiledConstant.getWorkspace()},
@@ -55,7 +54,7 @@ export default function loadPlugin(hookType:string, pluginName:string, pluginPat
           _registerHookExt(extName, fn)
           _log.success(`加载插件扩展 ${extName} 成功`.blue)
         },
-        options: _init.getFullConfig(),
+        options: _configFiledConstant.getGlobal(),
         utils: _utils, //一些默认工具函数，大多插件可以使用得到
         log: _log,
         cwd: ()=>{return _configFiledConstant.getWorkspace()}

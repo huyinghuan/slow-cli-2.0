@@ -9,26 +9,8 @@ import { CompilerCallBack } from './all';
 import * as _hooks from './hooks/index';
 import * as _hooksMap from './hooks/map';
 import _getMime from './lib/getMime';
-import * as _init from './init/index'
+import _configFiledConstant from './config-filed-constant';
 import * as _plugin from './plugin/index';
-
-const startServer = function(app:any, cli:any, router:_express.Router){
-  app.use(router)
-  let _server = _http.createServer(app)
-
-  _server.on('error', (error) => {
-    if((error as any).code == 'EADDRINUSE'){
-      console.log("端口冲突，请使用其它端口".red);
-      return process.exit(1)
-    }
-    console.log(error);
-    return process.exit(1)
-  });
-  let port = cli.port;
-  console.log(`server listen at port ${port}`.green)
-  _server.listen(app.listen(port));
-}
-
 
 /**
  * 启动静态服务
@@ -36,12 +18,10 @@ const startServer = function(app:any, cli:any, router:_express.Router){
 export default ()=>{
   //加载插件
   _plugin.scanPlugins('route');
-
-  let cli = _init.getFullConfig();
   let app = _express();
   let router = _express.Router();
-  let globalCLIConfig = _init.getFullConfig()
-  
+  let globalCLIConfig = _configFiledConstant.getGlobal()
+
   //启动静态服务器
   //增加一些基础信息
   router.all('*', function(req, resp, next){
@@ -52,7 +32,7 @@ export default ()=>{
       let startTime = (req as any).__acceptTime;
       let spellTime = new Date().getTime() - startTime
       let msg = `( ${req.url} ) : ${spellTime} ms : [${resp.statusCode}]`
-      
+
       switch(resp.statusCode){
         case 200:
         case 304 : console.log(msg.grey); break;
@@ -74,7 +54,7 @@ export default ()=>{
     return;
   }
 
-  //拦截GET请求，并且加载编译其他hooks 
+  //拦截GET请求，并且加载编译其他hooks
   router.get('*', function(req, resp, next){
     let queue = [];
     let realPath = req.path;
@@ -89,13 +69,13 @@ export default ()=>{
       //route:didRequest
       _hooks.triggerHttpCompilerHook(req, data, cb)
     });
-  
-    //TODO  min js,css, html, autoprefix 
+
+    //TODO  min js,css, html, autoprefix
     //対编译后内容的加工处理
     queue.push((responseContent, cb)=>{
       //route:willResponse
       _hooks.triggerHttpWillResponseHook(req, data, responseContent, cb)
-      
+
     });
 
     // outout mime and responseContent
@@ -134,5 +114,18 @@ export default ()=>{
     })
   })
 
-  startServer(app, cli, router)
+  app.use(router)
+
+  let _server = _http.createServer(app)
+
+  _server.on('error', (error) => {
+    if((error as any).code == 'EADDRINUSE'){
+      console.log("端口冲突，请使用其它端口".red);
+      return process.exit(1)
+    }
+    console.log(error);
+    return process.exit(1)
+  });
+
+  return _server
 }

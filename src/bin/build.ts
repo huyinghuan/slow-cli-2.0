@@ -5,9 +5,9 @@ import * as _plugin from '../plugin/index'
 import * as _path from 'path';
 import _extraParamsParse from './extraParamsParse';
 import _log from '../lib/log'
+import _configFiledConstant from '../config-filed-constant';
 
-
-export function execute(program, finish){
+export function prepare(program){
   //读取用户自定义配置
   _init.prepareUserEnv(program.workspace);
 
@@ -28,24 +28,37 @@ export function execute(program, finish){
   }
 
   //更新全局变量下的编译参数。
-  _init.setBuildParams(userInputArgs)
+  _configFiledConstant.setBuildParams(userInputArgs)
 
   if(program.additional){
-    _init.setBuildParams(program.additional)
+    _configFiledConstant.setBuildParams(program.additional)
   }
 
   //检查编译参数
   if(!_init.checkBuildArgs()){
     return process.exit(1)
   }
+}
+
+//单独提出来时为了方便单元测试
+export function getBuildServer(program){
+  return _build.buildServer(function(){prepare(program)})
+}
+
+export function execute(program, finish?){
+  /* istanbul ignore if  */
   if(program.httpServer){
-    _build.buildServer(program.port || 14423)
+    let app = getBuildServer(program)
+    let port = program.port || 14423
+    app.listen(port);
+    console.log(`Build Server listen at port ${port}`.green)
   }else{
-    _build.buildProcess(finish)
+    _build.buildProcess(function(){prepare(program)}, finish)
   }
 }
 
 export function commander(_commander){
+  /* istanbul ignore next  */
   _commander.command('build')
     .description('编译')
     .option('-w, --workspace <value>', '指定工作目录')

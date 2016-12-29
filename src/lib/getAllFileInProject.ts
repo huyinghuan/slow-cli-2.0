@@ -1,5 +1,4 @@
 import _getAllFileInDir from './getAllFileInDir';
-import * as _init from '../init/index'
 import * as _allDefine from '../all.d';
 
 import _configFiledConstant from '../config-filed-constant';
@@ -11,7 +10,7 @@ import _configFiledConstant from '../config-filed-constant';
  * 如果处理 返回true
  */
 function shouldInclude(filename, filepath):boolean{
-  const _buildConfig = _init.getBuildConfig();
+  const _buildConfig = _configFiledConstant.getBuildConfig();
   //忽略build文件夹
   if(filepath.indexOf(_buildConfig.outdir) != -1){
     return false
