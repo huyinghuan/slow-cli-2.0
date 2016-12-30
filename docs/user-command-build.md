@@ -17,7 +17,7 @@
 
 -l --log #见 command-common-params.md
 -A --additional #见command-common-params.md
-
+-w --workspace #指定工作目录
 ```
 
 ### 查看选项帮助说明

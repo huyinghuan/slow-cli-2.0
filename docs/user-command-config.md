@@ -25,4 +25,5 @@
 ```shell
 
 -u --url 配置服务器地址
+-w --workspace #指定工作目录
 ```

@@ -172,7 +172,7 @@ function commander(_commander) {
                         console.log(error);
                     }
                     else {
-                        console.log('同步配置文件成功！请允许 silky install 安装插件。');
+                        console.log('同步配置文件成功！请运行 silky install 安装插件。');
                     }
                 });
                 break;

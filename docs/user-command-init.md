@@ -2,7 +2,7 @@
 
 初始化项目
 
-启动静态服务器. e.g.  
+启动静态服务器. e.g.
 
 ```shell
  silky init -p web
@@ -15,6 +15,7 @@
 -p --pluginListName #制定插件列表名称，从而获取插件列表
 
 -l --log #见 command-common-params.md
+-w --workspace #指定工作目录
 ```
 
 ### 查看选项帮助说明

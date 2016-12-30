@@ -1,6 +1,9 @@
-## global.__CLI
+## 全局变量
 
-For Developer
+获取方式：
+```
+require('./config-filed-constant').get()
+```
 
 ```js
 {

@@ -8,18 +8,9 @@ exports.registerPlugin = (cli, options)=>{
 
   /*
   Params:
-    data: {
-      inputFilePath:
-      outputFilePath:
-      fileName,
-      appendFile: false 添加到文件尾还是替换全部内容， 默认false，替换全部内容
-      outdir: buildConfig.outdir,
-      inputFileRelativePath:  _path.join(fileItem.relativeDir, fileItem.fileName),
-      outputFileRelativePath: _path.join(buildConfig.outRelativeDir, fileItem.relativeDir, fileItem.fileName),
-      ignore: false 是否取消对该文件处理 不处理，不copy
-      appendTo: true
-    }
-    content 编译文件内容
+    @params: buildConfig 具体见 docs/dev-global-varibale-_CLI.md
+    @params: data 具体见 /docs/dev-hooks-build-params-filedata.md
+    @params: content 编译文件内容
 
     这中间 data 还可能被赋予其他值：
       status: 200 编译成功。 没有该值则认为编译失败

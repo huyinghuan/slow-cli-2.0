@@ -15,6 +15,7 @@ silky start -p 3002 -c
 -l --log #见 command-common-params.md
 -A --additional #见command-common-params.md
 -n --noConfig  #无配置文件运行
+-w --workspace #指定工作目录
 ```
 
 ### 查看选项帮助说明

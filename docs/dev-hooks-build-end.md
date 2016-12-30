@@ -1,6 +1,6 @@
 ### build:end
 
-全部编译，copy完成
+全部编译，copy完成后，触发完成该hook
 
 ```js
 exports.registerPlugin = (cli, options)=>{
