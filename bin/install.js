@@ -6,7 +6,7 @@ const _ = require("lodash");
 const _project = require("../project");
 const _init = require("../init/index");
 const config_filed_constant_1 = require("../config-filed-constant");
-function execute(plugins, program) {
+function execute(plugins, program, finish) {
     //读取用户自定义配置
     _init.prepareUserEnv(program.workspace);
     let packageJSON = _project.getProjectPackageJSON();
@@ -15,7 +15,7 @@ function execute(plugins, program) {
     if (program.pluginListName) {
         _initUtils.getRemoteServerProjectPluginConfig(program.pluginListName, (pluginConfig) => {
             _plugin.writePluginConfigToConfigFile(pluginConfig);
-            _plugin.install(Object.keys(pluginConfig));
+            _plugin.install(Object.keys(pluginConfig), program.registry, finish);
         });
     }
     else if (plugins.length) {
@@ -25,7 +25,7 @@ function execute(plugins, program) {
             pluginConfig[_plugin.getFullPluginName(pluginName)] = {};
         });
         _plugin.writePluginConfigToConfigFile(pluginConfig);
-        _plugin.install(plugins);
+        _plugin.install(plugins, program.registry, finish);
     }
     else {
         //没有指定，安装所有
@@ -55,10 +55,11 @@ function execute(plugins, program) {
         if (pluginNameArr.length == 0) {
             return console.log('所有依赖已全部安装。');
         }
-        _plugin.install(pluginNameArr);
+        _plugin.install(pluginNameArr, program.registry, finish);
     }
 }
 exports.execute = execute;
+/* istanbul ignore next  */
 function commander(_commander) {
     _commander.command('install [plugins...]')
         .description('安装插件')
@@ -66,6 +67,14 @@ function commander(_commander) {
         .option('-l, --log <value>', 'log日志,( 0[defaul]: show all; 1: show error, fail; 2: show error, fail, warn)', (value) => { log_1.default.setLevel(value); })
         .option('-p, --pluginListName <value>', '根据插件列表名称获取插件列表')
         .option('-f, --force', '强制重新安装')
-        .action(execute);
+        .option('-r, --registry <value>', "指定插件的仓库地址")
+        .action((plugins, program) => {
+        execute(plugins, program, (error) => {
+            if (error) {
+                log_1.default.error(error);
+            }
+            log_1.default.success("安装插件完成！".green);
+        });
+    });
 }
 exports.commander = commander;

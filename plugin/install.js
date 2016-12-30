@@ -3,13 +3,15 @@ const _project = require("../project");
 const executeCommand_1 = require("../lib/executeCommand");
 const log_1 = require("../lib/log");
 const getFullPluginName_1 = require("./getFullPluginName");
+const config_filed_constant_1 = require("../config-filed-constant");
 const _registry = "http://npm.hunantv.com";
-function installPlugin(pluginName, cb) {
-    let registry = _project.getProjectPackageJSONField('__registry') || _registry;
+function installPlugin(pluginName, registry, cb) {
+    registry = registry || _project.getProjectPackageJSONField('__registry') || _registry;
     console.log(`npm install ${pluginName}  --save --save-exact --registry ${registry}`);
-    executeCommand_1.default(`npm install ${pluginName} --save --save-exact --registry ${registry}`, (error) => {
+    executeCommand_1.default(`npm install ${pluginName} --save --save-exact --registry ${registry}`, { cwd: config_filed_constant_1.default.getWorkspace() }, (error) => {
         if (error) {
             cb(`安装插件${pluginName}失败`.red);
+            cb(error);
         }
         else {
             log_1.default.success(`安装插件${pluginName}成功`.green);
@@ -17,17 +19,12 @@ function installPlugin(pluginName, cb) {
         }
     });
 }
-function default_1(pluginList) {
+function default_1(pluginList, registry, finish) {
     let beInstallPluginList = [];
     pluginList.forEach((pluginName) => {
         beInstallPluginList.push(getFullPluginName_1.default(pluginName, true));
     });
-    installPlugin(beInstallPluginList.join(' '), (error) => {
-        if (error) {
-            log_1.default.error(error);
-        }
-        log_1.default.success("安装插件完成！".green);
-    });
+    installPlugin(beInstallPluginList.join(' '), registry, finish);
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

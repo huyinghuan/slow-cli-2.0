@@ -11,7 +11,9 @@ import _configFiledConstant from '../config-filed-constant';
 import * as _init from '../init'
 
 //上传配置
-const updateload = function(project, options){
+export function upload(options, finish){
+  _init.prepareUserEnv(options.workspace);
+  let project = _project.getProjectPackageJSON();
   let projectName = options.projectName || project.name;
   let version = options.projectVersion || project.version || "";
 
@@ -75,24 +77,18 @@ const updateload = function(project, options){
   _async.waterfall(queue, (error)=>{
     _fs.removeSync(tmpDirPath)
     _fs.removeSync(tmpTarFilePath)
-    if(error){
-      console.log("上传失败, 错误信息：".red)
-      console.log(error)
-      return
-    }
-    console.log(`上传 ${projectName}-${version} 成功！`)
+    finish(error, `${projectName}-${version}`)
   })
 }
 
 //下载配置
-const sync = function(project, options){
-
-
+export function sync(options, finish){
+  _init.prepareUserEnv(options.workspace);
+  let project = _project.getProjectPackageJSON();
   let projectName = options.projectName || project.name;
   let version = options.projectVersion || project.version;
 
   let configFiledConstant = _configFiledConstant.get();
-
   if(!projectName){
     return console.log("Error: 未制定项目名称".red)
   }
@@ -140,7 +136,7 @@ const sync = function(project, options){
 
   //解压文件并删除文件
   queue.push((next)=>{
-    let commandStr = `tar -xf ${file}`;
+    let commandStr = `tar -xf ${file} -C ${_configFiledConstant.getWorkspace()}`;
      _executeCommand(commandStr, (error)=>{
       if(error){
         console.log(`解压失败，请手动解压文件 ${file} 到项目根目录`)
@@ -151,26 +147,9 @@ const sync = function(project, options){
     })
   })
 
-  _async.waterfall(queue, (error)=>{
-    if(error){
-      console.log(error)
-    }else{
-      console.log('同步配置文件成功！请允许 silky install 安装插件。')
-    }
-  })
+  _async.waterfall(queue, finish)
 }
-
-export function execute(actionName, program){
-  //读取用户自定义配置
-  _init.prepareUserEnv(program.workspace);
-
-  let packageJSON = _project.getProjectPackageJSON();
-  switch(actionName){
-    case "up": updateload(packageJSON, program); break;
-    case "sync": sync(packageJSON, program); break;
-  }
-}
-
+/* istanbul ignore next  */
 export function commander(_commander){
   _commander.command('config <actionName>')
     .description('上传或者同步配置文件 up or sync ')
@@ -178,5 +157,28 @@ export function commander(_commander){
     .option('-u, --url <value>', '指定配置存储服务器地址')
     .option('-n, --projectName <value>', "指定同步的项目名称，可选，默认为 package.json => name")
     .option('-v, --projectVersion <value>', "指定同步的项目版本号， 可选，默认为 package.json => version")
-    .action(execute)
+    .action((actionName, program)=>{
+        //读取用户自定义配置
+        switch(actionName){
+          case "up":
+            upload(program, (error, result)=>{
+              if(error){
+                console.log("上传失败, 错误信息：".red)
+                console.log(error)
+                return
+              }
+              console.log(`上传 ${result} 成功！`)
+            });
+            break;
+          case "sync":
+            sync(program, (error)=>{
+              if(error){
+                console.log(error)
+              }else{
+                console.log('同步配置文件成功！请允许 silky install 安装插件。')
+              }
+            });
+           break;
+        }
+    })
 }

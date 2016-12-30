@@ -26,9 +26,12 @@ function execute(pluginName, program) {
     _marked.setOptions({
         renderer: new _TerminalRenderer()
     });
-    console.log(_marked(readmeContent));
+    let msg = _marked(readmeContent);
+    console.log(msg);
+    return msg;
 }
 exports.execute = execute;
+/* istanbul ignore next  */
 function commander(_commander) {
     _commander.command('info <pluginName>')
         .description('获取插件帮助信息')

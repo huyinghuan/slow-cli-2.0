@@ -7,6 +7,7 @@ import _extraParamsParse from './extraParamsParse';
 import _log from '../lib/log'
 import _configFiledConstant from '../config-filed-constant';
 
+/**环境变量初始化 */
 export function prepare(program){
   //读取用户自定义配置
   _init.prepareUserEnv(program.workspace);
@@ -57,8 +58,8 @@ export function execute(program, finish?){
   }
 }
 
+/* istanbul ignore next  */
 export function commander(_commander){
-  /* istanbul ignore next  */
   _commander.command('build')
     .description('编译')
     .option('-w, --workspace <value>', '指定工作目录')

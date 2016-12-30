@@ -14,6 +14,7 @@ export default function(){
   let result:any = {};
   result.name = _project.getProjectDirectoryName();
   result.version = '1.0';
+  result.dependencies = {};
   let configFiledConstant = _configFiledConstant.get()
   result[configFiledConstant.pluginVersionField] = _project.getCLIVersion();
   result[configFiledConstant.pluginConfigField] = {};

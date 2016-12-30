@@ -7,6 +7,7 @@ import * as _project from '../project';
  * params <pure> boolean, 纯净模式，不加载任何插件
  */
 export default function prepareUserEnv(workspace, pure?:boolean){
+  workspace = workspace || process.cwd();
   //设置工作根目录
   _configFiledConstant.setWorkspace(workspace);
 
@@ -14,7 +15,7 @@ export default function prepareUserEnv(workspace, pure?:boolean){
   let defaultConfig = generatorDefaultConfig();
   let configFiledConstant = _configFiledConstant.get();
   if(!_fs.existsSync(configFiledConstant.CLIConfigFile) || pure){
-    console.log(`非 ${configFiledConstant.infinity} 项目， 仅启用静态服务器功能`);
+    console.log(`非 ${configFiledConstant.infinity} 项目， 启用纯净模式<不加载任何插件>`);
     config = defaultConfig
   }else{
     //读取项目目录下的package.json

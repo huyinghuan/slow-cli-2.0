@@ -4,15 +4,16 @@ import * as _project from '../project';
 import _executeCommand from '../lib/executeCommand';
 import _log from '../lib/log';
 import _getFullPluginName from './getFullPluginName';
-
+import _configFiledConstant from '../config-filed-constant';
 const _registry = "http://npm.hunantv.com";
 
-function installPlugin(pluginName, cb){
-  let registry = _project.getProjectPackageJSONField('__registry') || _registry;
+function installPlugin(pluginName, registry, cb){
+  registry = registry || _project.getProjectPackageJSONField('__registry') || _registry;
   console.log(`npm install ${pluginName}  --save --save-exact --registry ${registry}`)
-  _executeCommand(`npm install ${pluginName} --save --save-exact --registry ${registry}`, (error)=>{
+  _executeCommand(`npm install ${pluginName} --save --save-exact --registry ${registry}`, {cwd: _configFiledConstant.getWorkspace()}, (error)=>{
     if(error){
       cb(`安装插件${pluginName}失败`.red)
+      cb(error)
     }else{
       _log.success(`安装插件${pluginName}成功`.green)
       cb(null)
@@ -20,16 +21,12 @@ function installPlugin(pluginName, cb){
   })
 }
 
-export default function(pluginList){
+export default function(pluginList, registry, finish){
   let beInstallPluginList = [];
   pluginList.forEach((pluginName)=>{
     beInstallPluginList.push(_getFullPluginName(pluginName, true))
   })
 
-  installPlugin(beInstallPluginList.join(' '),  (error)=>{
-    if(error){
-      _log.error(error);
-    }
-    _log.success("安装插件完成！".green)
-  })
+  installPlugin(beInstallPluginList.join(' '), registry, finish)
 }
+

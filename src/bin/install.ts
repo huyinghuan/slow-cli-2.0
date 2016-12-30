@@ -8,7 +8,7 @@ import * as _init from '../init/index'
 
 import _configFiledConstant from '../config-filed-constant';
 
-export function execute(plugins, program){
+export function execute(plugins, program, finish){
   //读取用户自定义配置
   _init.prepareUserEnv(program.workspace);
 
@@ -18,7 +18,7 @@ export function execute(plugins, program){
   if(program.pluginListName){
     _initUtils.getRemoteServerProjectPluginConfig(program.pluginListName, (pluginConfig)=>{
       _plugin.writePluginConfigToConfigFile(pluginConfig)
-      _plugin.install(Object.keys(pluginConfig))
+      _plugin.install(Object.keys(pluginConfig), program.registry, finish)
     })
   }else if(plugins.length){ //指定了插件名称就安装插件
     //写入到package.json
@@ -27,7 +27,7 @@ export function execute(plugins, program){
       pluginConfig[_plugin.getFullPluginName(pluginName)] = {}
     })
     _plugin.writePluginConfigToConfigFile(pluginConfig)
-    _plugin.install(plugins)
+    _plugin.install(plugins, program.registry, finish)
   }else{
     //没有指定，安装所有
     let pluginConfig = _configFiledConstant.getPluginConfig();
@@ -58,10 +58,10 @@ export function execute(plugins, program){
     if(pluginNameArr.length == 0){
       return console.log('所有依赖已全部安装。')
     }
-    _plugin.install(pluginNameArr)
+    _plugin.install(pluginNameArr, program.registry, finish)
   }
 }
-
+/* istanbul ignore next  */
 export function commander(_commander){
   _commander.command('install [plugins...]')
     .description('安装插件')
@@ -69,5 +69,13 @@ export function commander(_commander){
     .option('-l, --log <value>', 'log日志,( 0[defaul]: show all; 1: show error, fail; 2: show error, fail, warn)',(value)=>{_log.setLevel(value)})
     .option('-p, --pluginListName <value>', '根据插件列表名称获取插件列表')
     .option('-f, --force', '强制重新安装')
-    .action(execute)
+    .option('-r, --registry <value>',  "指定插件的仓库地址")
+    .action((plugins, program)=>{
+      execute(plugins, program,  (error)=>{
+        if(error){
+          _log.error(error);
+        }
+        _log.success("安装插件完成！".green)
+      })
+    })
 }

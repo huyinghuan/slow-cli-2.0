@@ -6,6 +6,7 @@ const _plugin = require("../plugin/index");
 const extraParamsParse_1 = require("./extraParamsParse");
 const log_1 = require("../lib/log");
 const config_filed_constant_1 = require("../config-filed-constant");
+/**环境变量初始化 */
 function prepare(program) {
     //读取用户自定义配置
     _init.prepareUserEnv(program.workspace);
@@ -51,8 +52,8 @@ function execute(program, finish) {
     }
 }
 exports.execute = execute;
+/* istanbul ignore next  */
 function commander(_commander) {
-    /* istanbul ignore next  */
     _commander.command('build')
         .description('编译')
         .option('-w, --workspace <value>', '指定工作目录')

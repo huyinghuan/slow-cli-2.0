@@ -8,13 +8,14 @@ const _project = require("../project");
  * params <pure> boolean, 纯净模式，不加载任何插件
  */
 function prepareUserEnv(workspace, pure) {
+    workspace = workspace || process.cwd();
     //设置工作根目录
     config_filed_constant_1.default.setWorkspace(workspace);
     let config = {};
     let defaultConfig = generatorDefaultConfig_1.default();
     let configFiledConstant = config_filed_constant_1.default.get();
     if (!_fs.existsSync(configFiledConstant.CLIConfigFile) || pure) {
-        console.log(`非 ${configFiledConstant.infinity} 项目， 仅启用静态服务器功能`);
+        console.log(`非 ${configFiledConstant.infinity} 项目， 启用纯净模式<不加载任何插件>`);
         config = defaultConfig;
     }
     else {
