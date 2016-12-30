@@ -1,4 +1,4 @@
-#! /usr/bin/env node --harmony
+#!/usr/bin node --harmony
 import * as _commander from 'commander';
 import * as _start from './start';
 import * as _init from './init'

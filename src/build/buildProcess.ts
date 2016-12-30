@@ -4,7 +4,7 @@ import * as _async from 'async'
 
 import * as _hook from '../hooks/index';
 import * as _plugin from '../plugin/index';
-import _getGitHash from '../lib/getGithash';
+import _getGitHash from '../lib/getGitHash';
 import _log from '../lib/log';
 import _executeProjectCompile from './executeProjectCompile';
 import _configFiledConstant from '../config-filed-constant';

@@ -2,7 +2,7 @@
 const _async = require("async");
 const _hook = require("../hooks/index");
 const _plugin = require("../plugin/index");
-const getGithash_1 = require("../lib/getGithash");
+const getGitHash_1 = require("../lib/getGitHash");
 const log_1 = require("../lib/log");
 const executeProjectCompile_1 = require("./executeProjectCompile");
 const config_filed_constant_1 = require("../config-filed-constant");
@@ -23,7 +23,7 @@ function default_1(prepareFn, finish, needLoadPlugin) {
     //build初始化HOOK
     queue.push((cb) => { _hook.triggerBuildInitHook(cb); });
     queue.push((stop, cb) => {
-        getGithash_1.default((error, hash) => {
+        getGitHash_1.default((error, hash) => {
             gitHash = hash;
             cb(error, stop);
         });
