@@ -13,7 +13,7 @@ const excuteFileCompile_1 = require("./excuteFileCompile");
 const buildServer = function () {
     let app = _express();
     let router = _express.Router();
-    router.all('*', (req, resp, next) => {
+    router.all(/^\/((single)|(all)).?/, (req, resp, next) => {
         //挂载时间点
         req.__acceptTime = Date.now();
         //显示请求耗费时间
