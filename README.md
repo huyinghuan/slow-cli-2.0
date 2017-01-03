@@ -142,3 +142,8 @@ build:initial > build:willBuild >  build:doCompile > build:didCompile >  ?build:
 ## 插件列表
 
 更多示例可参考 [官方插件](https://github.com/silky-plugin)
+
+
+## 更新
+
+v2.0.5 支持文件夹文件显示

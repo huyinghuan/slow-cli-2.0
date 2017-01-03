@@ -19,6 +19,9 @@ class ConstantFiled {
   private normalEnviromentDir = _path.join(this.cwd, `.${this.infinity}`, 'normal');
   //存储全局变量
   private globalVar:any = {
+    index: "index.html",
+    autoindex: false,
+    port: 14422,
     buildConfig: {},
     pluginsConfig:{}
   };

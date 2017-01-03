@@ -6,7 +6,8 @@ exports.route = {
     //  willPrepareDirectory: 'route:willPrepareDirectory',
     //  didPrepareDirectory: 'route:didPrepareDirectory',
     willResponse: 'route:willResponse',
-    didResponse: 'route:didResponse'
+    didResponse: 'route:didResponse',
+    isDir: 'route:dir'
 };
 exports.build = {
     initial: 'build:initial',

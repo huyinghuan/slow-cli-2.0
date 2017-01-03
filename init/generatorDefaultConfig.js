@@ -20,7 +20,7 @@ function default_1() {
     result[configFiledConstant.pluginVersionField] = _project.getCLIVersion();
     result[configFiledConstant.pluginConfigField] = {};
     result[configFiledConstant.infinity] = {
-        port: 14422, index: 'index.html'
+        port: 14422, index: 'index.html', autoindex: true
     };
     result[configFiledConstant.buildField] = {
         outdir: './build',

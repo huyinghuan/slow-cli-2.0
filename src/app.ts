@@ -11,6 +11,7 @@ import * as _hooksMap from './hooks/map';
 import _getMime from './lib/getMime';
 import _configFiledConstant from './config-filed-constant';
 import * as _plugin from './plugin/index';
+import _log from './lib/log';
 
 /**
  * 启动静态服务
@@ -47,6 +48,32 @@ export default ()=>{
     })
     next()
   });
+
+  //拦截文件夹请求
+  router.get('*', function(req, resp, next){
+    let path = req.path;
+    _fs.stat(_path.join(_configFiledConstant.getWorkspace(), path), (error, stat)=>{
+      if(error){
+        return next()
+      }
+      if(!stat.isDirectory() || !_configFiledConstant.getGlobal('autoindex')){
+        return next()
+      }
+
+      _hooks.triggerHttpResponseDirHook(path, (error, content)=>{
+        if(error){
+          _log.error(error)
+          return resp.sendStatus(500)
+        }
+        if(content){
+          resp.set('Content-Type', "text/html");
+          resp.send(content)
+        }else{
+          next()
+        }
+      })
+    })
+  })
 
   //启动服务器之前
   //_hooksMap.route.initial

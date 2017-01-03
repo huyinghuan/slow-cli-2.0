@@ -2,10 +2,13 @@
 const _express = require("express");
 const _http = require("http");
 const _async = require("async");
+const _fs = require("fs");
+const _path = require("path");
 const _hooks = require("./hooks/index");
 const getMime_1 = require("./lib/getMime");
 const config_filed_constant_1 = require("./config-filed-constant");
 const _plugin = require("./plugin/index");
+const log_1 = require("./lib/log");
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 启动静态服务
@@ -43,6 +46,31 @@ exports.default = () => {
             _hooks.triggerHttpDidResponseHook(req);
         });
         next();
+    });
+    //拦截文件夹请求
+    router.get('*', function (req, resp, next) {
+        let path = req.path;
+        _fs.stat(_path.join(config_filed_constant_1.default.getWorkspace(), path), (error, stat) => {
+            if (error) {
+                return next();
+            }
+            if (!stat.isDirectory() || !config_filed_constant_1.default.getGlobal('autoindex')) {
+                return next();
+            }
+            _hooks.triggerHttpResponseDirHook(path, (error, content) => {
+                if (error) {
+                    log_1.default.error(error);
+                    return resp.sendStatus(500);
+                }
+                if (content) {
+                    resp.set('Content-Type', "text/html");
+                    resp.send(content);
+                }
+                else {
+                    next();
+                }
+            });
+        });
     });
     //启动服务器之前
     //_hooksMap.route.initial

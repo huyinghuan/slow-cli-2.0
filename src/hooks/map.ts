@@ -5,7 +5,8 @@ export const route = {
 //  willPrepareDirectory: 'route:willPrepareDirectory',
 //  didPrepareDirectory: 'route:didPrepareDirectory',
   willResponse: 'route:willResponse', //编译内容的加工处理
-  didResponse: 'route:didResponse'
+  didResponse: 'route:didResponse',
+  isDir: 'route:dir'
 }
 export const build = {
   initial: 'build:initial', //正式编译之前
