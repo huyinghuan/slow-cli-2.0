@@ -50,7 +50,7 @@ export function execute(program){
 /* istanbul ignore next  */
 export function commander(_commander){
   _commander.command('dev')
-    .description('上传或者同步配置文件 up or sync ')
+    .description('开发插件和正式插件的相互转化')
     .option('-w, --workspace <value>', '指定工作目录')
     .option('-d, --dev')
     .option('-n, --name <value>')

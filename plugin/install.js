@@ -6,6 +6,9 @@ const getFullPluginName_1 = require("./getFullPluginName");
 const config_filed_constant_1 = require("../config-filed-constant");
 const _registry = "http://npm.hunantv.com";
 function installPlugin(pluginName, registry, cb) {
+    if (registry == "taobao") {
+        registry = "https://registry.npm.taobao.org";
+    }
     registry = registry || _project.getProjectPackageJSONField('__registry') || _registry;
     console.log(`npm install ${pluginName}  --save --save-exact --registry ${registry}`);
     executeCommand_1.default(`npm install ${pluginName} --save --save-exact --registry ${registry}`, { cwd: config_filed_constant_1.default.getWorkspace() }, (error) => {
