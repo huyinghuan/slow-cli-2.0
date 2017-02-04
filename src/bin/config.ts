@@ -103,7 +103,7 @@ export function sync(options, finish){
   })
   queue.push((next)=>{
     let req = _request({
-      uri: `/api/p/${project.name}/v/${project.version}`,
+      uri: `/api/p/${projectName}/v/${version}`,
       baseUrl: serverIp,
       method: 'GET',
     })
