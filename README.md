@@ -145,5 +145,7 @@ build:initial > build:willBuild >  build:doCompile > build:didCompile >  ?build:
 
 
 ## 更新
+v2.1.0
+  修复 config sync 问题
 
 v2.0.5 支持文件夹文件显示
