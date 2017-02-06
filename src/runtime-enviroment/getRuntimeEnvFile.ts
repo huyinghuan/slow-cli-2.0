@@ -70,18 +70,15 @@ export default function(filename:string, asString?:boolean):any{
 
   envBase = envBase || {};
   normalBase = normalBase ||{};
-
   Object.keys(envBase).forEach((key)=>{
     //避免误解
     if(normalBase[key] === null || normalBase[key] === undefined){
-      normalBase[key] = envBase[key]
+      return normalBase[key] = envBase[key]
     }
-
     if(!_.isPlainObject(envBase[key])){
-      normalBase[key] = envBase[key]
+      return normalBase[key] = envBase[key]
     }
     normalBase[key] = _.extend(normalBase[key], envBase[key])
   })
-
   return  normalBase
 }

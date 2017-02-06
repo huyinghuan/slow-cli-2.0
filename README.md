@@ -145,6 +145,9 @@ build:initial > build:willBuild >  build:doCompile > build:didCompile >  ?build:
 
 
 ## 更新
+v2.1.1
+  修复 环境变量读取继承bug
+
 v2.1.0
   修复 config sync 问题
 
