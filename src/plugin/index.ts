@@ -6,7 +6,7 @@ import _install from './install'
 import _setPluginConfig from './setPluginConfig'
 import _writePluginConfigToConfigFile from './writePluginConfigToConfigFile'
 import _getInstalledPluginVersion from './getInstalledPluginVersion'
-
+import _getPluginConfig from './getPluginConfig'
 export {
   _getFullPluginName as getFullPluginName,
   _scanPlugins as scanPlugins,
@@ -15,5 +15,6 @@ export {
   _install as install,
   _setPluginConfig as setPluginConfig,
   _writePluginConfigToConfigFile as writePluginConfigToConfigFile,
-  _getInstalledPluginVersion as getInstalledPluginVersion
+  _getInstalledPluginVersion as getInstalledPluginVersion,
+  _getPluginConfig as getPluginConfig
 }

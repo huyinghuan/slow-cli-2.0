@@ -13,26 +13,27 @@ export function execute(plugins, program, finish){
   _init.prepareUserEnv(program.workspace);
 
   let packageJSON = _project.getProjectPackageJSON();
+  let saveAsDev = program.dev
   //如果指定了项目
   /* istanbul ignore if  */
   if(program.pluginListName){
     _initUtils.getRemoteServerProjectPluginConfig(program.pluginListName, (pluginConfig)=>{
       _plugin.writePluginConfigToConfigFile(pluginConfig)
-      _plugin.install(Object.keys(pluginConfig), program.registry, finish)
+      _plugin.install(Object.keys(pluginConfig), program.registry, saveAsDev, finish)
     })
   }else if(plugins.length){ //指定了插件名称就安装插件
     //写入到package.json
     let pluginConfig = {}
     plugins.forEach((pluginName)=>{
-      pluginConfig[_plugin.getFullPluginName(pluginName)] = {}
+      pluginConfig[_plugin.getFullPluginName(pluginName)] = _plugin.getPluginConfig(pluginName)
     })
     _plugin.writePluginConfigToConfigFile(pluginConfig)
-    _plugin.install(plugins, program.registry, finish)
+    _plugin.install(plugins, program.registry, saveAsDev,finish)
   }else{
     //没有指定，安装所有
     let pluginConfig = _configFiledConstant.getPluginConfig();
     let pluginNameArr = [];
-    let versionDependencies = _project.getProjectPackageJSONField('dependencies')
+    let versionDependencies = _project.getProjectPackageJSONField('dependencies') || _project.getProjectPackageJSONField('dev-dependencies')
 
     Object.keys(pluginConfig).forEach((key)=>{
       if(pluginConfig[key] == false){
@@ -58,7 +59,7 @@ export function execute(plugins, program, finish){
     if(pluginNameArr.length == 0){
       return console.log('所有依赖已全部安装。')
     }
-    _plugin.install(pluginNameArr, program.registry, finish)
+    _plugin.install(pluginNameArr, program.registry, saveAsDev, finish)
   }
 }
 /* istanbul ignore next  */
@@ -70,6 +71,7 @@ export function commander(_commander){
     .option('-p, --pluginListName <value>', '根据插件列表名称获取插件列表')
     .option('-f, --force', '强制重新安装')
     .option('-r, --registry <value>',  "指定插件的仓库地址")
+    .option('-d, --dev', '以开发模式安装插件，用于开发js css lib 库')
     .action((plugins, program)=>{
       execute(plugins, program,  (error)=>{
         if(error){

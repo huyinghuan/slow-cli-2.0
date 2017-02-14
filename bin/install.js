@@ -10,28 +10,29 @@ function execute(plugins, program, finish) {
     //读取用户自定义配置
     _init.prepareUserEnv(program.workspace);
     let packageJSON = _project.getProjectPackageJSON();
+    let saveAsDev = program.dev;
     //如果指定了项目
     /* istanbul ignore if  */
     if (program.pluginListName) {
         _initUtils.getRemoteServerProjectPluginConfig(program.pluginListName, (pluginConfig) => {
             _plugin.writePluginConfigToConfigFile(pluginConfig);
-            _plugin.install(Object.keys(pluginConfig), program.registry, finish);
+            _plugin.install(Object.keys(pluginConfig), program.registry, saveAsDev, finish);
         });
     }
     else if (plugins.length) {
         //写入到package.json
         let pluginConfig = {};
         plugins.forEach((pluginName) => {
-            pluginConfig[_plugin.getFullPluginName(pluginName)] = {};
+            pluginConfig[_plugin.getFullPluginName(pluginName)] = _plugin.getPluginConfig(pluginName);
         });
         _plugin.writePluginConfigToConfigFile(pluginConfig);
-        _plugin.install(plugins, program.registry, finish);
+        _plugin.install(plugins, program.registry, saveAsDev, finish);
     }
     else {
         //没有指定，安装所有
         let pluginConfig = config_filed_constant_1.default.getPluginConfig();
         let pluginNameArr = [];
-        let versionDependencies = _project.getProjectPackageJSONField('dependencies');
+        let versionDependencies = _project.getProjectPackageJSONField('dependencies') || _project.getProjectPackageJSONField('dev-dependencies');
         Object.keys(pluginConfig).forEach((key) => {
             if (pluginConfig[key] == false) {
                 log_1.default.info(`插件${key}已被禁用， 跳过安装`);
@@ -55,7 +56,7 @@ function execute(plugins, program, finish) {
         if (pluginNameArr.length == 0) {
             return console.log('所有依赖已全部安装。');
         }
-        _plugin.install(pluginNameArr, program.registry, finish);
+        _plugin.install(pluginNameArr, program.registry, saveAsDev, finish);
     }
 }
 exports.execute = execute;
@@ -68,6 +69,7 @@ function commander(_commander) {
         .option('-p, --pluginListName <value>', '根据插件列表名称获取插件列表')
         .option('-f, --force', '强制重新安装')
         .option('-r, --registry <value>', "指定插件的仓库地址")
+        .option('-d, --dev', '以开发模式安装插件，用于开发js css lib 库')
         .action((plugins, program) => {
         execute(plugins, program, (error) => {
             if (error) {

@@ -15,3 +15,5 @@ const writePluginConfigToConfigFile_1 = require("./writePluginConfigToConfigFile
 exports.writePluginConfigToConfigFile = writePluginConfigToConfigFile_1.default;
 const getInstalledPluginVersion_1 = require("./getInstalledPluginVersion");
 exports.getInstalledPluginVersion = getInstalledPluginVersion_1.default;
+const getPluginConfig_1 = require("./getPluginConfig");
+exports.getPluginConfig = getPluginConfig_1.default;

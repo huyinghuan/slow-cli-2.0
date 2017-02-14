@@ -145,6 +145,9 @@ build:initial > build:willBuild >  build:doCompile > build:didCompile >  ?build:
 
 
 ## 更新
+v2.1.3
+  修复升级插件时，已有插件配置被清空bug
+
 v2.1.2
   修复依赖检查忽略了dev依赖的bug
 
