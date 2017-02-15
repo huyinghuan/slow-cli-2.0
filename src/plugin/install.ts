@@ -7,13 +7,13 @@ import _getFullPluginName from './getFullPluginName';
 import _configFiledConstant from '../config-filed-constant';
 const _registry = "http://npm.hunantv.com";
 
-function installPlugin(pluginName, registry, saveAsDev, cb){
+function installPlugin(pluginName, registry, saveAsProduct, cb){
   if(registry == "taobao"){
     registry = "https://registry.npm.taobao.org"
   }
-  let saveInfo = "--save --save-exact"
-  if(saveAsDev){
-    saveInfo = "--save-dev --save-exact"
+  let saveInfo = "--save-dev --save-exact"
+  if(saveAsProduct){
+    saveInfo = "--save --save-exact"
   }
   registry = registry || _project.getProjectPackageJSONField('__registry') || _registry;
   console.log(`npm install ${pluginName}  ${saveInfo} --registry ${registry}`)

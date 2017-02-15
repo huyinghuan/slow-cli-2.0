@@ -145,6 +145,10 @@ build:initial > build:willBuild >  build:doCompile > build:didCompile >  ?build:
 
 
 ## 更新
+
+v2.1.4
+  安装插件时，默认安装到`dev-dependencies`
+
 v2.1.3
   修复升级插件时，已有插件配置被清空bug
 

@@ -21,7 +21,7 @@ function execute(program) {
         preparePrerequisiteDir_1.default();
         console.log('更新配置文件完成...');
         console.log('开始安装插件...');
-        _plugin.install(pluginVersionList, program.registry, program.dev, (error) => {
+        _plugin.install(pluginVersionList, program.registry, program.save, (error) => {
             if (error) {
                 console.log(error);
                 console.log("安装失败");
@@ -40,7 +40,7 @@ function commander(_commander) {
         .option('-w, --workspace <value>', '指定工作目录')
         .option('-f, --fix', '修复相关配置文件')
         .option('-r, --registry <value>', "指定插件的仓库地址")
-        .option('-d, --dev', '以开发模式安装插件，用于开发js css lib 库')
+        .option('-s, --save', '以产品模式安装插件，用于开发js css lib 库')
         .action(execute);
 }
 exports.commander = commander;
