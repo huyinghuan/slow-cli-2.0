@@ -145,6 +145,8 @@ build:initial > build:willBuild >  build:doCompile > build:didCompile >  ?build:
 
 
 ## 更新
+v2.1.5
+  windows安装成功，但无法使用错误
 
 v2.1.4
   安装插件时，默认安装到`dev-dependencies`

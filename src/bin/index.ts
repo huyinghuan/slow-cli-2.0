@@ -1,5 +1,5 @@
-#!/bin/sh
-':' //; exec node --harmony "$0" "$@";
+#!/usr/bin/env node --harmony
+//':' //; exec node --harmony "$0" "$@";
 import * as _commander from 'commander';
 import * as _start from './start';
 import * as _init from './init'
