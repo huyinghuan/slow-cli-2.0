@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _hookMap = require("./map");
 function default_1(route) {
     let queue = _hookMap.HookQueue[_hookMap.build.serverFilter] || [];
@@ -10,5 +11,4 @@ function default_1(route) {
         queue[i].fn(route);
     }
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _project = require("../project");
 const _path = require("path");
 const config_filed_constant_1 = require("../config-filed-constant");
@@ -65,5 +66,4 @@ function default_1(needAppointVersion) {
     }
     return isMatch;
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

@@ -1,5 +1,6 @@
 #!/usr/bin/env node --harmony
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _commander = require("commander");
 const _start = require("./start");
 const _init = require("./init");

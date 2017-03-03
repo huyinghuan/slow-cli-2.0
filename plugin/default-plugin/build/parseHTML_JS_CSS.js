@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _fs = require("fs");
 exports.registerPlugin = function (cli, options) {
     cli.registerHook('build:doCompile', (buildConfig, data, content, cb) => {

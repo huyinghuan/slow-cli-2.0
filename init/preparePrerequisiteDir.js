@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const config_filed_constant_1 = require("../config-filed-constant");
 const _fs = require("fs-extra");
 const _path = require("path");
@@ -8,5 +9,4 @@ function default_1() {
         _fs.mkdirpSync(_path.join(configFiledConstant.environmentRootDir, prerequisite));
     });
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _fs = require("fs-extra");
 const _async = require("async");
 const _path = require("path");
@@ -28,5 +29,4 @@ function default_1(buildConfig, fileQueue, next) {
         next(error, buildConfig);
     });
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

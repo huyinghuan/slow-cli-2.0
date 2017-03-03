@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _project = require("../project");
 const executeCommand_1 = require("../lib/executeCommand");
 const log_1 = require("../lib/log");
@@ -33,5 +34,4 @@ function default_1(pluginList, registry, saveAsDev, finish) {
     });
     installPlugin(beInstallPluginList.join(' '), registry, saveAsDev, finish);
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

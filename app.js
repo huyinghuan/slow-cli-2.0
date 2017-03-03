@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _express = require("express");
 const _http = require("http");
 const _async = require("async");
@@ -9,7 +10,6 @@ const getMime_1 = require("./lib/getMime");
 const config_filed_constant_1 = require("./config-filed-constant");
 const _plugin = require("./plugin/index");
 const log_1 = require("./lib/log");
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 启动静态服务
  */

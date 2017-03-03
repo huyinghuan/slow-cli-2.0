@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /**定义http response 即将响应完之后的hook */
 const _hookMap = require("./map");
 const _ = require("lodash");
@@ -18,5 +19,4 @@ function default_1(req) {
     };
     next();
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

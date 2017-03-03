@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _express = require("express");
 const _path = require("path");
 const _hook = require("../hooks/index");
@@ -128,5 +129,4 @@ function default_1(prepareFn) {
     });
     return buildServer();
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

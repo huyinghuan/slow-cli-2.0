@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _ = require("lodash");
 const registerHook_1 = require("../hooks/registerHook");
 const registerHookExt_1 = require("../hooks/registerHookExt");
@@ -66,5 +67,4 @@ function loadPlugin(hookType, pluginName, pluginPath, options) {
         process.exit(1);
     }
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = loadPlugin;

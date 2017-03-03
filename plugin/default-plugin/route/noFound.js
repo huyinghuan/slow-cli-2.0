@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _path = require("path");
 const _ = require("lodash");
 const _fs = require("fs");

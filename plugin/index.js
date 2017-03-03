@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const getFullPluginName_1 = require("./getFullPluginName");
 exports.getFullPluginName = getFullPluginName_1.default;
 const scanPlugins_1 = require("./scanPlugins");

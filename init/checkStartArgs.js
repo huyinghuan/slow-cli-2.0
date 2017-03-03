@@ -1,6 +1,7 @@
 /**
  *校验build参数 */
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const config_filed_constant_1 = require("../config-filed-constant");
 function checkPort() {
     let port = ~~config_filed_constant_1.default.getGlobal('port');
@@ -17,5 +18,4 @@ function checkPort() {
 function default_1() {
     return checkPort();
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function default_1(value) {
     if (!value) {
         return {};
@@ -17,5 +18,4 @@ function default_1(value) {
     });
     return params;
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

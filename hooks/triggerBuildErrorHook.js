@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _ = require("lodash");
 const _hookMap = require("./map");
 function default_1(error) {
@@ -14,5 +15,4 @@ function default_1(error) {
     };
     next(error);
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

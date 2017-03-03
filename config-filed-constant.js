@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _path = require("path");
 const _ = require("lodash");
 /**
@@ -97,5 +98,4 @@ class ConstantFiled {
         return this.globalVar.pluginsConfig;
     }
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = new ConstantFiled();

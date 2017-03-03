@@ -1,6 +1,7 @@
 /**
  *校验build参数 */
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _path = require("path");
 const config_filed_constant_1 = require("../config-filed-constant");
 function default_1() {
@@ -21,5 +22,4 @@ function default_1() {
     config_filed_constant_1.default.setBuildParams({ outdir: outdir, outRelativeDir: outRelativeDir });
     return true;
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

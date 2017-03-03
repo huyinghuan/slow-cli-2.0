@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _fs = require("fs-extra");
 const _async = require("async");
 const _hook = require("../hooks/index");
@@ -76,5 +77,4 @@ function default_1(buildConfig, data, next) {
         next(error);
     });
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

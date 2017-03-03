@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _ = require("lodash");
 const _hookMap = require("./map");
 //排序 升序 越小先执行
@@ -19,5 +20,4 @@ function default_1(hookName, callback, priority) {
     //排序
     sortHook(hookName);
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

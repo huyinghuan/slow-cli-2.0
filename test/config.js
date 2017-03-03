@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _assert = require("assert");
 const _color = require('colors');
 const log_1 = require("../lib/log");

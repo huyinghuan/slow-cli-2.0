@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _project = require("../project");
 const config_filed_constant_1 = require("../config-filed-constant");
 /**
@@ -28,5 +29,4 @@ function default_1() {
     };
     return result;
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

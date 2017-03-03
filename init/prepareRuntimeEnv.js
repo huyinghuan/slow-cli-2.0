@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const config_filed_constant_1 = require("../config-filed-constant");
 const _path = require("path");
 function default_1(value) {
@@ -8,5 +9,4 @@ function default_1(value) {
         enviromentDir: _path.join(config_filed_constant_1.default.get().environmentRootDir, value)
     });
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

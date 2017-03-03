@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const generatorDefaultConfig_1 = require("./generatorDefaultConfig");
 const config_filed_constant_1 = require("../config-filed-constant");
 const _fs = require("fs-extra");
@@ -28,5 +29,4 @@ function prepareUserEnv(workspace, pure) {
     config_filed_constant_1.default.setGlobal({ pluginsConfig: config[configFiledConstant.pluginConfigField] });
     config_filed_constant_1.default.setGlobal({ buildConfig: config[configFiledConstant.buildField] || defaultConfig[configFiledConstant.buildField] });
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = prepareUserEnv;

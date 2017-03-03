@@ -1,4 +1,5 @@
 'use strict';
+Object.defineProperty(exports, "__esModule", { value: true });
 const _fs = require("fs");
 const _ = require("lodash");
 exports.registerPlugin = (cli, options) => {

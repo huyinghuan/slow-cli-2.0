@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _hookMap = require("./map");
 /**
 *触发RouterHook, 可用于自定义路由操作
@@ -17,5 +18,4 @@ function default_1(router) {
     }
     return false;
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

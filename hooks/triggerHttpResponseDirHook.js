@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _hookMap = require("./map");
 const _async = require("async");
 const _hanlebars = require("handlebars");
@@ -55,5 +56,4 @@ function default_1(path, callback) {
         }
     });
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

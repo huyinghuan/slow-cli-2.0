@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const generatorDefaultConfig_1 = require("./generatorDefaultConfig");
 exports.generatorDefaultConfig = generatorDefaultConfig_1.default;
 const getRemoteServerProjectPluginConfig_1 = require("./getRemoteServerProjectPluginConfig");

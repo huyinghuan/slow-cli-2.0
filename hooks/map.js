@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.route = {
     notFound: 'route:notFound',
     initial: 'route:initial',

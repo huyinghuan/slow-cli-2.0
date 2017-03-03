@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _build = require("../bin/build");
 const buildProcess_1 = require("../build/buildProcess");
 const _assert = require("assert");

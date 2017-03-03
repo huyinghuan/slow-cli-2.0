@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _fs = require("fs-extra");
 const _path = require("path");
 const _ = require("lodash");
@@ -75,5 +76,4 @@ function default_1(filename, asString) {
     });
     return normalBase;
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const log_1 = require("../lib/log");
 const _initUtils = require("../init/index");
 const _plugin = require("../plugin/index");
@@ -26,6 +27,7 @@ function execute(plugins, program, finish) {
             pluginConfig[_plugin.getFullPluginName(pluginName)] = _plugin.getPluginConfig(pluginName);
         });
         _plugin.writePluginConfigToConfigFile(pluginConfig);
+        console.log(pluginConfig);
         _plugin.install(plugins, program.registry, saveAsProduct, finish);
     }
     else {

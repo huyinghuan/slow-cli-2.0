@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const triggerHttpCompilerHook_1 = require("./triggerHttpCompilerHook");
 exports.triggerHttpCompilerHook = triggerHttpCompilerHook_1.default;
 const triggerHttpRouterHook_1 = require("./triggerHttpRouterHook");

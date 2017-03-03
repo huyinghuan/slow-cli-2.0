@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _path = require("path");
 const config_filed_constant_1 = require("../config-filed-constant");
 const getFullPluginName_1 = require("./getFullPluginName");
@@ -75,5 +76,4 @@ function scanPlugins(hookType) {
     //内置插件
     scanDefaultPlugins(hookType);
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = scanPlugins;

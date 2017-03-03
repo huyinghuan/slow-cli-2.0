@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _ = require("lodash");
 const _hookMap = require("./map");
 /**
@@ -20,5 +21,4 @@ function default_1(req, data, callback) {
     };
     next(null, null);
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

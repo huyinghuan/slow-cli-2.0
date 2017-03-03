@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _hookMap = require("./map");
 /**
  * route:noFound
@@ -10,5 +11,4 @@ function default_1(req, resp, cb) {
     }
     queue[0].fn(req, resp, cb);
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

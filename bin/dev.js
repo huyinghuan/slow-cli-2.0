@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _init = require("../init/index");
 const _project = require("../project");
 const _fse = require("fs-extra");

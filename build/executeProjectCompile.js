@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _async = require("async");
 const _fs = require("fs-extra");
 const getAllFileInProject_1 = require("../lib/getAllFileInProject");
@@ -51,5 +52,4 @@ function default_1(buildConfig, finish) {
         finish(error);
     });
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _async = require("async");
 const _hook = require("../hooks/index");
 const _plugin = require("../plugin/index");
@@ -53,5 +54,4 @@ function default_1(prepareFn, finish, needLoadPlugin) {
         });
     });
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

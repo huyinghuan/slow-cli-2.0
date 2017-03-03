@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const config_filed_constant_1 = require("../config-filed-constant");
 const _fs = require("fs-extra");
 const _path = require("path");
@@ -11,5 +12,4 @@ function default_1(pluginName) {
     let packageJson = _fs.readJSONSync(_path.join(pluginRootDir, pluginName, 'package.json'));
     return packageJson['version'] || -1;
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;

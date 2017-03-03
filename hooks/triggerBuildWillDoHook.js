@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const _hookMap = require("./map");
 const _async = require("async");
 function default_1(buildConfig, callback) {
@@ -15,5 +16,4 @@ function default_1(buildConfig, callback) {
         callback(error, buildConfig);
     });
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;
