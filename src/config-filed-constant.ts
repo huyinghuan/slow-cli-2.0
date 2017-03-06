@@ -17,13 +17,15 @@ class ConstantFiled {
   private environmentRootDir = _path.join(this.cwd, `.${this.infinity}`);
   private prerequisiteEnvironment = ['production', 'develop', 'normal'];
   private normalEnviromentDir = _path.join(this.cwd, `.${this.infinity}`, 'normal');
+  private pubModulesDir = `${this.infinity}-pubModulesDir`
   //存储全局变量
   private globalVar:any = {
     index: "index.html",
     autoindex: false,
     port: 14422,
     buildConfig: {},
-    pluginsConfig:{}
+    pluginsConfig:{},
+    pubModulesDir: "node_modules"
   };
   constructor(){}
   getWorkspace(){return this.cwd}
@@ -49,7 +51,8 @@ class ConstantFiled {
       buildField: this.buildField, //build 相关配置】//silky-build
       environmentRootDir: this.environmentRootDir,
       prerequisiteEnvironment: this.prerequisiteEnvironment,
-      normalEnviromentDir: this.normalEnviromentDir
+      normalEnviromentDir: this.normalEnviromentDir,
+      pubModulesDir: this.pubModulesDir
     }
   }
 

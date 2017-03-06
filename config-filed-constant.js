@@ -18,13 +18,15 @@ class ConstantFiled {
         this.environmentRootDir = _path.join(this.cwd, `.${this.infinity}`);
         this.prerequisiteEnvironment = ['production', 'develop', 'normal'];
         this.normalEnviromentDir = _path.join(this.cwd, `.${this.infinity}`, 'normal');
+        this.pubModulesDir = `${this.infinity}-pubModulesDir`;
         //存储全局变量
         this.globalVar = {
             index: "index.html",
             autoindex: false,
             port: 14422,
             buildConfig: {},
-            pluginsConfig: {}
+            pluginsConfig: {},
+            pubModulesDir: "node_modules"
         };
     }
     getWorkspace() { return this.cwd; }
@@ -51,7 +53,8 @@ class ConstantFiled {
             buildField: this.buildField,
             environmentRootDir: this.environmentRootDir,
             prerequisiteEnvironment: this.prerequisiteEnvironment,
-            normalEnviromentDir: this.normalEnviromentDir
+            normalEnviromentDir: this.normalEnviromentDir,
+            pubModulesDir: this.pubModulesDir
         };
     }
     //全局变量

@@ -31,7 +31,7 @@ export default function (needAppointVersion?:boolean):any{
 
   let packageJSON = _project.getProjectPackageJSON();
   let dependencies = packageJSON["dependencies"];
-  let devDependencies = packageJSON["dev-dependencies"]
+  let devDependencies = packageJSON["devDependencies"]
   if(pluginList.length == 0){
     return true;
   }

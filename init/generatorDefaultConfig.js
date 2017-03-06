@@ -23,6 +23,7 @@ function default_1() {
     result[configFiledConstant.infinity] = {
         port: 14422, index: 'index.html', autoindex: true
     };
+    result[configFiledConstant.pubModulesDir] = "node_modules";
     result[configFiledConstant.buildField] = {
         outdir: './build',
         ignore: ["node_modules", "(\\/\\.[^/]+)$"],

@@ -48,13 +48,19 @@ export default function scanPlugins(hookType:string){
   let pluginExts = [];
 
   Object.keys(pluginsConfig).forEach((key)=>{
+    //忽略配置
     if(/^(__)/.test(key)){
       return;
     }
-    if(/(\-ext)$/.test(key)){
+    //插件扩展
+    if(/^sp\-.+(\-ext)$/.test(key)){
       pluginExts.push(key)
-    }else{
+      return
+    }
+    //插件
+    if(/^sp-.+/.test(key)){
       plugins.push(key)
+      return
     }
   })
   //插件扩展优先加载，使得调用注册插件时，可以灵活使用。

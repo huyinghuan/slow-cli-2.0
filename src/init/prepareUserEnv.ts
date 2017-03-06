@@ -26,4 +26,5 @@ export default function prepareUserEnv(workspace, pure?:boolean){
   _configFiledConstant.setGlobal(config[configFiledConstant.infinity] || defaultConfig[configFiledConstant.infinity]);
   _configFiledConstant.setGlobal({pluginsConfig: config[configFiledConstant.pluginConfigField]});
   _configFiledConstant.setGlobal({buildConfig: config[configFiledConstant.buildField] || defaultConfig[configFiledConstant.buildField]});
+  _configFiledConstant.setGlobal({pubModulesDir: config[configFiledConstant.pubModulesDir]})
 }

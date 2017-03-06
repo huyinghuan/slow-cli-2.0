@@ -27,14 +27,13 @@ function execute(plugins, program, finish) {
             pluginConfig[_plugin.getFullPluginName(pluginName)] = _plugin.getPluginConfig(pluginName);
         });
         _plugin.writePluginConfigToConfigFile(pluginConfig);
-        console.log(pluginConfig);
         _plugin.install(plugins, program.registry, saveAsProduct, finish);
     }
     else {
         //没有指定，安装所有
         let pluginConfig = config_filed_constant_1.default.getPluginConfig();
         let pluginNameArr = [];
-        let versionDependencies = _project.getProjectPackageJSONField('dependencies') || _project.getProjectPackageJSONField('dev-dependencies') || {};
+        let versionDependencies = _project.getProjectPackageJSONField('dependencies') || _project.getProjectPackageJSONField('devDependencies') || {};
         Object.keys(pluginConfig).forEach((key) => {
             if (pluginConfig[key] == false) {
                 log_1.default.info(`插件${key}已被禁用， 跳过安装`);

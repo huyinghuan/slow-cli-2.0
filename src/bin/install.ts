@@ -33,7 +33,7 @@ export function execute(plugins, program, finish){
     //没有指定，安装所有
     let pluginConfig = _configFiledConstant.getPluginConfig();
     let pluginNameArr = [];
-    let versionDependencies = _project.getProjectPackageJSONField('dependencies') || _project.getProjectPackageJSONField('dev-dependencies') || {}
+    let versionDependencies = _project.getProjectPackageJSONField('dependencies') || _project.getProjectPackageJSONField('devDependencies') || {}
 
     Object.keys(pluginConfig).forEach((key)=>{
       if(pluginConfig[key] == false){
