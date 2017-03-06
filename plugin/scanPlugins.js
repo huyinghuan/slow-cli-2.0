@@ -75,7 +75,9 @@ function scanPlugins(hookType) {
         let pluginPath = getDevPluginPath(pluginsConfig[pluginName].__source) || _path.join(configFiledConstant.pluginDir, getFullPluginName_1.default(pluginName));
         let __loadStart = Date.now();
         loadPlugin_1.default(hookType, pluginName, pluginPath, pluginsConfig[pluginName]);
-        log_1.default.info(`加载 ${pluginName} 用时 ${Date.now() - __loadStart}ms`);
+        if (pluginsConfig[pluginName].__stop != true) {
+            log_1.default.info(`加载 ${pluginName} 用时 ${Date.now() - __loadStart}ms`);
+        }
     });
     log_1.default.info(`加载插件用时 ${Date.now() - __startTime}ms`);
     //内置插件

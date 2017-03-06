@@ -145,6 +145,12 @@ build:initial > build:willBuild >  build:doCompile > build:didCompile >  ?build:
 
 
 ## 更新
+v2.1.8
+  1. 增加一些插件工具函数
+
+v2.1.7
+  无
+
 v2.1.6
   1. 新增公共组件库支持。
   2. 修复读取 package.json 开发依赖错误

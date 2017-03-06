@@ -7,6 +7,49 @@ import _log from '../lib/log';
 import * as _hookMap from '../hooks/map';
 import * as _runtime from '../runtime-enviroment/index';
 import _configFiledConstant from '../config-filed-constant';
+import * as _path from 'path'
+import * as _fs from 'fs'
+
+function registerHook(hookType: string, pluginName: string){
+  return (hookName:string, callback:_allDefined.CallBack, priority?:number)=>{
+    if(hookName.indexOf(hookType) == 0 || hookType == 'all'){
+      priority = ~~priority > 0 ? ~~priority : 1;
+      _registerHook(hookName, callback, priority);
+      if(pluginName){
+        _log.success(`加载插件${pluginName}'s hook  ${hookName} 成功! priority:${priority}`.blue)
+      }
+      return
+    }
+  }
+}
+
+function getWorkspace(){
+  return _configFiledConstant.getWorkspace()
+}
+
+function getPublicLibIndex(moduleName){
+  let pubModulesDir = _configFiledConstant.getGlobal().pubModulesDir
+  let moduleRootAbsolute = _path.join(_configFiledConstant.getWorkspace(), pubModulesDir, moduleName)
+  let packageJSON = require(_path.join(moduleRootAbsolute, "package.json"));
+  let index = packageJSON.index
+  if(index){
+    return index
+  }
+  let files = _fs.readdirSync(moduleRootAbsolute)
+  for(let i = 0, len = files.length; i < len; i++){
+    if(/^index\./.test(files[i])){
+      index = files[i]
+      break
+    }
+  }
+  return index
+}
+
+function getPublicLibDir(moduleName){
+  let pubModulesDir = _configFiledConstant.getGlobal().pubModulesDir
+  return _path.join(pubModulesDir, moduleName)
+}
+
 /**
  * 加载指定类型hooks
  * hookType  hook类型，如start只用到了route 类型， build只用了build类型， 加载所有用 all
@@ -29,21 +72,14 @@ export default function loadPlugin(hookType:string, pluginName:string, pluginPat
     //默认权重 加载插件
     if(_.isFunction(plugin.registerPlugin)){
       plugin.registerPlugin({
-        registerHook: (hookName:string, callback:_allDefined.CallBack, priority?:number)=>{
-          if(hookName.indexOf(hookType) == 0 || hookType == 'all'){
-            priority = ~~priority > 0 ? ~~priority : 1;
-            _registerHook(hookName, callback, priority);
-            if(pluginName){
-              _log.success(`加载插件${pluginName}'s hook  ${hookName} 成功! priority:${priority}`.blue)
-            }
-            return
-          }
-        },
+        registerHook: registerHook(hookType, pluginName),
         ext: _hookMap.HookExtQueue,
         options: _configFiledConstant.getGlobal(),
         utils: _utils, //一些默认工具函数，大多插件可以使用得到
         log: _log,
-        cwd: ()=>{return _configFiledConstant.getWorkspace()},
+        cwd: getWorkspace,
+        getPublicLibIndex: getPublicLibIndex,
+        getPublicLibDir: getPublicLibDir,
         runtime: _runtime
       }, options)
     }
@@ -57,7 +93,7 @@ export default function loadPlugin(hookType:string, pluginName:string, pluginPat
         options: _configFiledConstant.getGlobal(),
         utils: _utils, //一些默认工具函数，大多插件可以使用得到
         log: _log,
-        cwd: ()=>{return _configFiledConstant.getWorkspace()}
+        cwd: getWorkspace,
       }, options)
     }
 
