@@ -41,7 +41,7 @@ for [silky build](docs/user-command-build.md)
 ...
 silky-build:{
   outdir: './build', //配置编译文件输出目录，⚠️ 注意 ⚠️ build之前会先清空该文件夹。
-  ignore: ["node_modules", "(\\/\\.[^/]+)$"] //编译跳过这些文件。 适用正则表达式的字符串
+  ignore: ["node_modules", "(\\/\\.[^/]+)$"] //编译跳过这些文件。 适用正则表达式的字符串。 所有平台下（包含windows）,路径分割符在写正则时都使用 '/' 不使用 '\'
 }
 ...
 ```
@@ -145,6 +145,9 @@ build:initial > build:willBuild >  build:doCompile > build:didCompile >  ?build:
 
 
 ## 更新
+v2.2.0 
+  1. 修复 在windows 下不能正确忽略 文件等bug
+
 v2.1.8
   1. 增加一些插件工具函数
 
