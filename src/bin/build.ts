@@ -72,7 +72,14 @@ export function commander(_commander){
     .option('-p, --port <value>', '仅当存在-h选项时，该配置起作用，用来指定http server端口，默认为 14423')
     .allowUnknownOption()
     .action((program)=>{
-      execute(program, ()=>{process.exit(1)})
+      execute(program, (error)=>{
+        if(error){
+          process.exit(1)
+        }else{
+           process.exit(0)
+        }
+        
+      })
     })
 }
 

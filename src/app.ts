@@ -36,11 +36,11 @@ export default ()=>{
 
       switch(resp.statusCode){
         case 200:
-        case 304 : console.log(msg.grey); break;
+        case 304 : _log.info(msg.grey); break;
         case 401:
         case 403:
         case 404:
-        case 500:  console.log(msg.red); break;
+        case 500:  _log.error(msg.red); break;
         default:
           console.log(msg.gray);
       }

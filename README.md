@@ -145,6 +145,9 @@ build:initial > build:willBuild >  build:doCompile > build:didCompile >  ?build:
 
 
 ## 更新
+v2.2.1
+  1. 修复 build成功 退出码不正确的bug
+
 v2.2.0 
   1. 修复 在windows 下不能正确忽略 文件等bug
 
