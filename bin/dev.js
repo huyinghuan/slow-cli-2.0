@@ -24,7 +24,7 @@ function changeToProduction(pluginConfig) {
         if (key.indexOf('__') == 0) {
             return;
         }
-        newPluginConfig[key] = pluginConfig[key].__setting;
+        newPluginConfig[key] = pluginConfig[key].__setting || {};
     });
     return newPluginConfig;
 }

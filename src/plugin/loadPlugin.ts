@@ -31,7 +31,7 @@ function getPublicLibIndex(moduleName){
   let pubModulesDir = _configFiledConstant.getGlobal().pubModulesDir
   let moduleRootAbsolute = _path.join(_configFiledConstant.getWorkspace(), pubModulesDir, moduleName)
   let packageJSON = require(_path.join(moduleRootAbsolute, "package.json"));
-  let index = packageJSON.index
+  let index = packageJSON.main
   if(index){
     return index
   }

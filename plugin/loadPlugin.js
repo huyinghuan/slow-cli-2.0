@@ -29,7 +29,7 @@ function getPublicLibIndex(moduleName) {
     let pubModulesDir = config_filed_constant_1.default.getGlobal().pubModulesDir;
     let moduleRootAbsolute = _path.join(config_filed_constant_1.default.getWorkspace(), pubModulesDir, moduleName);
     let packageJSON = require(_path.join(moduleRootAbsolute, "package.json"));
-    let index = packageJSON.index;
+    let index = packageJSON.main;
     if (index) {
         return index;
     }
