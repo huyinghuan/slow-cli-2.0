@@ -19,6 +19,10 @@ function shouldInclude(filename, filepath):boolean{
   //需要忽略掉文件
   const buildIgnore:Array<string> = _buildConfig.ignore;
   for(let i = 0, length = buildIgnore.length; i < length; i++){
+    if(filepath.indexOf(buildIgnore[i]) != -1){
+      return false
+    }
+    filepath = filepath.replace(/(\\)+/g, "/")
     if(new RegExp(buildIgnore[i]).test(filepath)){
       return false
     }
