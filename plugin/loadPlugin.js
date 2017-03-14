@@ -26,8 +26,7 @@ function getWorkspace() {
     return config_filed_constant_1.default.getWorkspace();
 }
 function getPublicLibIndex(moduleName) {
-    let pubModulesDir = config_filed_constant_1.default.getGlobal().pubModulesDir;
-    let moduleRootAbsolute = _path.join(config_filed_constant_1.default.getWorkspace(), pubModulesDir, moduleName);
+    let moduleRootAbsolute = _path.join(config_filed_constant_1.default.getWorkspace(), getPublicLibDir(moduleName));
     let packageJSON = require(_path.join(moduleRootAbsolute, "package.json"));
     let index = packageJSON.main;
     if (index) {
@@ -43,7 +42,14 @@ function getPublicLibIndex(moduleName) {
     return index;
 }
 function getPublicLibDir(moduleName) {
-    let pubModulesDir = config_filed_constant_1.default.getGlobal().pubModulesDir;
+    //查看改module是否存在于正式插件配置中， 如果存在，那么不是开发状态的组件，使用 node_modules默认组件目录 ，如果不存在，在去读取，组件的自定义目录配置。
+    let pubModulesDir = "";
+    if (config_filed_constant_1.default.getGlobal().pluginsConfig[moduleName]) {
+        pubModulesDir = "node_modules";
+    }
+    else {
+        pubModulesDir = config_filed_constant_1.default.getGlobal().pubModulesDir;
+    }
     return _path.join(pubModulesDir, moduleName);
 }
 /**

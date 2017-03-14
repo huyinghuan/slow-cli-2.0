@@ -18,7 +18,7 @@ class ConstantFiled {
         this.environmentRootDir = _path.join(this.cwd, `.${this.infinity}`);
         this.prerequisiteEnvironment = ['production', 'develop', 'normal'];
         this.normalEnviromentDir = _path.join(this.cwd, `.${this.infinity}`, 'normal');
-        this.pubModulesDir = `${this.infinity}-pubModulesDir`;
+        this.pubModulesDir = `${this.infinity}-pubPath`;
         //存储全局变量
         this.globalVar = {
             index: "index.html",

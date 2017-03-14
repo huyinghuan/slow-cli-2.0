@@ -28,6 +28,6 @@ function prepareUserEnv(workspace, pure) {
     config_filed_constant_1.default.setGlobal(config[configFiledConstant.infinity] || defaultConfig[configFiledConstant.infinity]);
     config_filed_constant_1.default.setGlobal({ pluginsConfig: config[configFiledConstant.pluginConfigField] });
     config_filed_constant_1.default.setGlobal({ buildConfig: config[configFiledConstant.buildField] || defaultConfig[configFiledConstant.buildField] });
-    config_filed_constant_1.default.setGlobal({ pubModulesDir: config[configFiledConstant.pubModulesDir] });
+    config_filed_constant_1.default.setGlobal({ pubModulesDir: config[configFiledConstant.pubModulesDir] || defaultConfig[configFiledConstant.pubModulesDir] });
 }
 exports.default = prepareUserEnv;

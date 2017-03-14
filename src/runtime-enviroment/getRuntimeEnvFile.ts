@@ -1,6 +1,7 @@
 import * as _fs from 'fs-extra';
 import * as _path from 'path';
 import * as _ from 'lodash'
+import _log from '../lib/log'
 import _configFiledConstant from '../config-filed-constant'
 /**
  * desc:
@@ -19,7 +20,7 @@ import _configFiledConstant from '../config-filed-constant'
 export default function(filename:string, asString?:boolean):any{
   let configFiledConstant = _configFiledConstant.get();
   if(!filename){
-    throw new Error(`获取文件名undefined`)
+    throw new Error(`环境文件定义名 undefined,请确保'function getRuntimeEnvFile()'传入正确的文件名`)
   }
   let env = _configFiledConstant.getEnviroment();
   let envFilepath = "";
@@ -34,7 +35,9 @@ export default function(filename:string, asString?:boolean):any{
   }
 
   if(envFilepath == "" && normalFilePath == ""){
-    throw new Error(`${filename} 文件未找到`)
+    //throw new Error(`${filename} 文件未找到`)
+    _log.warn(`⚠️提示:环境 ${env} 中不存在文件 ${filename}`)
+    return asString ? "" : {}
   }
 
   //作为文件内容读取顺序

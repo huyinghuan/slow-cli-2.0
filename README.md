@@ -145,6 +145,11 @@ build:initial > build:willBuild >  build:doCompile > build:didCompile >  ?build:
 
 
 ## 更新
+v2.2.4
+  1. 调用`getRuntimeEnvFile`时，当文件不存在时，由 错误抛出处理 改为 警告提示
+  2. 修复在未指明 自定义组件目录时，无法正确获默认组件目录bug
+  3. 修复开发组件时，同时引用了 开发中组件和正式组件 无法正确获取正式组件目录的bug
+
 v2.2.1
   1. 修复 build成功 退出码不正确的bug
 

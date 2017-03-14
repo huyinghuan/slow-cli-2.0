@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const _fs = require("fs-extra");
 const _path = require("path");
 const _ = require("lodash");
+const log_1 = require("../lib/log");
 const config_filed_constant_1 = require("../config-filed-constant");
 /**
  * desc:
@@ -20,7 +21,7 @@ const config_filed_constant_1 = require("../config-filed-constant");
 function default_1(filename, asString) {
     let configFiledConstant = config_filed_constant_1.default.get();
     if (!filename) {
-        throw new Error(`获取文件名undefined`);
+        throw new Error(`环境文件定义名 undefined,请确保'function getRuntimeEnvFile()'传入正确的文件名`);
     }
     let env = config_filed_constant_1.default.getEnviroment();
     let envFilepath = "";
@@ -33,7 +34,9 @@ function default_1(filename, asString) {
         normalFilePath = _path.join(configFiledConstant.normalEnviromentDir, filename);
     }
     if (envFilepath == "" && normalFilePath == "") {
-        throw new Error(`${filename} 文件未找到`);
+        //throw new Error(`${filename} 文件未找到`)
+        log_1.default.warn(`提示:环境 ${env} 中不存在文件 ${filename}`);
+        return asString ? "" : {};
     }
     //作为文件内容读取顺序
     if (asString) {
