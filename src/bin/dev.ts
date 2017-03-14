@@ -22,7 +22,11 @@ function changeToProduction(pluginConfig){
   let newPluginConfig =  {};
   Object.keys(pluginConfig).forEach((key)=>{
     if(key.indexOf('__') == 0){return}
-    newPluginConfig[key] =  pluginConfig[key].__setting || {}
+    if(pluginConfig[key].__source){
+       newPluginConfig[key] =  pluginConfig[key].__setting || {}
+    }else{
+      newPluginConfig[key] = pluginConfig[key]
+    }
   })
   return newPluginConfig
 }

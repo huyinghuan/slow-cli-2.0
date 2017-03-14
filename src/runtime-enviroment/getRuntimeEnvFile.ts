@@ -36,7 +36,7 @@ export default function(filename:string, asString?:boolean):any{
 
   if(envFilepath == "" && normalFilePath == ""){
     //throw new Error(`${filename} 文件未找到`)
-    _log.warn(`⚠️提示:环境 ${env} 中不存在文件 ${filename}`)
+    _log.warn(`⚠️提示:环境 ${env.enviroment} 中不存在文件 ${filename}`.yellow)
     return asString ? "" : {}
   }
 

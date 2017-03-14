@@ -35,7 +35,7 @@ function default_1(filename, asString) {
     }
     if (envFilepath == "" && normalFilePath == "") {
         //throw new Error(`${filename} 文件未找到`)
-        log_1.default.warn(`提示:环境 ${env} 中不存在文件 ${filename}`);
+        log_1.default.warn(`⚠️提示:环境 ${env.enviroment} 中不存在文件 ${filename}`.yellow);
         return asString ? "" : {};
     }
     //作为文件内容读取顺序

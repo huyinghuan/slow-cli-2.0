@@ -145,6 +145,12 @@ build:initial > build:willBuild >  build:doCompile > build:didCompile >  ?build:
 
 
 ## 更新
+v2.2.6
+  1. `getRuntimeEnvFile`提示信息不完整
+
+v2.2.5
+  1. 修复开发组件时，开发配置转正式环境配置插件配置丢失情况。涉及命令`silky dev`
+
 v2.2.4
   1. 调用`getRuntimeEnvFile`时，当文件不存在时，由 错误抛出处理 改为 警告提示
   2. 修复在未指明 自定义组件目录时，无法正确获默认组件目录bug
