@@ -29,5 +29,5 @@ export const plugin = {
   run: 'plugin:run'
 }
 
-export var HookQueue = [];
-export var HookExtQueue = [];
+export var HookQueue:object = {};
+export var HookExtQueue = {};

@@ -12,8 +12,9 @@ import * as _async from 'async';
 import _getGitHash from '../lib/getGitHash';
 import _executeProjectCompile from './executeProjectCompile'
 import _excuteFileCompile from './excuteFileCompile'
+import _unregisterHooks from '../hooks/unregisterHooks'
 
-const buildServer = function():_express.Express{
+const buildServer = function(prepareFn:Function):_express.Express{
   let app = _express()
   let router = _express.Router();
 
@@ -90,6 +91,19 @@ const buildServer = function():_express.Express{
     })
   });
 
+  router.get('/reloadHooks', (req, resp, next)=>{
+    prepareFn((hassError)=>{
+      if(hassError){
+        resp.status(500)
+        return resp.send({error: "初始化环境失败"})
+      }else{
+        _unregisterHooks();
+        _plugin.scanPlugins('build');
+        resp.sendStatus(200)
+      }
+    })    
+  })
+
   //编译所有
   router.get('/all', (req, resp)=>{
     let outdir = req.query.outdir;
@@ -125,7 +139,7 @@ const buildServer = function():_express.Express{
 }
 
 export default function(prepareFn:Function):_express.Express{
-  prepareFn()
+  prepareFn((hasError)=>{if(hasError){process.exit(1)}})
   //加载插件
   _plugin.scanPlugins('build');
   _hook.triggerBuildInitHook((error, stop)=>{
@@ -140,5 +154,5 @@ export default function(prepareFn:Function):_express.Express{
       return
     }
   })
-  return buildServer()
+  return buildServer(prepareFn)
 }

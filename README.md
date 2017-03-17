@@ -145,6 +145,10 @@ build:initial > build:willBuild >  build:doCompile > build:didCompile >  ?build:
 
 
 ## 更新
+
+v2.2.7
+  1. 支持build server 模式下 配置，插件 重新加载，避免重启
+
 v2.2.6
   1. `getRuntimeEnvFile`提示信息不完整
 

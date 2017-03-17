@@ -18,6 +18,7 @@
 -l --log #见 command-common-params.md
 -A --additional #见command-common-params.md
 -w --workspace #指定工作目录
+-s --httpServer #以server形式运行
 ```
 
 ### 查看选项帮助说明
@@ -39,4 +40,42 @@ silky build --help
   }
 }
 
+```
+
+### 以server形式运行build时，提供以下接口:
+
+#### 编译项目
+```
+ path: /all
+ method: get
+ query:  outdir  输出编译后的文件夹位置，必须指定
+
+ return
+   response code 200 编译完成
+   response code 非200 编译错误
+```
+
+#### 编译某个页面
+
+```
+  path: /sigle
+  method: get
+  query:  
+    filepath 需要编译等页面路径  必须   
+    outdir 输出文件夹位置 必须
+
+  return
+   response code 200 编译完成
+   response code 非200 编译错误
+```
+
+
+#### 重新加载插件【当项目的插件有更新时】
+
+```
+  path: /reloadHooks
+  method: get
+  return 
+    response code 200 加载插件成功
+    response code 非200 加载插件失败，或者校验插件失败
 ```

@@ -30,5 +30,5 @@ exports.build = {
 exports.plugin = {
     run: 'plugin:run'
 };
-exports.HookQueue = [];
-exports.HookExtQueue = [];
+exports.HookQueue = {};
+exports.HookExtQueue = {};

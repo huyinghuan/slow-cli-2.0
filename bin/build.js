@@ -7,16 +7,21 @@ const _plugin = require("../plugin/index");
 const extraParamsParse_1 = require("./extraParamsParse");
 const log_1 = require("../lib/log");
 const config_filed_constant_1 = require("../config-filed-constant");
-/**环境变量初始化 */
+/**环境变量初始化 ,是否存在错误，true 存在，false不存在*/
 function prepare(program) {
     //读取用户自定义配置
     _init.prepareUserEnv(program.workspace);
     _init.prepareRuntimeEnv(program.enviroment || "production");
     //build 强制进行版本检查
-    let checkResult = _project.checkCLIVersion() && _plugin.checkPluginVersion();
-    //如没有强制build项目，那么如果版本检查没通过则结束build
-    if (!program.force && !checkResult) {
-        process.exit(1);
+    let checkCLIResult = _project.checkCLIVersion();
+    let checPluginResult = _plugin.checkPluginVersion();
+    //如没有强制build项目，那么如果cli版本检查没通过则结束build
+    if (!program.force && !checkCLIResult) {
+        return true;
+    }
+    //强制build对plugin无效
+    if (!checPluginResult) {
+        return true;
     }
     //运行时参数记录
     let userInputArgs = {};
@@ -31,13 +36,16 @@ function prepare(program) {
     }
     //检查编译参数
     if (!_init.checkBuildArgs()) {
-        return process.exit(1);
+        return true;
     }
+    return false;
 }
 exports.prepare = prepare;
 //单独提出来时为了方便单元测试
 function getBuildServer(program) {
-    return _build.buildServer(function () { prepare(program); });
+    return _build.buildServer(function (errHandle) {
+        errHandle(prepare(program));
+    });
 }
 exports.getBuildServer = getBuildServer;
 function execute(program, finish) {
@@ -49,7 +57,11 @@ function execute(program, finish) {
         console.log(`Build Server listen at port ${port}`.green);
     }
     else {
-        _build.buildProcess(function () { prepare(program); }, finish);
+        _build.buildProcess(function () {
+            if (prepare(program)) {
+                process.exit(1);
+            }
+        }, finish);
     }
 }
 exports.execute = execute;
@@ -63,8 +75,8 @@ function commander(_commander) {
         .option('-e, --enviroment <value>', "运行时环境可选[develop, production，或其他] 默认production")
         .option('-l, --log <value>', 'log日志,( 0[defaul]: show all; 1: show error, fail; 2: show error, fail, warn)', (value) => { log_1.default.setLevel(value); })
         .option('-A, --additional <items>', '额外的参数，格式 -A A=1[,B=xxx] 或者指定唯一值  -A value', extraParamsParse_1.default)
-        .option('-h, --httpServer', '作为http server启动')
-        .option('-p, --port <value>', '仅当存在-h选项时，该配置起作用，用来指定http server端口，默认为 14423')
+        .option('-s, --httpServer', '作为http server启动')
+        .option('-p, --port <value>', '仅当存在-s选项时，该配置起作用，用来指定http server端口，默认为 14423')
         .allowUnknownOption()
         .action((program) => {
         execute(program, (error) => {

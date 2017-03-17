@@ -11,7 +11,8 @@ const _async = require("async");
 const getGitHash_1 = require("../lib/getGitHash");
 const executeProjectCompile_1 = require("./executeProjectCompile");
 const excuteFileCompile_1 = require("./excuteFileCompile");
-const buildServer = function () {
+const unregisterHooks_1 = require("../hooks/unregisterHooks");
+const buildServer = function (prepareFn) {
     let app = _express();
     let router = _express.Router();
     router.all(/^\/((single)|(all)).?/, (req, resp, next) => {
@@ -81,6 +82,19 @@ const buildServer = function () {
             }
         });
     });
+    router.get('/reloadHooks', (req, resp, next) => {
+        prepareFn((hassError) => {
+            if (hassError) {
+                resp.status(500);
+                return resp.send({ error: "初始化环境失败" });
+            }
+            else {
+                unregisterHooks_1.default();
+                _plugin.scanPlugins('build');
+                resp.sendStatus(200);
+            }
+        });
+    });
     //编译所有
     router.get('/all', (req, resp) => {
         let outdir = req.query.outdir;
@@ -112,7 +126,9 @@ const buildServer = function () {
     return app;
 };
 function default_1(prepareFn) {
-    prepareFn();
+    prepareFn((hasError) => { if (hasError) {
+        process.exit(1);
+    } });
     //加载插件
     _plugin.scanPlugins('build');
     _hook.triggerBuildInitHook((error, stop) => {
@@ -127,6 +143,6 @@ function default_1(prepareFn) {
             return;
         }
     });
-    return buildServer();
+    return buildServer(prepareFn);
 }
 exports.default = default_1;
