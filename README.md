@@ -145,6 +145,8 @@ build:initial > build:willBuild >  build:doCompile > build:didCompile >  ?build:
 
 
 ## 更新
+v2.2.8
+  1. 修复linux下报错
 
 v2.2.7
   1. 支持build server 模式下 配置，插件 重新加载，避免重启

@@ -1,4 +1,4 @@
-#!/usr/bin/env node --harmony
+#!/usr/bin/env node
 //':' //; exec node --harmony "$0" "$@";
 import * as _commander from 'commander';
 import * as _start from './start';
