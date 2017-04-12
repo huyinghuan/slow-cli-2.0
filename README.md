@@ -145,6 +145,9 @@ build:initial > build:willBuild >  build:doCompile > build:didCompile >  ?build:
 
 
 ## 更新
+v2.3.0
+  1. 增加 安装插件时，展示安装进度信息
+
 v2.2.8
   1. 修复linux下报错
 
