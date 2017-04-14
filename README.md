@@ -3,24 +3,296 @@
 该版本为`silky`重构版。 该工具静态服务器部分基于`expressjs`实现,  编译过程 采用hook形式，在处理文件的不同阶段调用不同的hook.
 
 # 用户手册
-
 ## 安装
+### 【芒果TV内部版本】
+所有带`-g`参数的，linux或者mac请加 `sudo`
+
+```
+# 1. 确保npm 最新版本  npm --version  显示在3.x的可以忽略此步骤
+npm update -g npm
+# 2. 安装或者更新mgtv
+#如果mac安装失败  请 
+#sudo rm -rf /usr/local/lib/node_modules/.mgtv_npminstal
+#sudo rm -rf /usr/local/bin/mgtv
+#sudo rm -rf /usr/local/lib/node_modules/mgtv
+npm uninstall -g mgtv
+npm install -g mgtv  
+
+
+
+# 3. 安装新版silky
+mgtv -g install silky-reborn
+# 4. 检查是否安装成功, 显示2.x.x版本及以上即安装完成
+sr --version
+```
+### npm 公开版本
+
+```
+# 1. 确保npm 最新版本  npm --version  显示在3.x的可以忽略此步骤
+npm update -g npm
+# 3. 安装新版silky
+npm -g install silky-reborn
+# 4. 检查是否安装成功, 显示2.x.x版本及以上即安装完成
+sr --version
+```
 
 ## 启动命令及参数说明
 
-[silky start](docs/user-command-start.md)
+### init
 
-[silky build](docs/user-command-build.md)
+在一个空的文件夹中，需要建立一个silky项目，那么可以使用该命令进行初始化
 
-[silky init](docs/user-command-init.md)
+启动静态服务器. e.g.
 
-[silky check](docs/user-command-check.md)
+```shell
+ sr init
+```
+或者根据示例项目初始化项目
 
-[silky install](docs/user-command-install.md)
+```shell
+sr init -p MGUI
+#然后安装该项目的依赖
+sr install 
+```
 
-[silky config](docs/user-command-config.md)
+### 可选选项参数：
 
-## 配置文件可配置项
+```shell
+
+-p --projectName #指定根据某个项目初始化本项目
+-l --log #见 通用选项说明
+-w --workspace #指定工作目录 可选，默认为当前目录
+```
+
+### 查看选项帮助说明
+
+```
+sr init --help
+```
+
+
+### start
+
+启动静态服务器. e.g.
+
+```shell
+sr start -p 3002
+```
+
+#### 可选选项参数：
+
+```shell
+-p --port #指定运行端口
+-c --check #检测运行版本，和插件版本
+-e --enviroment #指定运行环境，使插件读取相应环境等配置 optional:【develop, production】
+-l --log #见 command-common-params.md
+-A --additional #见command-common-params.md
+-n --noConfig  #无配置文件运行
+-w --workspace #指定工作目录
+```
+
+#### 查看选项帮助说明
+
+```
+sr start --help
+```
+
+你也可以通过修改过对应的配置文件项目目录下 `package.json`的部分内容来替换每次都需要进行的设置(有些选项无法在package.json进行设置)：
+
+```js
+{
+  "xxx": "xxx",
+  "silky":{
+    "port": 14422, //对应 port
+    "index": "index.html", //首页
+    "autoindex": "true" //是否展示目录
+  }
+}
+```
+
+### build
+
+编译项目. e.g.:
+
+```shell
+ sr build -o ./build-test -f
+```
+
+#### 可选项参数：
+
+```shell
+
+#强制编译项目，当silky 版本，插件版本和 项目的package.json中所依赖的版本不同时，sr build会失败，这时需要使用-f参数
+-f --force 
+-o --outdir #输出路径 该参数不指定时，默认build到 ./build目录
+
+-l --log  #见 command-common-params.md #
+
+-w --workspace #指定工作目录 #默认为当前目录
+-s --httpServer #以server形式运行 #本地开发不重要，一般服务器启动
+
+-A --additional #见command-common-params.md #不重要，除非使用了特定插件，插件会进行说名
+```
+
+#### 查看选项帮助说明
+
+```
+sr build --help
+```
+
+你也可以通过修改过对应的配置文件项目目录下 `package.json`的部分内容来替换每次都需要进行的设置(有些选项无法在package.json进行设置)：
+
+已存在值为默认值。
+
+```js
+{
+  "xxx": "xxx",
+  "silky-build": {
+    "outdir": "./build", //默认输出目录 可以不用配置
+     "ignore": ["node_modules", "(\\/\\.[^/]+)$"] // ==> new RegExp(ArrayItem) 默认忽略以 . 开始的文件名
+  }
+}
+
+```
+
+### install
+
+安装项目插件 e.g.
+安装指定插件:
+```shell
+ sr install sp-proxy sp-merge
+```
+或者
+安装项目所有依赖插件
+```shell
+sr install
+```
+
+#### 可选选项参数：
+
+`-l --log` 详细见[common-command-common-params.md](common-command-common-params.md)
+`-p --pluginListName` 根据插件列表名称获取插件列表
+`-w --workspace` 指定工作目录
+`-s, --save`, 以正式依赖安装插件，用于开发js css lib 库, 安装的插件会保存到`dependencies`里面
+如果设置了`-p`,那么忽略其他安装选项。 如果指定了安装插件的具体名称，那么只安装指定插件， 如果既没有指定插件也没有制定插件列表名称，那么默认安装`silky-plugin`下配置的插件。
+
+#### 查看选项帮助说明
+```
+sr init --help
+```
+
+### sync
+
+同步项目配置文件 e.g.
+
+```shell
+ #下载本项目配置（读取package.json的name和version）
+ sr sync
+ #下载本项目某个版本配置
+ sr sync -v 1.0.0
+ #下载某个项目的某个配置的某个版本
+ sr sync -n test -v 1.0.0
+```
+
+#### 可选选项参数：
+
+```shell
+
+-u --url 配置服务器地址 #可选
+-w --workspace #可选 指定工作目录
+-n, --projectName #可选 项目名字
+-v, --version  #可选 项目版本
+```
+
+### up
+
+上传项目配置文件 e.g.
+
+```shell
+ #上传项目配置文件(未指定版本时，读取package.json的version版本)
+ sr up
+ #上传项目配置文件到某个版本(未指定版本时，读取package.json的version版本)
+ sr up -v 1.0.0
+ #上传项目配置文件到某个名称下面(未指定版本时，读取package.json的version版本)
+ sr up -n test
+ #上传项目配置文件到某个名称下面的摸个版本
+ sr config up -n test -v 1.0.0
+```
+
+## check
+
+检查工具版本和插件版本 e.g.
+
+```shell
+ sr check
+```
+
+### 可选选项参数：
+
+```shell
+-l --log #见 command-common-params.md
+-f --fix #修复silky 缺失的配置项，增加必备的文件夹, 安装缺失插件或者重新安装配置指定版本的插件
+-w --workspace #指定工作目录
+```
+
+### 查看选项帮助说明
+
+```
+silky check --help
+```
+
+#### 可选选项参数：
+
+```shell
+
+-u --url 配置服务器地址
+-w --workspace #指定工作目录
+```
+
+### 通用选项说明 start, build 等通用
+
+#### -l, --log
+
+log日志,打印silky运行时相关日志， 如果觉得信息过多可以使用该参数,
+
+( 0[默认]: show all; 1: show error, fail; 2: show error, fail, warn)
+
+```
+-l 0 显示所有类型的log
+
+-l 1 显示 error和fail
+
+-l 2 显示 error ，fail， warn
+
+```
+
+
+#### -A, --additional 不重要
+
+插件开发者灵活使用该参数。用户根据插件文档说明使用该参数
+
+```shell
+-A key=value[,key2=value2]
+#增加的编译参数为
+{
+  key: value,
+  key2: value2
+}
+```
+
+额外的环境变量导入.
+
+也可以使用
+
+```shell
+-A value
+
+#得到的编译参数为 {extra: value}
+```
+
+
+
+## 配置文件
 
 配置文件： package.json
 
@@ -55,148 +327,3 @@ silky-plugin:{
 }
 ...
 ```
-
-# 开发者手册
-
-## 插件接口标准
-
-1. 所有插件必须实现
-
-```js
-
-exports.registerPlugin((cli, options)=>{})
-
-或
-
-exports.registerPluginExt((cli, options)=>{})
-
-```
-其中
-[params cli](docs/dev-registerPlugin-params-cli.md), [params options](docs/dev-registerPlugin-params-options.md)
-
-
-其他相关 [dev-plugin.md](docs/dev-plugin.md), 插件扩展 [dev-registerPluginExt.md](docs/dev-registerPluginExt.md)
-
-
-2. 所有插件必须包含`README.md`,告知使用方式。
-
-
-
-## silky start 插件开发【route hook】
-
-### Hook 触发顺序
-
-```js
-
-route:initial -> route:didRequest ->  route:willResponse -> ?route:notFound -> route:didResponse
-
-```
-
-[route:initial](docs/dev-hooks-route-initial.md)
-
-[route:didRequest](docs/dev-hooks-route-didRequest.md)
-
-[route:willResponse](docs/dev-hooks-route-willResponse.md)
-
-[route:noFound](docs/dev-hooks-route-noFound.md)
-
-[route:didResponse](docs/dev-hooks-route-didResponse.md)
-
-### Hook 重要参数说明。
-
-#### data
-`route:didRequest`， `route:willResponse`中的data参数 ，初始化时：
-
-```
-{
-  status: 404,  #用于标示 是否经过编译器处理 200 已经过编译
-  realPath: pathname #用于代替 req.path。  主要是 将  path == '/'  替换为 配置的 silky.index.  没有默认为 index.html
-}
-```
-
-## silky build 插件开发 【build hook】
-
-### 触发顺序
-
-```js
-
-build:initial > build:willBuild >  build:doCompile > build:didCompile >  ?build:doNothing > build:end
-
------------------------ 以上任意一个步骤发生错误将触发[build:error] -----------------------
-
-```
-
-
-[build:initial](docs/dev-hooks-build-initial.md)
-
-[build:willBuild](docs/dev-hooks-build-willBuild.md)
-
-[build:doCompile](docs/dev-hooks-build-doCompile.md)
-
-[build:didCompile](docs/dev-hooks-build-didCompile.md)
-
-[build:doNothing](docs/dev-hooks-build-doNothing.md)
-
-[build:end](docs/dev-hooks-build-end.md)
-
-## 插件列表
-
-更多示例可参考 [官方插件](https://github.com/silky-plugin)
-
-
-## 更新
-v2.3.0
-  1. 增加 安装插件时，展示安装进度信息
-
-v2.2.8
-  1. 修复linux下报错
-
-v2.2.7
-  1. 支持build server 模式下 配置，插件 重新加载，避免重启
-
-v2.2.6
-  1. `getRuntimeEnvFile`提示信息不完整
-
-v2.2.5
-  1. 修复开发组件时，开发配置转正式环境配置插件配置丢失情况。涉及命令`silky dev`
-
-v2.2.4
-  1. 调用`getRuntimeEnvFile`时，当文件不存在时，由 错误抛出处理 改为 警告提示
-  2. 修复在未指明 自定义组件目录时，无法正确获默认组件目录bug
-  3. 修复开发组件时，同时引用了 开发中组件和正式组件 无法正确获取正式组件目录的bug
-
-v2.2.1
-  1. 修复 build成功 退出码不正确的bug
-
-v2.2.0 
-  1. 修复 在windows 下不能正确忽略 文件等bug
-
-v2.1.8
-  1. 增加一些插件工具函数
-
-v2.1.7
-  无
-
-v2.1.6
-  1. 新增公共组件库支持。
-  2. 修复读取 package.json 开发依赖错误
-
-v2.1.5
-  windows安装成功，但无法使用错误
-
-v2.1.4
-  安装插件时，默认安装到`dev-dependencies`
-
-v2.1.3
-  修复升级插件时，已有插件配置被清空bug
-
-v2.1.2
-  修复依赖检查忽略了dev依赖的bug
-
-v2.1.1
-  修复 环境变量读取继承bug
-
-v2.1.0
-  修复 config sync 问题
-
-v2.0.5 支持文件夹文件显示

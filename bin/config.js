@@ -9,6 +9,7 @@ const getMD5_1 = require("../lib/getMD5");
 const executeCommand_1 = require("../lib/executeCommand");
 const config_filed_constant_1 = require("../config-filed-constant");
 const _init = require("../init");
+const public_1 = require("../public");
 //上传配置
 function upload(options, finish) {
     _init.prepareUserEnv(options.workspace);
@@ -90,7 +91,8 @@ function sync(options, finish) {
     if (!projectName) {
         return console.log("Error: 未制定项目名称".red);
     }
-    let serverIp = options.url || project["config-server"] || configFiledConstant.configServer;
+    let serverIp = options.url || public_1.default.silky_config_store;
+    console.log(serverIp, 999);
     let queue = [];
     let file = "";
     let fileHash = "";
@@ -148,36 +150,37 @@ function sync(options, finish) {
 exports.sync = sync;
 /* istanbul ignore next  */
 function commander(_commander) {
-    _commander.command('config <actionName>')
-        .description('上传或者同步配置文件 up or sync ')
+    _commander.command('sync')
+        .description('同步配置文件')
         .option('-w, --workspace <value>', '指定工作目录')
         .option('-u, --url <value>', '指定配置存储服务器地址')
         .option('-n, --projectName <value>', "指定同步的项目名称，可选，默认为 package.json => name")
         .option('-v, --projectVersion <value>', "指定同步的项目版本号， 可选，默认为 package.json => version")
-        .action((actionName, program) => {
-        //读取用户自定义配置
-        switch (actionName) {
-            case "up":
-                upload(program, (error, result) => {
-                    if (error) {
-                        console.log("上传失败, 错误信息：".red);
-                        console.log(error);
-                        return;
-                    }
-                    console.log(`上传 ${result} 成功！`);
-                });
-                break;
-            case "sync":
-                sync(program, (error) => {
-                    if (error) {
-                        console.log(error);
-                    }
-                    else {
-                        console.log('同步配置文件成功！请运行 silky install 安装插件。');
-                    }
-                });
-                break;
-        }
+        .action((program) => {
+        sync(program, (error) => {
+            if (error) {
+                console.log(error);
+            }
+            else {
+                console.log('同步配置文件成功！请运行 silky install 安装插件。');
+            }
+        });
+    });
+    _commander.command('up')
+        .description('上传配置文件')
+        .option('-w, --workspace <value>', '指定工作目录')
+        .option('-u, --url <value>', '指定配置存储服务器地址')
+        .option('-n, --projectName <value>', "指定同步的项目名称，可选，默认为 package.json => name")
+        .option('-v, --projectVersion <value>', "指定同步的项目版本号， 可选，默认为 package.json => version")
+        .action((program) => {
+        upload(program, (error, result) => {
+            if (error) {
+                console.log("上传失败, 错误信息：".red);
+                console.log(error);
+                return;
+            }
+            console.log(`上传 ${result} 成功！`);
+        });
     });
 }
 exports.commander = commander;

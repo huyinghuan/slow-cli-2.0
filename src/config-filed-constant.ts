@@ -10,7 +10,7 @@ class ConstantFiled {
   private configServer = "";
   private infinity = 'silky';
   private pluginConfigField = `${this.infinity}-plugin`;//silky-plugin
-  private  pluginVersionField = `${this.infinity}-version`;//silky-version
+  private pluginVersionField = `${this.infinity}-version`;//silky-version
   private pluginDir = _path.join(this.cwd, 'node_modules'); //插件目录
   private CLIConfigFile = _path.join(this.cwd, 'package.json');//配置文件
   private buildField = `${this.infinity}-build`; //build 相关配置】//silky-build

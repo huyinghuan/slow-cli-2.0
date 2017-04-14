@@ -6,17 +6,20 @@ import * as _spawn from 'cross-spawn'
 import _log from '../lib/log';
 import _getFullPluginName from './getFullPluginName';
 import _configFiledConstant from '../config-filed-constant';
-const _registry = "http://npm.hunantv.com";
+import _publicConfig from '../public'
 
 function installPlugin(beInstallPluginList, registry, saveAsProduct, cb){
   if(registry == "taobao"){
     registry = "https://registry.npm.taobao.org"
   }
+  if(registry == "npm"){
+    registry = "https://registry.npmjs.com/"
+  }
   let saveInfo = ["--save-dev","--save-exact"]
   if(saveAsProduct){
     saveInfo = ["--save", "--save-exact"]
   }
-  registry = registry || _project.getProjectPackageJSONField('__registry') || _registry;
+  registry = registry || _project.getProjectPackageJSONField('__registry') || _publicConfig.private_npm_registry;
   var argvs = ["install", "--registry", registry].concat(beInstallPluginList).concat(saveInfo)
   let child = _spawn('npm', argvs, { stdio: 'inherit' })
   child.on('exit', function (code) {

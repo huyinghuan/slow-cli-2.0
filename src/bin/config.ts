@@ -9,6 +9,7 @@ import _getMD5 from '../lib/getMD5';
 import _executeCommand from '../lib/executeCommand';
 import _configFiledConstant from '../config-filed-constant';
 import * as _init from '../init'
+import _publicConfig from '../public'
 
 //上传配置
 export function upload(options, finish){
@@ -92,7 +93,8 @@ export function sync(options, finish){
   if(!projectName){
     return console.log("Error: 未制定项目名称".red)
   }
-  let serverIp =  options.url || project["config-server"] || configFiledConstant.configServer;
+  let serverIp =  options.url || _publicConfig.silky_config_store;
+  console.log(serverIp, 999)
   let queue = [];
   let file = "";
   let fileHash = "";
@@ -151,34 +153,36 @@ export function sync(options, finish){
 }
 /* istanbul ignore next  */
 export function commander(_commander){
-  _commander.command('config <actionName>')
-    .description('上传或者同步配置文件 up or sync ')
+  _commander.command('sync')
+    .description('同步配置文件')
     .option('-w, --workspace <value>', '指定工作目录')
     .option('-u, --url <value>', '指定配置存储服务器地址')
     .option('-n, --projectName <value>', "指定同步的项目名称，可选，默认为 package.json => name")
     .option('-v, --projectVersion <value>', "指定同步的项目版本号， 可选，默认为 package.json => version")
-    .action((actionName, program)=>{
-        //读取用户自定义配置
-        switch(actionName){
-          case "up":
-            upload(program, (error, result)=>{
-              if(error){
-                console.log("上传失败, 错误信息：".red)
-                console.log(error)
-                return
-              }
-              console.log(`上传 ${result} 成功！`)
-            });
-            break;
-          case "sync":
-            sync(program, (error)=>{
-              if(error){
-                console.log(error)
-              }else{
-                console.log('同步配置文件成功！请运行 silky install 安装插件。')
-              }
-            });
-           break;
+    .action((program)=>{
+        sync(program, (error)=>{
+          if(error){
+            console.log(error)
+          }else{
+            console.log('同步配置文件成功！请运行 silky install 安装插件。')
+          }
+        });
+    })
+  _commander.command('up')
+    .description('上传配置文件')
+    .option('-w, --workspace <value>', '指定工作目录')
+    .option('-u, --url <value>', '指定配置存储服务器地址')
+    .option('-n, --projectName <value>', "指定同步的项目名称，可选，默认为 package.json => name")
+    .option('-v, --projectVersion <value>', "指定同步的项目版本号， 可选，默认为 package.json => version")
+    .action((program)=>{
+      upload(program, (error, result)=>{
+        if(error){
+          console.log("上传失败, 错误信息：".red)
+          console.log(error)
+          return
         }
+        console.log(`上传 ${result} 成功！`)
+      });
     })
 }
+

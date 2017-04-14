@@ -4,16 +4,19 @@ const _project = require("../project");
 const _spawn = require("cross-spawn");
 const log_1 = require("../lib/log");
 const getFullPluginName_1 = require("./getFullPluginName");
-const _registry = "http://npm.hunantv.com";
+const public_1 = require("../public");
 function installPlugin(beInstallPluginList, registry, saveAsProduct, cb) {
     if (registry == "taobao") {
         registry = "https://registry.npm.taobao.org";
+    }
+    if (registry == "npm") {
+        registry = "https://registry.npmjs.com/";
     }
     let saveInfo = ["--save-dev", "--save-exact"];
     if (saveAsProduct) {
         saveInfo = ["--save", "--save-exact"];
     }
-    registry = registry || _project.getProjectPackageJSONField('__registry') || _registry;
+    registry = registry || _project.getProjectPackageJSONField('__registry') || public_1.default.private_npm_registry;
     var argvs = ["install", "--registry", registry].concat(beInstallPluginList).concat(saveInfo);
     let child = _spawn('npm', argvs, { stdio: 'inherit' });
     child.on('exit', function (code) {
