@@ -17,9 +17,6 @@ npm update -g npm
 #sudo rm -rf /usr/local/lib/node_modules/mgtv
 npm uninstall -g mgtv
 npm install -g mgtv  
-
-
-
 # 3. 安装新版silky
 mgtv -g install silky-reborn
 # 4. 检查是否安装成功, 显示2.x.x版本及以上即安装完成
@@ -163,7 +160,8 @@ sr build --help
  sr install sp-proxy sp-merge
 ```
 或者
-安装项目所有依赖插件
+安装项目所有依赖的silky插件， ⚠️ `sr install` 仅安装`silky-plugin`里面配置的插件，`package.json`里面的`devDependencies`和`dependencies`不会安装的，这些配置还是需要用`npm`或者`mgtv`安装
+
 ```shell
 sr install
 ```
@@ -190,6 +188,8 @@ sr init --help
  sr sync
  #下载本项目某个版本配置
  sr sync -v 1.0.0
+ #下载某个项目最后一个版本配置
+ sr sync -n test
  #下载某个项目的某个配置的某个版本
  sr sync -n test -v 1.0.0
 ```
@@ -290,8 +290,6 @@ log日志,打印silky运行时相关日志， 如果觉得信息过多可以使�
 #得到的编译参数为 {extra: value}
 ```
 
-
-
 ## 配置文件
 
 配置文件： package.json
@@ -327,3 +325,20 @@ silky-plugin:{
 }
 ...
 ```
+
+## 常用插件
+
+
+[插件仓库](https://github.com/silky-plugin)
+
+常用插件说明
+[sp-hbs hbs处理](https://github.com/silky-plugin/sp-hbs)
+[sp-less less处理](https://github.com/silky-plugin/sp-less)
+[sp-proxy http代理，避免跨域开发](https://github.com/silky-plugin/sp-proxy)
+[sp-coffee coffee支持](https://github.com/silky-plugin/sp-coffee)
+[sp-mini 文件压缩](https://github.com/silky-plugin/sp-mini)
+[sp-merge-in-html 文件合并](https://github.com/silky-plugin/sp-merge-in-html)
+
+##LICENSE
+
+MIT

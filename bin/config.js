@@ -49,7 +49,7 @@ function upload(options, finish) {
         getMD5_1.default(tmpTarFilePath, next);
     });
     queue.push((md5, next) => {
-        let serverIp = options.url || project["config-server"] || defConfigServerIP;
+        let serverIp = options.url || public_1.default.silky_config_store;
         if (!serverIp) {
             return next(new Error('未指定配置服务器IP'));
         }
@@ -170,6 +170,7 @@ function commander(_commander) {
         .description('上传配置文件')
         .option('-w, --workspace <value>', '指定工作目录')
         .option('-u, --url <value>', '指定配置存储服务器地址')
+        .option('-a, --all', "包括项目文件全部上传")
         .option('-n, --projectName <value>', "指定同步的项目名称，可选，默认为 package.json => name")
         .option('-v, --projectVersion <value>', "指定同步的项目版本号， 可选，默认为 package.json => version")
         .action((program) => {
