@@ -16,26 +16,49 @@ function installPlugin(beInstallPluginList, registry, saveAsProduct, cb){
     registry = "https://registry.npmjs.com/"
   }
   let saveInfo = ["--save-dev","--save-exact"]
-  if(saveAsProduct){
-    saveInfo = ["--save", "--save-exact"]
-  }
+  
   registry = registry || _project.getProjectPackageJSONField('__registry') || _publicConfig.private_npm_registry;
+  let installSuccessPlugnList  = []
+  let installFailPlugnList  = []
+  _async.mapSeries(beInstallPluginList, (pluginName, doNext)=>{
+    let saveInfo = ["--save-dev","--save-exact"]
+    if((pluginName as string).indexOf("sp-") != 0){
+      saveInfo = ["--save", "--save-exact"]
+    }else if(saveAsProduct){
+      saveInfo = ["--save", "--save-exact"]
+    }
+    let child = _spawn('npm', ["install", "--registry", registry].concat(pluginName).concat(saveInfo), { stdio: 'inherit' })
+    child.on('exit', function (code) {
+        if(code == 0){
+          _log.success(`安装插件${installSuccessPlugnList}成功`.green)
+          installSuccessPlugnList.push(pluginName)
+          doNext(null, null)
+        }else{
+          installFailPlugnList.push(pluginName)
+          doNext(null, null)
+        }
+    });
+    child.on('error', function(e){
+      console.log(e)
+      installFailPlugnList.push(pluginName)
+      doNext(null, null)
+    })
+  }, (err)=>{
+    if(installSuccessPlugnList.length){
+      _log.success(`安装插件${installSuccessPlugnList}成功`.green)
+    }
+    if(installFailPlugnList.length){
+      cb(`安装插件${installFailPlugnList}失败`.red)
+    }else{
+      cb(null)
+    }
+  })
+
+  /*
   var argvs = ["install", "--registry", registry].concat(beInstallPluginList).concat(saveInfo)
   let child = _spawn('npm', argvs, { stdio: 'inherit' })
-  child.on('exit', function (code) {
-      console.log(code)
-      if(code == 0){
-        _log.success(`安装插件${beInstallPluginList}成功`.green)
-        cb(null)
-      }else{
-        cb(`安装插件${beInstallPluginList}失败`.red)
-      }
-      
-  });
-  child.on('error', function(e){
-    console.log(e)
-    cb(`安装插件${beInstallPluginList}失败`.red)
-  })
+
+  */
 }
 
 export default function(pluginList, registry, saveAsDev, finish){

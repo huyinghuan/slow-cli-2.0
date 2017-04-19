@@ -44,7 +44,7 @@ function getPublicLibIndex(moduleName) {
 function getPublicLibDir(moduleName) {
     //查看改module是否存在于正式插件配置中， 如果存在，那么不是开发状态的组件，使用 node_modules默认组件目录 ，如果不存在，在去读取，组件的自定义目录配置。
     let pubModulesDir = "";
-    if (config_filed_constant_1.default.getGlobal().pluginsConfig[moduleName]) {
+    if (_fs.existsSync(_path.join(config_filed_constant_1.default.getWorkspace(), "node_modules", moduleName))) {
         pubModulesDir = "node_modules";
     }
     else {
