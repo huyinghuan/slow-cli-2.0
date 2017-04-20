@@ -10,6 +10,54 @@ import _executeCommand from '../lib/executeCommand';
 import _configFiledConstant from '../config-filed-constant';
 import * as _init from '../init'
 import _publicConfig from '../public'
+import * as _glob from 'glob'
+import * as _ignore from "ignore"
+import _log from '../lib/log';
+
+//copy all
+const copyAll = (workspace, tmpDirPath, next)=>{
+    _glob('**', {
+        cwd: workspace,
+        mark: true
+      }, (err, files) => {
+        if (err) {
+          return next(err)
+        }
+        let gitignoreFilePath = _path.join(workspace, ".gitignore")
+        let filtered = []
+        if(_fs.existsSync(gitignoreFilePath)){
+          filtered = _ignore().add(_fs.readFileSync(gitignoreFilePath).toString()).filter(files)
+        }else{
+          filtered = _ignore().add("node_modules").filter(files)
+        }
+        if(filtered.length == 0){
+          return next(null)
+        }
+        _fs.ensureDirSync(tmpDirPath);
+        _async.mapSeries(filtered, (file, mapNext)=>{
+          let sourceFilePath = _path.join(workspace, file)
+          let targetFilePath = _path.join(tmpDirPath, file)
+          _fs.stat(sourceFilePath, (err, stat)=>{
+            if(err){return mapNext(err, null)}
+            if(stat.isDirectory()){
+              _fs.ensureDirSync(targetFilePath)
+            }else if(stat.isFile()){
+              _log.info(`copy ${file}`)
+              _fs.copySync(sourceFilePath,targetFilePath)
+            }else{
+              _log.warn(`找不到 ${sourceFilePath} 文件类型`)
+            }
+            mapNext(null, null)
+          })
+        }, (err, reuslt)=>{
+          next(err)
+        })
+    })
+}
+
+const copyFiles = ()=>{
+
+}
 
 //上传配置
 export function upload(options, finish){
@@ -24,13 +72,26 @@ export function upload(options, finish){
   if(!projectName){console.log('缺少配置文件名称，无法上传，请使用 -n 指定')}
   if(!version){console.log('缺少配置文件版本，无法上传，请使用 -v 指定')}
   let tmpDirName = projectName + "-" + version;
-  let tmpDirPath = _path.join(_configFiledConstant.getWorkspace(), tmpDirName)
+
+  let workspace = _configFiledConstant.getWorkspace()
+  let tmpDirPath = _path.join(workspace, tmpDirName)
   let tmpTarFilePath = tmpDirPath + ".tar"
   let commanderStr = `cd "${tmpDirPath}" && tar -cf "${tmpTarFilePath}" .`;
 
   let queue = [];
-
+  
   queue.push((next)=>{
+    //上传所有
+    if(options.all){
+      return copyAll(workspace, tmpDirPath, (err)=>{
+        if(err){return next(err)}
+        if(_fs.existsSync(configFiledConstant.environmentRootDir)){
+          _fs.copySync(configFiledConstant.environmentRootDir, _path.join(tmpDirPath, '.silky'))
+        }
+        next(null)
+      })
+    }
+    //仅上传配置
     try{
       _fs.ensureDirSync(tmpDirPath);
       _fs.copySync(configFiledConstant.CLIConfigFile, _path.join(tmpDirPath, 'package.json'))
@@ -175,6 +236,7 @@ export function commander(_commander){
     .option('-a, --all', "包括项目文件全部上传")
     .option('-n, --projectName <value>', "指定同步的项目名称，可选，默认为 package.json => name")
     .option('-v, --projectVersion <value>', "指定同步的项目版本号， 可选，默认为 package.json => version")
+    .option('-l, --log <value>', 'log日志,( 0[defaul]: show all; 1: show error, fail; 2: show error, fail, warn)',(value)=>{_log.setLevel(value)})
     .action((program)=>{
       upload(program, (error, result)=>{
         if(error){
