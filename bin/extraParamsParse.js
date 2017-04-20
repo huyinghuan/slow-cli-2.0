@@ -4,7 +4,7 @@ function default_1(value) {
     if (!value) {
         return {};
     }
-    if (/(\,|\=)/.test(value)) {
+    if (!/(\,|\=)/.test(value)) {
         return { extra: value };
     }
     let arr = value.split(',');

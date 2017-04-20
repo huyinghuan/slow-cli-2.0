@@ -72,7 +72,7 @@ export function upload(options, finish){
   let workspace = _configFiledConstant.getWorkspace()
   let tmpDirPath = _path.join(workspace, tmpDirName)
   let tmpTarFilePath = tmpDirPath + ".tar"
-  let commanderStr = `cd "${tmpDirPath}" && tar -cf "${tmpTarFilePath}" .`;
+  let commanderStr = `tar -cf "${tmpTarFilePath}" .`;
 
   let queue = [];
   
@@ -101,7 +101,7 @@ export function upload(options, finish){
   })
 
   queue.push((next)=>{
-    _executeCommand(commanderStr, next)
+    _executeCommand(commanderStr, {cwd: tmpDirPath},next)
   })
 
   queue.push((next)=>{

@@ -76,7 +76,7 @@ function upload(options, finish) {
     let workspace = config_filed_constant_1.default.getWorkspace();
     let tmpDirPath = _path.join(workspace, tmpDirName);
     let tmpTarFilePath = tmpDirPath + ".tar";
-    let commanderStr = `cd "${tmpDirPath}" && tar -cf "${tmpTarFilePath}" .`;
+    let commanderStr = `tar -cf "${tmpTarFilePath}" .`;
     let queue = [];
     queue.push((next) => {
         //上传所有
@@ -105,7 +105,7 @@ function upload(options, finish) {
         }
     });
     queue.push((next) => {
-        executeCommand_1.default(commanderStr, next);
+        executeCommand_1.default(commanderStr, { cwd: tmpDirPath }, next);
     });
     queue.push((next) => {
         getMD5_1.default(tmpTarFilePath, next);
