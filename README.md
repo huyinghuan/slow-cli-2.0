@@ -332,13 +332,13 @@ silky-plugin:{
 [插件仓库](https://github.com/silky-plugin)
 
 常用插件说明
-[sp-hbs hbs处理](https://github.com/silky-plugin/sp-hbs)
-[sp-less less处理](https://github.com/silky-plugin/sp-less)
-[sp-proxy http代理，避免跨域开发](https://github.com/silky-plugin/sp-proxy)
-[sp-coffee coffee支持](https://github.com/silky-plugin/sp-coffee)
-[sp-mini 文件压缩](https://github.com/silky-plugin/sp-mini)
-[sp-merge-in-html 文件合并](https://github.com/silky-plugin/sp-merge-in-html)
+  - [sp-hbs hbs处理](https://github.com/silky-plugin/sp-hbs)
+  - [sp-less less处理](https://github.com/silky-plugin/sp-less)
+  - [sp-proxy http代理，避免跨域开发](https://github.com/silky-plugin/sp-proxy)
+  - [sp-coffee coffee支持](https://github.com/silky-plugin/sp-coffee)
+  - [sp-mini 文件压缩](https://github.com/silky-plugin/sp-mini)
+  - [sp-merge-in-html 文件合并](https://github.com/silky-plugin/sp-merge-in-html)
 
-##LICENSE
+## LICENSE
 
 MIT
