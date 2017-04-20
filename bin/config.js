@@ -58,8 +58,6 @@ const copyAll = (workspace, tmpDirPath, next) => {
         });
     });
 };
-const copyFiles = () => {
-};
 //上传配置
 function upload(options, finish) {
     _init.prepareUserEnv(options.workspace);
@@ -155,8 +153,8 @@ function sync(options, finish) {
     if (!projectName) {
         return console.log("Error: 未制定项目名称".red);
     }
+    let workspace = config_filed_constant_1.default.getWorkspace();
     let serverIp = options.url || public_1.default.silky_config_store;
-    console.log(serverIp, 999);
     let queue = [];
     let file = "";
     let fileHash = "";
@@ -166,17 +164,21 @@ function sync(options, finish) {
         next(null);
     });
     queue.push((next) => {
+        let uri = version ? `/api/p/${projectName}/v/${version}` : `/api/p/${projectName}`;
         let req = _request({
-            uri: `/api/p/${projectName}/v/${version}`,
+            uri: uri,
             baseUrl: serverIp,
             method: 'GET',
         });
         req.on('response', (resp) => {
+            if (resp.statusCode == 404) {
+                return next(`服务器没有存储相关项目:${projectName}`);
+            }
             if (resp.statusCode !== 200) {
                 return next(new Error('http code ' + resp.statusCode));
             }
             fileHash = resp.headers['content-disposition'];
-            file = _path.join(config_filed_constant_1.default.getWorkspace(), fileHash + ".tar");
+            file = _path.join(workspace, fileHash + ".tar");
             let fws = _fs.createWriteStream(file);
             resp.pipe(fws);
             resp.on('end', () => {
@@ -199,8 +201,8 @@ function sync(options, finish) {
     });
     //解压文件并删除文件
     queue.push((next) => {
-        let commandStr = `tar -xf ${file} -C ${config_filed_constant_1.default.getWorkspace()}`;
-        executeCommand_1.default(commandStr, (error) => {
+        let commandStr = `tar -xf ${fileHash}.tar`;
+        executeCommand_1.default(commandStr, { cwd: workspace }, (error) => {
             if (error) {
                 console.log(`解压失败，请手动解压文件 ${file} 到项目根目录`);
                 return next(error);
