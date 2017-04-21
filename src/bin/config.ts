@@ -225,7 +225,7 @@ export function commander(_commander){
           if(error){
             console.log(error)
           }else{
-            console.log('同步配置文件成功！请运行 silky install 安装插件。')
+            console.log('同步配置文件成功！请运行 sr install 安装插件。')
           }
         });
     })

@@ -1,6 +1,6 @@
 {
   "name": "silky-reborn",
-  "version": "2.3.6",
+  "version": "2.3.7",
   "description": "",
   "bin": {
     "sr": "./bin/index.js"
