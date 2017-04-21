@@ -82,6 +82,9 @@ export function upload(options, finish){
         if(_fs.existsSync(configFiledConstant.environmentRootDir)){
           _fs.copySync(configFiledConstant.environmentRootDir, _path.join(tmpDirPath, '.silky'))
         }
+        if(_fs.existsSync(_path.join(workspace, ".gitignore"))){
+          _fs.copySync(_path.join(workspace, ".gitignore"), _path.join(tmpDirPath, '.gitignore'))
+        }
         next(null)
       })
     }
@@ -99,7 +102,7 @@ export function upload(options, finish){
   })
 
   queue.push((next)=>{
-    let results = _crossSpawn.sync("tar", ["-cf", tmpTarFilePath, "."], {stdio: 'inherit', cwd: tmpDirPath})
+    let results = _crossSpawn.sync("tar", ["-cf", `../${tmpDirName}.tar`, "."], {stdio: 'inherit', cwd: tmpDirPath})
     if(results.status != 0){
       _log.error(results)
       next(`压缩项目失败`)
@@ -205,6 +208,7 @@ export function sync(options, finish){
     if(result.status != 0){
       next(`解压失败，请手动解压文件 ${file} 到项目根目录`)
     }else{
+      _fs.removeSync(_path.join(workspace, fileHash + ".tar"))
       next(null)
     }
   })
