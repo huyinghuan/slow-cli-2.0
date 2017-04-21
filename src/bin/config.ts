@@ -4,9 +4,8 @@ import * as _fs from 'fs-extra';
 import * as _path from 'path';
 import * as _async from 'async';
 import * as _request from 'request';
-
+import * as _crossSpawn from 'cross-spawn'
 import _getMD5 from '../lib/getMD5';
-import _executeCommand from '../lib/executeCommand';
 import _configFiledConstant from '../config-filed-constant';
 import * as _init from '../init'
 import _publicConfig from '../public'
@@ -72,7 +71,6 @@ export function upload(options, finish){
   let workspace = _configFiledConstant.getWorkspace()
   let tmpDirPath = _path.join(workspace, tmpDirName)
   let tmpTarFilePath = tmpDirPath + ".tar"
-  let commanderStr = `tar -cf "${tmpTarFilePath}" .`;
 
   let queue = [];
   
@@ -101,7 +99,13 @@ export function upload(options, finish){
   })
 
   queue.push((next)=>{
-    _executeCommand(commanderStr, {cwd: tmpDirPath},next)
+    let results = _crossSpawn.sync("tar", ["-cf", tmpTarFilePath, "."], {stdio: 'inherit', cwd: tmpDirPath})
+    if(results.status != 0){
+      _log.error(results)
+      next(`压缩项目失败`)
+    }else{
+      next(null)
+    }
   })
 
   queue.push((next)=>{
@@ -121,9 +125,7 @@ export function upload(options, finish){
         config: _fs.createReadStream(tmpTarFilePath)
       }
     }, (error, resp, body)=>{
-      console.log(md5)
       if(error){return next(error)}
-      console.log(body)
       if(resp.statusCode != 200){
         next(`http code: ${resp.statusCode}`)
       }else{
@@ -199,17 +201,13 @@ export function sync(options, finish){
 
   //解压文件并删除文件
   queue.push((next)=>{
-    let commandStr = `tar -xf ${fileHash}.tar`;
-     _executeCommand(commandStr, {cwd: workspace}, (error)=>{
-      if(error){
-        console.log(`解压失败，请手动解压文件 ${file} 到项目根目录`)
-        return next(error)
-      }
-      _fs.removeSync(file);
+    let result = _crossSpawn.sync("tar", ["-xf", `${fileHash}.tar`], {cwd: workspace, stdio: 'inherit' })
+    if(result.status != 0){
+      next(`解压失败，请手动解压文件 ${file} 到项目根目录`)
+    }else{
       next(null)
-    })
+    }
   })
-
   _async.waterfall(queue, finish)
 }
 /* istanbul ignore next  */

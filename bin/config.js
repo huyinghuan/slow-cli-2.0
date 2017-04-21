@@ -5,8 +5,8 @@ const _fs = require("fs-extra");
 const _path = require("path");
 const _async = require("async");
 const _request = require("request");
+const _crossSpawn = require("cross-spawn");
 const getMD5_1 = require("../lib/getMD5");
-const executeCommand_1 = require("../lib/executeCommand");
 const config_filed_constant_1 = require("../config-filed-constant");
 const _init = require("../init");
 const public_1 = require("../public");
@@ -76,7 +76,6 @@ function upload(options, finish) {
     let workspace = config_filed_constant_1.default.getWorkspace();
     let tmpDirPath = _path.join(workspace, tmpDirName);
     let tmpTarFilePath = tmpDirPath + ".tar";
-    let commanderStr = `tar -cf "${tmpTarFilePath}" .`;
     let queue = [];
     queue.push((next) => {
         //上传所有
@@ -105,7 +104,14 @@ function upload(options, finish) {
         }
     });
     queue.push((next) => {
-        executeCommand_1.default(commanderStr, { cwd: tmpDirPath }, next);
+        let results = _crossSpawn.sync("tar", ["-cf", tmpTarFilePath, "."], { stdio: 'inherit', cwd: tmpDirPath });
+        if (results.status != 0) {
+            log_1.default.error(results);
+            next(`压缩项目失败`);
+        }
+        else {
+            next(null);
+        }
     });
     queue.push((next) => {
         getMD5_1.default(tmpTarFilePath, next);
@@ -123,11 +129,9 @@ function upload(options, finish) {
                 config: _fs.createReadStream(tmpTarFilePath)
             }
         }, (error, resp, body) => {
-            console.log(md5);
             if (error) {
                 return next(error);
             }
-            console.log(body);
             if (resp.statusCode != 200) {
                 next(`http code: ${resp.statusCode}`);
             }
@@ -201,15 +205,13 @@ function sync(options, finish) {
     });
     //解压文件并删除文件
     queue.push((next) => {
-        let commandStr = `tar -xf ${fileHash}.tar`;
-        executeCommand_1.default(commandStr, { cwd: workspace }, (error) => {
-            if (error) {
-                console.log(`解压失败，请手动解压文件 ${file} 到项目根目录`);
-                return next(error);
-            }
-            _fs.removeSync(file);
+        let result = _crossSpawn.sync("tar", ["-xf", `${fileHash}.tar`], { cwd: workspace, stdio: 'inherit' });
+        if (result.status != 0) {
+            next(`解压失败，请手动解压文件 ${file} 到项目根目录`);
+        }
+        else {
             next(null);
-        });
+        }
     });
     _async.waterfall(queue, finish);
 }

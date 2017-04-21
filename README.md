@@ -218,6 +218,7 @@ sr init --help
  #上传项目配置文件到某个名称下面的摸个版本
  sr up -n test -v 1.0.0
  #可选配置项 -a, --all #可选上传所有文件【自动忽略.开始的文件，但是不会忽略.silky文件夹】
+ sr up -n test -a
 ```
 
 ## check
