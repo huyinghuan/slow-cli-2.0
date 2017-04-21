@@ -223,6 +223,7 @@ exports.sync = sync;
 /* istanbul ignore next  */
 function commander(_commander) {
     _commander.command('sync')
+        .alias("download")
         .description('同步配置文件')
         .option('-w, --workspace <value>', '指定工作目录')
         .option('-u, --url <value>', '指定配置存储服务器地址')
@@ -239,6 +240,7 @@ function commander(_commander) {
         });
     });
     _commander.command('up')
+        .alias("upload")
         .description('上传配置文件')
         .option('-w, --workspace <value>', '指定工作目录')
         .option('-u, --url <value>', '指定配置存储服务器地址')
