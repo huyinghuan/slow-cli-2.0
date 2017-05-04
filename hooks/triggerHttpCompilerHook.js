@@ -1,24 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const _ = require("lodash");
 const _hookMap = require("./map");
+const _async = require("async");
 /**
  * route:didRequest
  */
 function default_1(req, data, callback) {
     let queue = _hookMap.HookQueue[_hookMap.route.didRequest] || [];
-    let contentFactoryList = [];
-    _.forEach(queue, (hook) => { contentFactoryList.push(hook.fn); });
-    let next = (error, responseContent) => {
-        if (error) {
-            return callback(error, responseContent);
-        }
-        let compiler = contentFactoryList.shift();
-        if (!compiler) {
-            return callback(null, responseContent);
-        }
-        compiler(req, data, responseContent, next);
-    };
-    next(null, null);
+    if (!queue.length) {
+        callback(null, null);
+        return;
+    }
+    let content = null;
+    _async.mapSeries(queue, (hook, next) => {
+        hook.fn(req, data, content, (error, compileContent) => {
+            content = compileContent;
+            next(error, null);
+        });
+    }, (error) => {
+        callback(error, content);
+    });
 }
 exports.default = default_1;
