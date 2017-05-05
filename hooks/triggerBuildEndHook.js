@@ -1,21 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const _ = require("lodash");
 const _hookMap = require("./map");
+const _async = require("async");
 function default_1(buildConfig, callback) {
     let queue = _hookMap.HookQueue[_hookMap.build.endBuild] || [];
-    let processFactoryList = [];
-    _.forEach(queue, (hook) => { processFactoryList.push(hook.fn); });
-    let next = (error) => {
-        if (error) {
-            return callback(error);
-        }
-        let processHandle = processFactoryList.shift();
-        if (!processHandle) {
-            return callback(null);
-        }
-        processHandle(buildConfig, next);
-    };
-    next(null);
+    _async.mapSeries(queue, (hook, next) => {
+        hook.fn(buildConfig, next);
+    }, (err) => {
+        callback(err);
+    });
 }
 exports.default = default_1;

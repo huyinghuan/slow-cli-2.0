@@ -1,6 +1,6 @@
+"use strict";
 /**
  *校验build参数 */
-"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const _path = require("path");
 const config_filed_constant_1 = require("../config-filed-constant");
