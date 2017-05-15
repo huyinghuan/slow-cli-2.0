@@ -54,7 +54,7 @@ function commander(_commander) {
         let server = getHttpServer(program);
         let port = program.port || config_filed_constant_1.default.getGlobal('port');
         server.listen(port);
-        console.log(`silky listen on ${port}`.red);
+        console.log(`silky run on http://localhost:${port}`.green);
     });
 }
 exports.commander = commander;

@@ -10,6 +10,7 @@ const getMime_1 = require("./lib/getMime");
 const config_filed_constant_1 = require("./config-filed-constant");
 const _plugin = require("./plugin/index");
 const log_1 = require("./lib/log");
+const fortmatContentLength_1 = require("./lib/fortmatContentLength");
 /**
  * 启动静态服务
  */
@@ -28,9 +29,8 @@ exports.default = () => {
         resp.on('finish', () => {
             let startTime = req.__acceptTime;
             let spellTime = new Date().getTime() - startTime;
-            let msg = `( ${req.url} ) : ${spellTime} ms : [${resp.statusCode}]`;
+            let msg = `( ${req.url} ): ${spellTime} ms: [${resp.statusCode}] size:`;
             switch (resp.statusCode) {
-                case 200:
                 case 304:
                     log_1.default.info(msg.grey);
                     break;
@@ -41,7 +41,7 @@ exports.default = () => {
                     log_1.default.error(msg.red);
                     break;
                 default:
-                    console.log(msg.gray);
+                    console.log(msg.gray, `${fortmatContentLength_1.default(resp._contentLength)}`);
             }
             _hooks.triggerHttpDidResponseHook(req);
         });

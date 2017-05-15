@@ -12,7 +12,7 @@ import _getMime from './lib/getMime';
 import _configFiledConstant from './config-filed-constant';
 import * as _plugin from './plugin/index';
 import _log from './lib/log';
-
+import _formatContentLength from './lib/fortmatContentLength'
 /**
  * 启动静态服务
  */
@@ -32,17 +32,15 @@ export default ()=>{
     resp.on('finish', ()=>{
       let startTime = (req as any).__acceptTime;
       let spellTime = new Date().getTime() - startTime
-      let msg = `( ${req.url} ) : ${spellTime} ms : [${resp.statusCode}]`
-
+      let msg = `( ${req.url} ): ${spellTime} ms: [${resp.statusCode}] size:`
       switch(resp.statusCode){
-        case 200:
         case 304 : _log.info(msg.grey); break;
         case 401:
         case 403:
         case 404:
         case 500:  _log.error(msg.red); break;
         default:
-          console.log(msg.gray);
+          console.log(msg.gray, `${_formatContentLength((resp as any)._contentLength)}`);
       }
       _hooks.triggerHttpDidResponseHook(req);
     })
