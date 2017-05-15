@@ -6,7 +6,7 @@ export default function(buildConfig, data, callback: _allDefined.BuildDoNothingC
   let queue = _hookMap.HookQueue[_hookMap.build.doNothing] || [];
 
   _async.mapSeries(queue, (hook, next)=>{
-    (hook as any).fn(buildConfig, data, (err)=>{next(err)})
+    (hook as any).fn(buildConfig, data, (err)=>{next(err,null)})
   }, (err)=>{
     callback(err, data)
   })
