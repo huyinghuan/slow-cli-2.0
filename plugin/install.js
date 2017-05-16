@@ -53,11 +53,6 @@ function installPlugin(beInstallPluginList, registry, saveAsProduct, cb) {
             cb(null);
         }
     });
-    /*
-    var argvs = ["install", "--registry", registry].concat(beInstallPluginList).concat(saveInfo)
-    let child = _spawn('npm', argvs, { stdio: 'inherit' })
-  
-    */
 }
 function default_1(pluginList, registry, saveAsDev, finish) {
     let beInstallPluginList = [];

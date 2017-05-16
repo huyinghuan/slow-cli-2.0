@@ -6,6 +6,8 @@ import _extraParamsParse from './extraParamsParse'
 import _log from '../lib/log';
 
 import _configFiledConstant from '../config-filed-constant';
+import _checkLatestCLIVersion from '../lib/checkLatestCLIVersion';
+import _reportLog from '../lib/reportLog';
 
 export function getHttpServer(program){
   //读取用户自定义配置
@@ -29,7 +31,8 @@ export function getHttpServer(program){
   if(!_init.checkStartArgs()){
     process.exit(1)
   };
-
+  _checkLatestCLIVersion()
+  _reportLog()
   if(program.check){
     //检查cli 版本
     // 检查插件版本

@@ -3,7 +3,6 @@ import * as _http from 'http';
 import * as _async from 'async';
 import * as _fs from 'fs';
 import * as _path from 'path';
-import * as _ from 'lodash';
 
 import { CompilerCallBack } from './all';
 import * as _hooks from './hooks/index';

@@ -7,6 +7,8 @@ const app_1 = require("../app");
 const extraParamsParse_1 = require("./extraParamsParse");
 const log_1 = require("../lib/log");
 const config_filed_constant_1 = require("../config-filed-constant");
+const checkLatestCLIVersion_1 = require("../lib/checkLatestCLIVersion");
+const reportLog_1 = require("../lib/reportLog");
 function getHttpServer(program) {
     //读取用户自定义配置
     _init.prepareUserEnv(program.workspace, program.noConfig);
@@ -27,6 +29,8 @@ function getHttpServer(program) {
         process.exit(1);
     }
     ;
+    checkLatestCLIVersion_1.default();
+    reportLog_1.default();
     if (program.check) {
         //检查cli 版本
         // 检查插件版本
