@@ -7,6 +7,7 @@ const _plugin = require("../plugin/index");
 const extraParamsParse_1 = require("./extraParamsParse");
 const log_1 = require("../lib/log");
 const config_filed_constant_1 = require("../config-filed-constant");
+const reportLog_1 = require("../lib/reportLog");
 /**环境变量初始化 ,是否存在错误，true 存在，false不存在*/
 function prepare(program) {
     //读取用户自定义配置
@@ -54,9 +55,11 @@ function execute(program, finish) {
         let app = getBuildServer(program);
         let port = program.port || 14423;
         app.listen(port);
+        reportLog_1.default("build", "server");
         console.log(`Build Server listen at port ${port}`.green);
     }
     else {
+        reportLog_1.default("build", "process");
         _build.buildProcess(function () {
             if (prepare(program)) {
                 process.exit(1);

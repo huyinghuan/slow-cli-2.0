@@ -30,7 +30,6 @@ function getHttpServer(program) {
     }
     ;
     checkLatestCLIVersion_1.default();
-    reportLog_1.default();
     if (program.check) {
         //检查cli 版本
         // 检查插件版本
@@ -38,6 +37,7 @@ function getHttpServer(program) {
             process.exit(1);
         }
     }
+    reportLog_1.default("start", "success");
     //启动http服务
     return app_1.default();
 }

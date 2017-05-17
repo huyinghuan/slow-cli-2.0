@@ -32,7 +32,6 @@ export function getHttpServer(program){
     process.exit(1)
   };
   _checkLatestCLIVersion()
-  _reportLog()
   if(program.check){
     //检查cli 版本
     // 检查插件版本
@@ -40,6 +39,7 @@ export function getHttpServer(program){
       process.exit(1)
     }
   }
+  _reportLog("start", "success")
   //启动http服务
   return _app()
 }

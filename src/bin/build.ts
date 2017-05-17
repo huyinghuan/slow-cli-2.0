@@ -6,6 +6,7 @@ import * as _path from 'path';
 import _extraParamsParse from './extraParamsParse';
 import _log from '../lib/log'
 import _configFiledConstant from '../config-filed-constant';
+import _reportLog from '../lib/reportLog';
 
 /**环境变量初始化 ,是否存在错误，true 存在，false不存在*/
 export function prepare(program): boolean{
@@ -63,8 +64,10 @@ export function execute(program, finish?){
     let app = getBuildServer(program)
     let port = program.port || 14423
     app.listen(port);
+    _reportLog("build", "server")
     console.log(`Build Server listen at port ${port}`.green)
   }else{
+    _reportLog("build", "process")
     _build.buildProcess(function(){
       if(prepare(program)){
         process.exit(1)
@@ -91,9 +94,8 @@ export function commander(_commander){
         if(error){
           process.exit(1)
         }else{
-           process.exit(0)
+          process.exit(0)
         }
-        
       })
     })
 }

@@ -166,6 +166,8 @@ sr build --help
 sr install
 ```
 
+注意⚠️ 非mgtv内网安装插件记得使用` -r taobao` 或者 `-r npm`参数 ,即 `sr install -r taobao`, `sr install xxx -r taobao`, 因为默认为mgtv内网仓库
+
 #### 可选选项参数：
 
 `-l --log` 详细见[common-command-common-params.md](common-command-common-params.md)
