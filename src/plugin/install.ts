@@ -30,7 +30,7 @@ function installPlugin(beInstallPluginList, registry, saveAsProduct, cb){
     let child = _spawn('npm', ["install", "--registry", registry].concat(pluginName).concat(saveInfo), { stdio: 'inherit' })
     child.on('exit', function (code) {
         if(code == 0){
-          _log.success(`安装插件${installSuccessPlugnList}成功`.green)
+          _log.success(`安装插件${pluginName}成功`.green)
           installSuccessPlugnList.push(pluginName)
           doNext(null, null)
         }else{
