@@ -28,27 +28,26 @@ export default function(buildConfig, data, next){
     }
     let outputFilePathArr = [].concat(data.outputFilePath);
     let appendFile = data.appendFile;
-    try{
-      //如果一个内容要输出到多个文件
-      outputFilePathArr.forEach((outputFilePath)=>{
-        if(!appendFile){
-          _fs.outputFileSync(outputFilePath, content)
-        }else{
-          _log.info(`append ${data.inputFileRelativePath} to ${outputFilePath.replace(data.outdir, "")}`)
-          if(!_fs.existsSync(outputFilePath)){
-            _fs.outputFileSync(outputFilePath, content)
-          }else{
-            if(data.appendFilePrefix){
-              content = data.appendFilePrefix + content
-            }
-            _fs.appendFileSync(outputFilePath, content, {encoding: 'utf8'})
-          }
-        }
+
+    _async.each(outputFilePathArr, (outputFilePath, doNext)=>{
+      if(!appendFile){
+        _fs.outputFile(outputFilePath, content, (err)=>{ doNext(err) })
+        return
+      }
+      _log.info(`append ${data.inputFileRelativePath} to ${outputFilePath.replace(data.outdir, "")}`)
+      if(!_fs.existsSync(outputFilePath)){
+        _fs.outputFile(outputFilePath, content, (err)=>{ doNext(err) })
+        return
+      }
+      if(data.appendFilePrefix){
+        content = data.appendFilePrefix + content
+      }
+      _fs.appendFile(outputFilePath, content, {encoding: 'utf8'},(err)=>{
+        doNext(err)
+      })
+    }, (e)=>{
+      e ? cb(e) : cb(null, true)
     })
-    }catch(e){
-      return cb(e)
-    }
-    cb(null, true)
   })
 
   /* 未完成编译， 触发hook， hook如果已经写入文件，那么不做任何事情， 如果ignore为true也不做任何事情

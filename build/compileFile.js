@@ -27,30 +27,25 @@ function default_1(buildConfig, data, next) {
         }
         let outputFilePathArr = [].concat(data.outputFilePath);
         let appendFile = data.appendFile;
-        try {
-            //如果一个内容要输出到多个文件
-            outputFilePathArr.forEach((outputFilePath) => {
-                if (!appendFile) {
-                    _fs.outputFileSync(outputFilePath, content);
-                }
-                else {
-                    log_1.default.info(`append ${data.inputFileRelativePath} to ${outputFilePath.replace(data.outdir, "")}`);
-                    if (!_fs.existsSync(outputFilePath)) {
-                        _fs.outputFileSync(outputFilePath, content);
-                    }
-                    else {
-                        if (data.appendFilePrefix) {
-                            content = data.appendFilePrefix + content;
-                        }
-                        _fs.appendFileSync(outputFilePath, content, { encoding: 'utf8' });
-                    }
-                }
+        _async.each(outputFilePathArr, (outputFilePath, doNext) => {
+            if (!appendFile) {
+                _fs.outputFile(outputFilePath, content, (err) => { doNext(err); });
+                return;
+            }
+            log_1.default.info(`append ${data.inputFileRelativePath} to ${outputFilePath.replace(data.outdir, "")}`);
+            if (!_fs.existsSync(outputFilePath)) {
+                _fs.outputFile(outputFilePath, content, (err) => { doNext(err); });
+                return;
+            }
+            if (data.appendFilePrefix) {
+                content = data.appendFilePrefix + content;
+            }
+            _fs.appendFile(outputFilePath, content, { encoding: 'utf8' }, (err) => {
+                doNext(err);
             });
-        }
-        catch (e) {
-            return cb(e);
-        }
-        cb(null, true);
+        }, (e) => {
+            e ? cb(e) : cb(null, true);
+        });
     });
     /* 未完成编译， 触发hook， hook如果已经写入文件，那么不做任何事情， 如果ignore为true也不做任何事情
      如果没有写入文件， 那么默认copy[调用默认hook(plugin/default-plugin/build/*)]文件。*/

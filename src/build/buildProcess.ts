@@ -14,13 +14,13 @@ import _configFiledConstant from '../config-filed-constant';
  * */
 export default function(prepareFn:Function, finish, needLoadPlugin?){
   prepareFn();
-  let __starTime = Date.now();
+  
   //加载插件
   /* istanbul ignore if */
   if(needLoadPlugin != false){
     _plugin.scanPlugins('build')
   }
-
+  let __starTime = Date.now();
   let queue = [];
   let gitHash = null;
   //build初始化HOOK

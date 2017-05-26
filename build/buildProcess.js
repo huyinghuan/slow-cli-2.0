@@ -13,12 +13,12 @@ const config_filed_constant_1 = require("../config-filed-constant");
  * */
 function default_1(prepareFn, finish, needLoadPlugin) {
     prepareFn();
-    let __starTime = Date.now();
     //加载插件
     /* istanbul ignore if */
     if (needLoadPlugin != false) {
         _plugin.scanPlugins('build');
     }
+    let __starTime = Date.now();
     let queue = [];
     let gitHash = null;
     //build初始化HOOK
