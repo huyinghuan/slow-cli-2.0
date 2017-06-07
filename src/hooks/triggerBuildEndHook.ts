@@ -5,7 +5,7 @@ export default function(buildConfig, callback: _allDefined.BuildEndCallback){
   let queue = _hookMap.HookQueue[_hookMap.build.endBuild] || [];
   
   _async.mapSeries(queue, (hook, next)=>{
-    (hook as any).fn(buildConfig, next)
+    ;(hook as any).fn(buildConfig, next)
   }, (err)=>{
     callback(err)
   })

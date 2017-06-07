@@ -316,6 +316,7 @@ for [silky build](docs/user-command-build.md)
 silky-build:{
   outdir: './build', //配置编译文件输出目录，⚠️ 注意 ⚠️ build之前会先清空该文件夹。
   ignore: ["node_modules", "(\\/\\.[^/]+)$"] //编译跳过这些文件。 适用正则表达式的字符串。 所有平台下（包含windows）,路径分割符在写正则时都使用 '/' 不使用 '\'
+  include: []//应该包含哪些文件， 如果符合ignore 也符合 include，最后结果取include
 }
 ...
 ```

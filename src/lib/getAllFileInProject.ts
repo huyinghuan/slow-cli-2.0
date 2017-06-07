@@ -18,16 +18,29 @@ function shouldInclude(filename, filepath):boolean{
 
   //需要忽略掉文件
   const buildIgnore:Array<string> = _buildConfig.ignore;
+  //需要包含的文件
+  const buildInclude:Array<string> = _buildConfig.include;
+  let flag = true 
   for(let i = 0, length = buildIgnore.length; i < length; i++){
     if(filepath.indexOf(buildIgnore[i]) != -1){
-      return false
+      flag = false
     }
     filepath = filepath.replace(/(\\)+/g, "/")
     if(new RegExp(buildIgnore[i]).test(filepath)){
-      return false
+      flag =  false
     }
   }
-  return true
+
+  for(let i = 0, length = buildInclude.length; i < length; i++){
+    if(filepath.indexOf(buildInclude[i]) != -1){
+      flag = true
+    }
+    filepath = filepath.replace(/(\\)+/g, "/")
+    if(new RegExp(buildInclude[i]).test(filepath)){
+      flag =  true
+    }
+  }
+  return flag
 }
 
 /* 获取项目目录下的所有文件，除编译目录外*/
