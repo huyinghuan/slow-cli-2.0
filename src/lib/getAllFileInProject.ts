@@ -17,9 +17,9 @@ function shouldInclude(filename, filepath):boolean{
   }
 
   //需要忽略掉文件
-  const buildIgnore:Array<string> = _buildConfig.ignore;
+  const buildIgnore:Array<string> = _buildConfig.ignore || [];
   //需要包含的文件
-  const buildInclude:Array<string> = _buildConfig.include;
+  const buildInclude:Array<string> = _buildConfig.include || [];
   let flag = true 
   for(let i = 0, length = buildIgnore.length; i < length; i++){
     if(filepath.indexOf(buildIgnore[i]) != -1){
