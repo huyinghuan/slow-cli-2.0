@@ -42,7 +42,7 @@ const buildServer = function(prepareFn:Function):_express.Express{
     }
     if(!_path.isAbsolute(outdir)){
       resp.status(403);
-      resp.send({error:"路径不正确"})
+      resp.send({error:"输出路径不正确"})
       return
     };
     try{
