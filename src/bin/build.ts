@@ -7,7 +7,6 @@ import _extraParamsParse from './extraParamsParse';
 import _log from '../lib/log'
 import _configFiledConstant from '../config-filed-constant';
 import _reportLog from '../lib/reportLog';
-
 /**环境变量初始化 ,是否存在错误，true 存在，false不存在*/
 export function prepare(program): boolean{
   //读取用户自定义配置
@@ -66,11 +65,18 @@ export function execute(program, finish?){
     app.listen(port);
     _reportLog("build", "server")
     console.log(`Build Server listen at port ${port}`.green)
+  }else if(program.singleFile){
+    _reportLog("build", "single")
+    _build.buildSingleFile(function(){
+      if(prepare(program)){
+        finish("初始化配置失败")
+      }
+    }, program.singleFile, finish)
   }else{
     _reportLog("build", "process")
     _build.buildProcess(function(){
       if(prepare(program)){
-        process.exit(1)
+        finish("初始化配置失败")
       }
     }, finish)
   }
@@ -82,6 +88,7 @@ export function commander(_commander){
     .description('编译')
     .option('-w, --workspace <value>', '指定工作目录')
     .option('-o, --outdir <value>', '指定build文件夹')
+    .option('-i, --singleFile <value>', "编译指定文件")
     .option('-f, --force', '强制进行build，哪怕版本检查没通过')
     .option('-e, --enviroment <value>', "运行时环境可选[develop, production，或其他] 默认production")
     .option('-l, --log <value>', 'log日志,( 0[defaul]: show all; 1: show error, fail; 2: show error, fail, warn)',(value)=>{_log.setLevel(value)})
@@ -92,6 +99,7 @@ export function commander(_commander){
     .action((program)=>{
       execute(program, (error)=>{
         if(error){
+          _log.error(error)
           process.exit(1)
         }else{
           process.exit(0)

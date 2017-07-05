@@ -122,7 +122,7 @@ sr start --help
 #强制编译项目，当silky 版本，插件版本和 项目的package.json中所依赖的版本不同时，sr build会失败，这时需要使用-f参数
 -f --force 
 -o --outdir #输出路径 该参数不指定时，默认build到 ./build目录
-
+-i --singleFile #编译单个文件夹
 -l --log  #见 command-common-params.md #
 
 -w --workspace #指定工作目录 #默认为当前目录

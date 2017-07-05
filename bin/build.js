@@ -58,11 +58,19 @@ function execute(program, finish) {
         reportLog_1.default("build", "server");
         console.log(`Build Server listen at port ${port}`.green);
     }
+    else if (program.singleFile) {
+        reportLog_1.default("build", "single");
+        _build.buildSingleFile(function () {
+            if (prepare(program)) {
+                finish("初始化配置失败");
+            }
+        }, program.singleFile, finish);
+    }
     else {
         reportLog_1.default("build", "process");
         _build.buildProcess(function () {
             if (prepare(program)) {
-                process.exit(1);
+                finish("初始化配置失败");
             }
         }, finish);
     }
@@ -74,6 +82,7 @@ function commander(_commander) {
         .description('编译')
         .option('-w, --workspace <value>', '指定工作目录')
         .option('-o, --outdir <value>', '指定build文件夹')
+        .option('-i, --singleFile <value>', "编译指定文件")
         .option('-f, --force', '强制进行build，哪怕版本检查没通过')
         .option('-e, --enviroment <value>', "运行时环境可选[develop, production，或其他] 默认production")
         .option('-l, --log <value>', 'log日志,( 0[defaul]: show all; 1: show error, fail; 2: show error, fail, warn)', (value) => { log_1.default.setLevel(value); })
@@ -84,6 +93,7 @@ function commander(_commander) {
         .action((program) => {
         execute(program, (error) => {
             if (error) {
+                log_1.default.error(error);
                 process.exit(1);
             }
             else {
