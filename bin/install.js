@@ -33,7 +33,7 @@ function execute(plugins, program, finish) {
         //没有指定，安装所有
         let pluginConfig = config_filed_constant_1.default.getPluginConfig();
         let pluginNameArr = [];
-        let versionDependencies = _project.getProjectPackageJSONField('dependencies') || _project.getProjectPackageJSONField('devDependencies') || {};
+        let versionDependencies = _.extend({}, _project.getProjectPackageJSONField('devDependencies'), _project.getProjectPackageJSONField('dependencies'));
         Object.keys(pluginConfig).forEach((key) => {
             if (pluginConfig[key] == false) {
                 log_1.default.info(`插件${key}已被禁用， 跳过安装`);
