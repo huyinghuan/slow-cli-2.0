@@ -1,4 +1,7 @@
 ## 更新历史
+v2.5.3 
+  fix bug. 错误引用`git-head-hash`包
+  
 v2.5.2
   在`sr start`后，修改配置【包括sr install】后无需重启
 
