@@ -5,11 +5,14 @@ const _super = require('supertest');
 const _color = require('colors');
 const log_1 = require("../lib/log");
 const _start = require("../bin/start");
+const app_1 = require("../app");
 describe("test start server", () => {
     log_1.default.setLevel(1);
-    let _agent = _super.agent(_start.getHttpServer({
+    let server = app_1.default();
+    _start.prepare({
         workspace: "/Users/hyh/workspace/imgotv-channel"
-    }));
+    });
+    let _agent = _super.agent(server);
     it('Get a index.html', function (done) {
         this.timeout(300000);
         _agent.get('/')

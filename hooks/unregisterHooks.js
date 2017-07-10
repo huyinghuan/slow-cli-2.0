@@ -20,6 +20,7 @@ function default_1() {
             pluginNameList.push(key);
         }
     });
+    pluginNameList.push(".silky");
     Object.keys(require.cache).forEach((cacheKey) => {
         pluginNameList.forEach((pluginName) => {
             if (cacheKey.indexOf(pluginName) != -1) {

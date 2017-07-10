@@ -1,4 +1,7 @@
 ## 更新历史
+v2.5.2
+  在`sr start`后，修改配置【包括sr install】后无需重启
+
 v2.5.1
     更新获取git commit  hash方式
 v2.5.0

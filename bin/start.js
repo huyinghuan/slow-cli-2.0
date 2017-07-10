@@ -1,5 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const _fs = require("fs");
+const _path = require("path");
 const _init = require("../init/index");
 const _project = require("../project");
 const _utils = require("../plugin/index");
@@ -9,7 +11,30 @@ const log_1 = require("../lib/log");
 const config_filed_constant_1 = require("../config-filed-constant");
 const checkLatestCLIVersion_1 = require("../lib/checkLatestCLIVersion");
 const reportLog_1 = require("../lib/reportLog");
-function getHttpServer(program) {
+const _plugin = require("../plugin/index");
+const unregisterHooks_1 = require("../hooks/unregisterHooks");
+function watchConfig(program) {
+    let workspace = config_filed_constant_1.default.getWorkspace();
+    let packageJsonFilePath = _path.join(workspace, "package.json");
+    _fs.watch(packageJsonFilePath, function (eventType, filename) {
+        if (eventType == "rename" && filename != "package.json") {
+            log_1.default.error("package.json be delete！ can not reload config".red);
+            return;
+        }
+        //Reload config
+        prepare(program);
+        unregisterHooks_1.default();
+        _plugin.scanPlugins('route');
+    });
+    let configDir = _path.join(workspace, ".silky");
+    _fs.watch(configDir, { recursive: true }, function () {
+        //ReloadConfig
+        prepare(program);
+        unregisterHooks_1.default();
+        _plugin.scanPlugins('route');
+    });
+}
+function prepare(program) {
     //读取用户自定义配置
     _init.prepareUserEnv(program.workspace, program.noConfig);
     //读取运行时环境配置
@@ -37,11 +62,8 @@ function getHttpServer(program) {
             process.exit(1);
         }
     }
-    reportLog_1.default("start", "success");
-    //启动http服务
-    return app_1.default();
 }
-exports.getHttpServer = getHttpServer;
+exports.prepare = prepare;
 /* istanbul ignore next  */
 function commander(_commander) {
     _commander.command('start')
@@ -55,9 +77,12 @@ function commander(_commander) {
         .option('-A, --additional <items>', '额外的参数，格式 -A A=1[,B=xxx]', extraParamsParse_1.default)
         .allowUnknownOption()
         .action((program) => {
-        let server = getHttpServer(program);
+        prepare(program);
+        let server = app_1.default();
         let port = program.port || config_filed_constant_1.default.getGlobal('port');
+        reportLog_1.default("start", "success");
         server.listen(port);
+        watchConfig(program);
         console.log(`silky run on http://localhost:${port}`.green);
     });
 }

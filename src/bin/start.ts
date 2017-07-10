@@ -1,3 +1,5 @@
+import * as _fs from 'fs'
+import * as _path from 'path'
 import * as _init from '../init/index'
 import * as _project from '../project'
 import * as _utils from '../plugin/index';
@@ -8,8 +10,34 @@ import _log from '../lib/log';
 import _configFiledConstant from '../config-filed-constant';
 import _checkLatestCLIVersion from '../lib/checkLatestCLIVersion';
 import _reportLog from '../lib/reportLog';
+import * as _plugin from '../plugin/index'
+import _unregisterHooks from '../hooks/unregisterHooks'
 
-export function getHttpServer(program){
+function watchConfig(program){
+  let workspace = _configFiledConstant.getWorkspace()
+  let packageJsonFilePath = _path.join(workspace, "package.json")
+  _fs.watch(packageJsonFilePath, function(eventType, filename){
+    if(eventType == "rename" && filename != "package.json"){
+      _log.error("package.json be delete！ can not reload config".red)
+      return
+    }
+    //Reload config
+    prepare(program)
+    _unregisterHooks()
+    _plugin.scanPlugins('route');
+  })
+  let configDir = _path.join(workspace, ".silky")
+  _fs.watch(configDir,  {recursive: true}, function(){
+    //ReloadConfig
+     prepare(program)
+     _unregisterHooks()
+     _plugin.scanPlugins('route');
+  })
+
+}
+
+
+export function prepare(program){
   //读取用户自定义配置
   _init.prepareUserEnv(program.workspace, program.noConfig);
   //读取运行时环境配置
@@ -39,9 +67,6 @@ export function getHttpServer(program){
       process.exit(1)
     }
   }
-  _reportLog("start", "success")
-  //启动http服务
-  return _app()
 }
 
 /* istanbul ignore next  */
@@ -57,9 +82,12 @@ export function commander(_commander){
     .option('-A, --additional <items>', '额外的参数，格式 -A A=1[,B=xxx]', _extraParamsParse)
     .allowUnknownOption()
     .action((program)=>{
-      let server = getHttpServer(program)
+      prepare(program)
+      let server = _app()
       let port = program.port || _configFiledConstant.getGlobal('port')
+      _reportLog("start", "success")
       server.listen(port);
+      watchConfig(program)
       console.log(`silky run on http://localhost:${port}`.green)
     })
 }

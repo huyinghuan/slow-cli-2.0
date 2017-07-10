@@ -4,13 +4,15 @@ const _super = require('supertest');
 const _color = require('colors')
 import _log from '../lib/log';
 import * as _start from '../bin/start';
-
+import _app from '../app'
 
 describe("test start server", ()=>{
   _log.setLevel(1);
-  let _agent = _super.agent(_start.getHttpServer({
+  let server = _app()
+  _start.prepare({
     workspace: "/Users/hyh/workspace/imgotv-channel"
-  }))
+  })
+  let _agent = _super.agent(server)
 
   it('Get a index.html', function(done){
     this.timeout(300000)
