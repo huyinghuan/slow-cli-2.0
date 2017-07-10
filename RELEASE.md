@@ -1,4 +1,6 @@
 ## 更新历史
+v2.5.1
+    更新获取git commit  hash方式
 v2.5.0
     修复sr install 重复安装bug 
 
