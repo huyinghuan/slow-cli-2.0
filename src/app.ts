@@ -39,7 +39,7 @@ export default ()=>{
         case 404:
         case 500:  _log.error(msg.red); break;
         default:
-          console.log(msg.gray, `${_formatContentLength((resp as any)._contentLength)}`);
+          _log.info(msg.gray, `${_formatContentLength((resp as any)._contentLength)}`);
       }
       _hooks.triggerHttpDidResponseHook(req);
     })
@@ -79,8 +79,11 @@ export default ()=>{
   }
 
   //拦截GET请求，并且加载编译其他hooks
-  router.get('*', function(req, resp, next){
+  router.get('*', function(request, resp, next){
     let queue = [];
+    let req = {
+      path:  request.path
+    }
     let realPath = req.path;
     if(realPath == '/'){
       realPath = globalCLIConfig.index || "index.html"
@@ -89,6 +92,7 @@ export default ()=>{
       status: 404,
       realPath: realPath
     }
+
     queue.push((cb:CompilerCallBack)=>{
       //route:didRequest
       _hooks.triggerHttpCompilerHook(req, data, cb)

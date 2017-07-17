@@ -41,7 +41,7 @@ exports.default = () => {
                     log_1.default.error(msg.red);
                     break;
                 default:
-                    console.log(msg.gray, `${fortmatContentLength_1.default(resp._contentLength)}`);
+                    log_1.default.info(msg.gray, `${fortmatContentLength_1.default(resp._contentLength)}`);
             }
             _hooks.triggerHttpDidResponseHook(req);
         });
@@ -78,8 +78,11 @@ exports.default = () => {
         return;
     }
     //拦截GET请求，并且加载编译其他hooks
-    router.get('*', function (req, resp, next) {
+    router.get('*', function (request, resp, next) {
         let queue = [];
+        let req = {
+            path: request.path
+        };
         let realPath = req.path;
         if (realPath == '/') {
             realPath = globalCLIConfig.index || "index.html";
