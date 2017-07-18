@@ -7,14 +7,13 @@ const _hook = require("../hooks/index");
 const compileFileQueue_1 = require("./compileFileQueue");
 const compileFile_1 = require("./compileFile");
 const log_1 = require("../lib/log");
+const config_filed_constant_1 = require("../config-filed-constant");
 /**
  * @params: buildConfig <Object> 编译参数
  * @params: finish <Function> 回调函数， 接收一个参数
 */
 function default_1(buildConfig, finish) {
     let queue = [];
-    //获取所有待编译文件
-    let fileQueue = getAllFileInProject_1.default(false);
     //额外需要编译的文件
     buildConfig.__extra = [];
     //编译完成后需要删除掉冗余文件
@@ -25,6 +24,9 @@ function default_1(buildConfig, finish) {
     });
     //处理文件队列 （doCompile，didCompile，doNothing) in there
     queue.push((buildConfig, next) => {
+        config_filed_constant_1.default.setBuildParams(buildConfig);
+        //获取所有待编译文件
+        let fileQueue = getAllFileInProject_1.default(false);
         //编译文件
         compileFileQueue_1.default(buildConfig, fileQueue, next);
     });

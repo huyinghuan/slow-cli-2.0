@@ -6,16 +6,15 @@ import * as _hook from '../hooks/index';
 import _compileFileQueue from './compileFileQueue';
 import _compileFile from './compileFile';
 import _log from '../lib/log';
-
+import * as _ from 'lodash'
+import _configFiledConstant from '../config-filed-constant';
 /**
  * @params: buildConfig <Object> 编译参数
  * @params: finish <Function> 回调函数， 接收一个参数
 */
 export default function(buildConfig, finish){
   let queue = [];
-  //获取所有待编译文件
-  let fileQueue:Array<Object> = _getAllFileInProject(false);
-
+  
   //额外需要编译的文件
   buildConfig.__extra = [];
   //编译完成后需要删除掉冗余文件
@@ -27,6 +26,9 @@ export default function(buildConfig, finish){
 
   //处理文件队列 （doCompile，didCompile，doNothing) in there
   queue.push((buildConfig, next)=>{
+    _configFiledConstant.setBuildParams(buildConfig)
+    //获取所有待编译文件
+    let fileQueue:Array<Object> = _getAllFileInProject(false);
     //编译文件
     _compileFileQueue(buildConfig, fileQueue, next)
   })

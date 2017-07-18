@@ -13,7 +13,7 @@ import * as _fs from 'fs'
 function registerHook(hookType: string, pluginName: string){
   return (hookName:string, callback:_allDefined.CallBack, priority?:number)=>{
     if(hookName.indexOf(hookType) == 0 || hookType == 'all'){
-      priority = ~~priority > 0 ? ~~priority : 1;
+      priority = ~~priority != 0 ? ~~priority : 1;
       _registerHook(hookName, callback, priority);
       if(pluginName){
         _log.success(`加载插件${pluginName}'s hook  ${hookName} 成功! priority:${priority}`.blue)

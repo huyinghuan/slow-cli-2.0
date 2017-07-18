@@ -32,7 +32,6 @@ export default function(buildConfig, data, next){
     outputFilePathArr.forEach((outputFilePath)=>{
       if(!appendFile){
         return _fs.outputFileSync(outputFilePath, content)
-        
       }
       _log.info(`append ${data.inputFileRelativePath} to ${outputFilePath.replace(data.outdir, "")}`)
       if(!_fs.existsSync(outputFilePath)){
