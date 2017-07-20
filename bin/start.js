@@ -82,7 +82,9 @@ function commander(_commander) {
         let port = program.port || config_filed_constant_1.default.getGlobal('port');
         reportLog_1.default("start", "success");
         server.listen(port);
-        watchConfig(program);
+        if (!program.noConfig) {
+            watchConfig(program);
+        }
         console.log(`silky run on http://localhost:${port}`.green);
     });
 }
