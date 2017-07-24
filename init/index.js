@@ -2,8 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const generatorDefaultConfig_1 = require("./generatorDefaultConfig");
 exports.generatorDefaultConfig = generatorDefaultConfig_1.default;
-const getRemoteServerProjectPluginConfig_1 = require("./getRemoteServerProjectPluginConfig");
-exports.getRemoteServerProjectPluginConfig = getRemoteServerProjectPluginConfig_1.default;
 const checkBuildArgs_1 = require("./checkBuildArgs");
 exports.checkBuildArgs = checkBuildArgs_1.default;
 const checkStartArgs_1 = require("./checkStartArgs");

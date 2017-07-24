@@ -13,16 +13,13 @@ function installPlugin(beInstallPluginList, registry, saveAsProduct, cb) {
     if (registry == "npm") {
         registry = "https://registry.npmjs.com/";
     }
-    let saveInfo = ["--save-dev", "--save-exact"];
     registry = registry || _project.getProjectPackageJSONField('__registry') || public_1.default.private_npm_registry;
     let installSuccessPlugnList = [];
     let installFailPlugnList = [];
     _async.mapSeries(beInstallPluginList, (pluginName, doNext) => {
         let saveInfo = ["--save-dev", "--save-exact"];
-        if (pluginName.indexOf("sp-") != 0) {
-            saveInfo = ["--save", "--save-exact"];
-        }
-        else if (saveAsProduct) {
+        //所有非内容处理插件（即不以sp-开始的库，全部保存到正式依赖）
+        if (pluginName.indexOf("sp-") != 0 || saveAsProduct) {
             saveInfo = ["--save", "--save-exact"];
         }
         let child = _spawn('npm', ["install", "--registry", registry].concat(pluginName).concat(saveInfo), { stdio: 'inherit' });
@@ -43,22 +40,22 @@ function installPlugin(beInstallPluginList, registry, saveAsProduct, cb) {
             doNext(null, null);
         });
     }, (err) => {
-        if (installSuccessPlugnList.length) {
-            log_1.default.success(`安装插件${installSuccessPlugnList}成功`.green);
+        if (installSuccessPlugnList.length > 1) {
+            log_1.default.success(`\n安装插件${installSuccessPlugnList}成功`.green);
         }
         if (installFailPlugnList.length) {
-            cb(`安装插件${installFailPlugnList}失败`.red);
+            cb(`\n安装插件${installFailPlugnList}失败`.red, installSuccessPlugnList);
         }
         else {
-            cb(null);
+            cb(null, installSuccessPlugnList);
         }
     });
 }
-function default_1(pluginList, registry, saveAsDev, finish) {
+function default_1(pluginList, registry, saveAsProduct, finish) {
     let beInstallPluginList = [];
     pluginList.forEach((pluginName) => {
         beInstallPluginList.push(getFullPluginName_1.default(pluginName, true));
     });
-    installPlugin(beInstallPluginList, registry, saveAsDev, finish);
+    installPlugin(beInstallPluginList, registry, saveAsProduct, finish);
 }
 exports.default = default_1;
