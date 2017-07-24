@@ -60,7 +60,9 @@ export default ()=>{
       _hooks.triggerHttpResponseDirHook(path, (error, content)=>{
         if(error){
           _log.error(error)
-          return resp.sendStatus(500)
+          resp.status(500)
+          resp.send(error)
+          return
         }
         if(content){
           resp.set('Content-Type', "text/html");
@@ -123,7 +125,8 @@ export default ()=>{
     _async.waterfall(queue, (error, hasProcess)=>{
       if(error){
         console.log(error)
-        resp.sendStatus(500)
+        resp.status(500)
+        resp.send(error)
       }else{
         //交给自带的静态文件处理
         if(!hasProcess){
