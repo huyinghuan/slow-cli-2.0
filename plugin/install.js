@@ -22,6 +22,9 @@ function installPlugin(beInstallPluginList, registry, saveAsProduct, cb) {
         if (pluginName.indexOf("sp-") != 0 || saveAsProduct) {
             saveInfo = ["--save", "--save-exact"];
         }
+        if (pluginName.indexOf('@') == -1) {
+            pluginName = pluginName + "@latest";
+        }
         let child = _spawn('npm', ["install", "--registry", registry].concat(pluginName).concat(saveInfo), { stdio: 'inherit' });
         child.on('exit', function (code) {
             if (code == 0) {
@@ -41,7 +44,7 @@ function installPlugin(beInstallPluginList, registry, saveAsProduct, cb) {
         });
     }, (err) => {
         if (installSuccessPlugnList.length > 1) {
-            log_1.default.success(`\n安装插件${installSuccessPlugnList}成功`.green);
+            log_1.default.success(`安装插件:\n${installSuccessPlugnList.join('\n')}成功`.green);
         }
         if (installFailPlugnList.length) {
             cb(`\n安装插件${installFailPlugnList}失败`.red, installSuccessPlugnList);

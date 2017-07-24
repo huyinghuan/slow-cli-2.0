@@ -25,6 +25,9 @@ function installPlugin(beInstallPluginList, registry, saveAsProduct, cb){
     if((pluginName as string).indexOf("sp-") != 0 || saveAsProduct){
       saveInfo = ["--save", "--save-exact"]
     }
+    if((pluginName as string).indexOf('@') == -1){
+      pluginName = pluginName+"@latest"
+    }
     let child = _spawn('npm', ["install", "--registry", registry].concat(pluginName).concat(saveInfo), { stdio: 'inherit' })
     child.on('exit', function (code) {
         if(code == 0){
@@ -43,7 +46,7 @@ function installPlugin(beInstallPluginList, registry, saveAsProduct, cb){
     })
   }, (err)=>{
     if(installSuccessPlugnList.length > 1){
-      _log.success(`\n安装插件${installSuccessPlugnList}成功`.green)
+      _log.success(`安装插件:\n${installSuccessPlugnList.join('\n')}成功`.green)
     }
     if(installFailPlugnList.length){
       cb(`\n安装插件${installFailPlugnList}失败`.red, installSuccessPlugnList)
