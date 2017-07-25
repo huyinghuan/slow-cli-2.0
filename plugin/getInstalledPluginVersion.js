@@ -6,7 +6,7 @@ const _path = require("path");
 //获取实际已安装插件的版本好 （node_modules/xx）
 function default_1(pluginName) {
     let pluginRootDir = config_filed_constant_1.default.get().pluginDir;
-    if (!_fs.existsSync(_path.join(pluginRootDir, pluginName))) {
+    if (!_fs.existsSync(_path.join(pluginRootDir, pluginName, 'package.json'))) {
         return -1;
     }
     let packageJson = _fs.readJSONSync(_path.join(pluginRootDir, pluginName, 'package.json'));

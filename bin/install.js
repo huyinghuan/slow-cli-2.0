@@ -16,7 +16,8 @@ function execute(plugins, program, finish) {
         _plugin.install(plugins, program.registry, saveAsProduct, (error, installSuccessPlugnList) => {
             let pluginConfig = {};
             installSuccessPlugnList.forEach((pluginName) => {
-                pluginConfig[_plugin.getFullPluginName(pluginName)] = _plugin.getPluginConfig(pluginName);
+                pluginName = _plugin.getFullPluginName(pluginName, false);
+                pluginConfig[pluginName] = _plugin.getPluginConfig(pluginName);
             });
             _plugin.writePluginConfigToConfigFile(pluginConfig);
             finish(error);
