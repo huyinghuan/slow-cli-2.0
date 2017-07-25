@@ -1,4 +1,3 @@
-
 import * as _async from 'async';
 import * as _project from '../project';
 import _executeCommand from '../lib/executeCommand';
@@ -7,6 +6,16 @@ import _log from '../lib/log';
 import _getFullPluginName from './getFullPluginName';
 import _configFiledConstant from '../config-filed-constant';
 import _publicConfig from '../public'
+import * as _ from 'lodash'
+
+function logSuccessInfo(installSuccessPlugnList: Array<string>){
+    let versionDependencies = _.extend({}, _project.getProjectPackageJSONField('devDependencies'),_project.getProjectPackageJSONField('dependencies'))
+    _log.success(`\n已成功安装插件:`.yellow)
+    installSuccessPlugnList.forEach((pluginNameAndVersion:string)=>{
+      let pluginName = pluginNameAndVersion.replace(/\@.+$/, "")
+      _log.success(`  ${pluginName}@${versionDependencies[pluginName]}`.yellow)
+    })
+}
 
 function installPlugin(beInstallPluginList, registry, saveAsProduct, cb){
   if(registry == "taobao"){
@@ -46,7 +55,7 @@ function installPlugin(beInstallPluginList, registry, saveAsProduct, cb){
     })
   }, (err)=>{
     if(installSuccessPlugnList.length > 1){
-      _log.success(`安装插件:\n${installSuccessPlugnList.join('\n')}成功`.green)
+      logSuccessInfo(installSuccessPlugnList)
     }
     if(installFailPlugnList.length){
       cb(`\n安装插件${installFailPlugnList}失败`.red, installSuccessPlugnList)

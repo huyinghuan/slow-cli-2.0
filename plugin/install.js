@@ -6,6 +6,15 @@ const _spawn = require("cross-spawn");
 const log_1 = require("../lib/log");
 const getFullPluginName_1 = require("./getFullPluginName");
 const public_1 = require("../public");
+const _ = require("lodash");
+function logSuccessInfo(installSuccessPlugnList) {
+    let versionDependencies = _.extend({}, _project.getProjectPackageJSONField('devDependencies'), _project.getProjectPackageJSONField('dependencies'));
+    log_1.default.success(`\n已成功安装插件:`.yellow);
+    installSuccessPlugnList.forEach((pluginNameAndVersion) => {
+        let pluginName = pluginNameAndVersion.replace(/\@.+$/, "");
+        log_1.default.success(`  ${pluginName}@${versionDependencies[pluginName]}`.yellow);
+    });
+}
 function installPlugin(beInstallPluginList, registry, saveAsProduct, cb) {
     if (registry == "taobao") {
         registry = "https://registry.npm.taobao.org";
@@ -44,7 +53,7 @@ function installPlugin(beInstallPluginList, registry, saveAsProduct, cb) {
         });
     }, (err) => {
         if (installSuccessPlugnList.length > 1) {
-            log_1.default.success(`安装插件:\n${installSuccessPlugnList.join('\n')}成功`.green);
+            logSuccessInfo(installSuccessPlugnList);
         }
         if (installFailPlugnList.length) {
             cb(`\n安装插件${installFailPlugnList}失败`.red, installSuccessPlugnList);

@@ -68,6 +68,9 @@ function execute(program, finish) {
     }
     else {
         reportLog_1.default("build", "process");
+        if (program.update) {
+            _project.updateProjectCLIVersion();
+        }
         _build.buildProcess(function () {
             if (prepare(program)) {
                 finish("初始化配置失败");
@@ -84,6 +87,7 @@ function commander(_commander) {
         .option('-o, --outdir <value>', '指定build文件夹')
         .option('-i, --singleFile <value>', "编译指定文件")
         .option('-f, --force', '强制进行build，哪怕版本检查没通过')
+        .option('-u, --update', '更新package.json版本到当前sr版本')
         .option('-e, --enviroment <value>', "运行时环境可选[develop, production，或其他] 默认production")
         .option('-l, --log <value>', 'log日志,( 0[defaul]: show all; 1: show error, fail; 2: show error, fail, warn)', (value) => { log_1.default.setLevel(value); })
         .option('-A, --additional <items>', '额外的参数，格式 -A A=1[,B=xxx] 或者指定唯一值  -A value', extraParamsParse_1.default)
