@@ -3,6 +3,22 @@ import * as _path from 'path';
 import * as _ from 'lodash'
 import _log from '../lib/log'
 import _configFiledConstant from '../config-filed-constant'
+import * as _project from "../project"
+import _getGitHash from '../lib/getGitHash'
+
+function getBaseVar(base){
+  if(!base){
+    return base
+  }
+  if(base.$data && _.isFunction(base.$data)){
+    return (base.$data as Function)({
+      projectName:_project.getProjectPackageJSONField("name"),
+      gitHash: _getGitHash()
+    })
+  }
+  return base
+}
+
 /**
  * desc:
  *   搜索顺序  指定的运行环境【默认:develop】 -->  通用目录搜索
@@ -16,7 +32,6 @@ import _configFiledConstant from '../config-filed-constant'
  *
  * throw Error
  */
-
 export default function(filename:string, asString?:boolean):any{
   let configFiledConstant = _configFiledConstant.get();
   if(!filename){
@@ -57,22 +72,30 @@ export default function(filename:string, asString?:boolean):any{
   if(!!envFilepath){
     envBase = require(envFilepath)
   }
+  //通用环境不存在获取环境变量
+  if(!normalBase){
+    return getBaseVar(envBase)
+  }
+  if(!envBase){
+    return getBaseVar(normalBase)
+  }
 
   //moudle 是否为函数 如果环境变量为函数，则不用继承直接返回
   if(_.isFunction(envBase)){
     return envBase
   }
+
   //如果环境变量不存在， 通用变量存在则直接扔通用变量
-  if(!envBase && normalBase){
-    return normalBase
-  }
+  // if(!envBase && normalBase){
+  //   return normalBase
+  // }
+  // if((_.isPlainObject(envBase) && _.isFunction(normalBase)) || (_.isPlainObject(normalBase) && _.isFunction(envBase))){
+  //   throw new Error(`环境变量和通用变量类型不一致 ${filename}`)
+  // }
+  
+  envBase = getBaseVar(envBase) || {};
+  normalBase = getBaseVar(normalBase) ||{};
 
-  if((_.isPlainObject(envBase) && _.isFunction(normalBase)) || (_.isPlainObject(normalBase) && _.isFunction(envBase))){
-    throw new Error(`环境变量和通用变量类型不一致 ${filename}`)
-  }
-
-  envBase = envBase || {};
-  normalBase = normalBase ||{};
   Object.keys(envBase).forEach((key)=>{
     //避免误解
     if(normalBase[key] === null || normalBase[key] === undefined){

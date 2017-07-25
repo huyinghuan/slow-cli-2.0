@@ -35,10 +35,30 @@
  *    asString 作为string返回
  *    
  * return:
- *    string or jsonObject 
+ *    string or jsonObject or function
  * 
  * throw Error
  */
-getRuntimeEnvFile(filename:string, asContent:boolean):any
+getRuntimeEnvFile(filename:string, asString:boolean):any
 
+//Demo：
+getRuntimeEnvFile("global.js")
+/*
+.silky/production/global.js 或者 .silky/production/global.js 内容：
+
+//当导出对象中存在$data属性，并且为function时， 将会执行该函数【并且传入 一个project 对象，里面包含一些 项目 数据，如git hash等】。
+// 将函数的返回值当作 该文件的内容
+exports.$data = function(project){
+  console.log(project)
+  return {
+    xxxx:Xxxx
+  }
+}
+
+等同于
+//不过这个里面无法获取 传入的项目数据
+module.exports = {
+  xxxx:Xxxx
+}
+*/
 ```
