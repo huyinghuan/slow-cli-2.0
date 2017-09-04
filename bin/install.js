@@ -6,6 +6,12 @@ const _ = require("lodash");
 const _project = require("../project");
 const _init = require("../init/index");
 const config_filed_constant_1 = require("../config-filed-constant");
+const padding = function (str, length) {
+    if (str.length >= length) {
+        return str;
+    }
+    return str + (new Array(length - str.length)).join(" ");
+};
 function execute(plugins, program, finish) {
     //读取用户自定义配置
     _init.prepareUserEnv(program.workspace);
@@ -30,17 +36,21 @@ function execute(plugins, program, finish) {
     let versionDependencies = _.extend({}, _project.getProjectPackageJSONField('devDependencies'), _project.getProjectPackageJSONField('dependencies'));
     Object.keys(pluginConfig).forEach((key) => {
         if (pluginConfig[key] == false) {
-            log_1.default.info(`插件${key}已被禁用， 跳过安装`);
+            log_1.default.info(`插件 ${padding(key, 20)} 已被禁用， 跳过安装`.red);
             return;
         }
         if (_.isPlainObject(pluginConfig[key]) && pluginConfig[key].__source) {
-            log_1.default.info(`插件${key}处于开发中模式， 跳过安装`);
+            log_1.default.info(`插件 ${padding(key, 20)} 处于开发中模式， 跳过安装`.yellow);
             return;
         }
         let version = versionDependencies[_plugin.getFullPluginName(key, false)];
         let hadInstalledVersion = _plugin.getInstalledPluginVersion(_plugin.getFullPluginName(key, false));
+        let pluginType = "插件";
+        if (key.indexOf("sp-") == -1) {
+            pluginType = "组件";
+        }
         if (version == hadInstalledVersion && !program.force && !program.newest) {
-            return console.log(`插件${key}已安装规定版本${version}`);
+            return console.log(`${pluginType} ${padding(key, 20)} 版本 ${version} [✔]`.green);
         }
         if (program.newest) {
             version = "latest";
@@ -75,6 +85,13 @@ function commander(_commander) {
             else {
                 log_1.default.success("安装插件完成！".green);
             }
+        });
+    });
+    _commander.command('uninstall [plugins...]')
+        .alias("remove")
+        .action((plugins, program) => {
+        plugins.forEach((pluginName) => {
+            _plugin.removePluginConfig(pluginName);
         });
     });
 }

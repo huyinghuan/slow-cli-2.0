@@ -18,3 +18,5 @@ const getInstalledPluginVersion_1 = require("./getInstalledPluginVersion");
 exports.getInstalledPluginVersion = getInstalledPluginVersion_1.default;
 const getPluginConfig_1 = require("./getPluginConfig");
 exports.getPluginConfig = getPluginConfig_1.default;
+const removePluginConfig_1 = require("./removePluginConfig");
+exports.removePluginConfig = removePluginConfig_1.default;

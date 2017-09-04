@@ -7,6 +7,16 @@ import * as _project from '../project';
 import * as _init from '../init/index'
 
 import _configFiledConstant from '../config-filed-constant';
+import * as _commander from 'commander';
+import { plugin } from '../hooks/map';
+import * as _path from 'path';
+
+const padding = function(str, length){
+  if(str.length >= length){
+    return str
+  }
+  return str + (new Array(length - str.length)).join(" ")
+}
 
 export function execute(plugins, program, finish){
   //读取用户自定义配置
@@ -34,18 +44,22 @@ export function execute(plugins, program, finish){
 
   Object.keys(pluginConfig).forEach((key)=>{
     if(pluginConfig[key] == false){
-      _log.info(`插件${key}已被禁用， 跳过安装`)
+      _log.info(`插件 ${padding(key, 20)} 已被禁用， 跳过安装`.red)
       return;
     }
 
     if(_.isPlainObject(pluginConfig[key]) && pluginConfig[key].__source){
-      _log.info(`插件${key}处于开发中模式， 跳过安装`);
+      _log.info(`插件 ${padding(key, 20)} 处于开发中模式， 跳过安装`.yellow);
       return
     }
     let version = versionDependencies[_plugin.getFullPluginName(key, false)];
     let hadInstalledVersion = _plugin.getInstalledPluginVersion(_plugin.getFullPluginName(key, false));
+    let pluginType = "插件"
+    if(key.indexOf("sp-")==-1){
+      pluginType = "组件"
+    }
     if(version == hadInstalledVersion && !program.force && !program.newest){
-      return console.log(`插件${key}已安装规定版本${version}`)
+      return console.log(`${pluginType} ${padding(key, 20)} 版本 ${version} [✔]`.green)
     }
     if(program.newest){
       version = "latest"
@@ -80,5 +94,13 @@ export function commander(_commander){
         }
         
       })
+    })
+
+  _commander.command('uninstall [plugins...]')
+    .alias("remove")
+    .action((plugins, program)=>{
+      plugins.forEach((pluginName) => {
+        _plugin.removePluginConfig(pluginName)
+      });
     })
 }
