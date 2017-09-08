@@ -147,16 +147,5 @@ export default ()=>{
 
   app.use(router)
 
-  let _server = _http.createServer(app)
-
-  _server.on('error', (error) => {
-    if((error as any).code == 'EADDRINUSE'){
-      console.log("端口冲突，请使用其它端口".red);
-      return process.exit(1)
-    }
-    console.log(error);
-    return process.exit(1)
-  });
-
-  return _server
+  return app
 }

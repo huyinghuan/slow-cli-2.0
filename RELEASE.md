@@ -1,4 +1,8 @@
 ## 更新历史
+v2.6.2
+
+    1. 增加https命令 `sr https` 其他参数和`sr start` 一致
+
 v2.6.1
 
     1. 增加 卸载插件 命令  `sr remove xxx`

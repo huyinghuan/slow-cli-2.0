@@ -106,6 +106,16 @@ sr start --help
   }
 }
 ```
+### https
+
+启用静态https服务器.e.g.
+
+```
+sr https -p 3002
+```
+
+其他参数和 命令`sr start` 一致
+
 
 ### build
 

@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const _express = require("express");
-const _http = require("http");
 const _async = require("async");
 const _fs = require("fs");
 const _path = require("path");
@@ -138,14 +137,5 @@ exports.default = () => {
         });
     });
     app.use(router);
-    let _server = _http.createServer(app);
-    _server.on('error', (error) => {
-        if (error.code == 'EADDRINUSE') {
-            console.log("端口冲突，请使用其它端口".red);
-            return process.exit(1);
-        }
-        console.log(error);
-        return process.exit(1);
-    });
-    return _server;
+    return app;
 };
