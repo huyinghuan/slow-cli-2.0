@@ -17,7 +17,7 @@ export default function (buildConfig, filepath, finish){
   if(!_fs.existsSync(realPath) || realPath.indexOf(_workspace) == -1){
     return finish(new Error('编译文件在项目中找不到'))
   }
-  let fileName = realPath.split(_path.sep).pop();
+  let fileName =  _path.parse(realPath).base
 
   let fileData = {
     inputFilePath: realPath,

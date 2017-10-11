@@ -38,7 +38,7 @@ export default function (needAppointVersion?:boolean):any{
   }
 
   if(!dependencies && !devDependencies){
-    _log.warn(`警告! 配置插件列表唯恐， 如果有需要请先安装插件`.yellow);
+    _log.warn(`警告! 配置插件列表为空， 如果有需要请先安装插件`.yellow);
     if(needAppointVersion){return pluginList}
     return false;
   }

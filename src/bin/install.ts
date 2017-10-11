@@ -10,13 +10,7 @@ import _configFiledConstant from '../config-filed-constant';
 import * as _commander from 'commander';
 import { plugin } from '../hooks/map';
 import * as _path from 'path';
-
-const padding = function(str, length){
-  if(str.length >= length){
-    return str
-  }
-  return str + (new Array(length - str.length)).join(" ")
-}
+import padding from '../lib/padding'
 
 export function execute(plugins, program, finish){
   //读取用户自定义配置

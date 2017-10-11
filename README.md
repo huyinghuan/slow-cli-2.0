@@ -242,6 +242,19 @@ sr init --help
  #可选配置项 -a, --all #可选上传所有文件【自动忽略.开始的文件，但是不会忽略.silky文件夹】
  sr up -n test -a
 ```
+#### 可选选项参数：
+
+```shell
+
+-u --url 配置服务器地址
+-w --workspace #指定工作目录
+```
+## list
+列出插件版本
+
+```
+sr list
+```
 
 ## check
 
@@ -263,14 +276,6 @@ sr init --help
 
 ```
 silky check --help
-```
-
-#### 可选选项参数：
-
-```shell
-
--u --url 配置服务器地址
--w --workspace #指定工作目录
 ```
 
 ### 通用选项说明 start, build 等通用

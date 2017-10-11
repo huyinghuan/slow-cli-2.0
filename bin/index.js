@@ -11,6 +11,7 @@ const _info = require("./info");
 const _config = require("./config");
 const _project = require("../project");
 const _dev = require("./dev");
+const _list = require("./list");
 const config_filed_constant_1 = require("../config-filed-constant");
 //import * as colors from 'colors' 坑, 全应用引用， 其他module无须重复引用
 require('colors');
@@ -27,4 +28,5 @@ _install.commander(_commander);
 _info.commander(_commander);
 _config.commander(_commander);
 _dev.commander(_commander);
+_list.commander(_commander);
 _commander.version(versionDesc).parse(process.argv);
