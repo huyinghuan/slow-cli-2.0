@@ -1,6 +1,6 @@
 {
   "name": "silky-reborn",
-  "version": "2.6.3",
+  "version": "2.6.4",
   "description": "",
   "bin": {
     "sr": "./bin/index.js"
@@ -23,7 +23,7 @@
     "request": "^2.79.0"
   },
   "engines": {
-    "node": ">= 4.0.0"
+    "node": ">= 6.0.0"
   },
   "devDependencies": {
     "@types/async": "^2.0.32",

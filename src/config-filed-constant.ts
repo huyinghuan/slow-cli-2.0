@@ -22,6 +22,7 @@ class ConstantFiled {
   private globalVar:any = {
     index: "index.html",
     autoindex: false,
+    enviroment: "develop",
     port: 14422,
     buildConfig: {},
     pluginsConfig:{},
@@ -42,6 +43,7 @@ class ConstantFiled {
   }
   get(){
     return {
+      env: this.globalVar.enviroment,
       configServer: this.configServer,
       infinity: this.infinity,
       pluginConfigField: this.pluginConfigField,

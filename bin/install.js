@@ -7,6 +7,7 @@ const _project = require("../project");
 const _init = require("../init/index");
 const config_filed_constant_1 = require("../config-filed-constant");
 const padding_1 = require("../lib/padding");
+const _child = require("child_process");
 function execute(plugins, program, finish) {
     //读取用户自定义配置
     _init.prepareUserEnv(program.workspace);
@@ -73,6 +74,12 @@ function commander(_commander) {
         .option('-r, --registry <value>', "指定插件的仓库地址")
         .option('-s, --save', '以产品模式安装插件，用于开发js css lib 库')
         .action((plugins, program) => {
+        //检查npm版本，低于5.0爆错 //
+        let npmVersion = String(_child.execSync("npm --version")).replace(/\s/g, "");
+        if (parseInt(npmVersion) < 5) {
+            console.error(`当前npm版本是:${npmVersion}, 请使用 'npm install -g npm@latest' 升级npm到 5.x版本`);
+            process.exit(1);
+        }
         execute(plugins, program, (error) => {
             if (error) {
                 log_1.default.error(error);
