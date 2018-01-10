@@ -82,7 +82,8 @@ exports.default = () => {
     router.get('*', function (request, resp, next) {
         let queue = [];
         let req = {
-            path: request.path
+            path: request.path,
+            query: request.query
         };
         let realPath = req.path;
         if (realPath == '/') {
