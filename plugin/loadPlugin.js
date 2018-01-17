@@ -11,14 +11,18 @@ const config_filed_constant_1 = require("../config-filed-constant");
 const _path = require("path");
 const _fs = require("fs");
 function registerHook(hookType, pluginName) {
-    return (hookName, callback, priority) => {
-        if (hookName.indexOf(hookType) == 0 || hookType == 'all') {
-            priority = ~~priority != 0 ? ~~priority : 1;
-            registerHook_1.default(hookName, callback, priority);
-            if (pluginName) {
-                log_1.default.success(`加载插件${pluginName}'s hook  ${hookName} 成功! priority:${priority}`.blue);
+    return (hookList, callback, priority) => {
+        hookList = [].concat(hookList);
+        for (let i = 0; i < hookList.length; i++) {
+            let hookName = hookList[i];
+            if (hookName.indexOf(hookType) == 0 || hookType == 'all') {
+                priority = ~~priority != 0 ? ~~priority : 1;
+                registerHook_1.default(hookName, callback, priority);
+                if (pluginName) {
+                    log_1.default.success(`加载插件${pluginName}'s hook  ${hookName} 成功! priority:${priority}`.blue);
+                }
+                return;
             }
-            return;
         }
     };
 }

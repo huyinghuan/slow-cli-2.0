@@ -28,3 +28,5 @@ const triggerBuildEndHook_1 = require("./triggerBuildEndHook");
 exports.triggerBuildEndHook = triggerBuildEndHook_1.default;
 const triggerBuildServerFilterHook_1 = require("./triggerBuildServerFilterHook");
 exports.triggerBuildServerFilterHook = triggerBuildServerFilterHook_1.default;
+const triggerPreivew_1 = require("./triggerPreivew");
+exports.triggerPreview = triggerPreivew_1.default;

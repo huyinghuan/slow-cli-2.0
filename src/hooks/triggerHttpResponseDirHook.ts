@@ -44,7 +44,6 @@ function getHtml(path, fileArray){
 
 export default function(path, callback){
   let queue = _hookMap.HookQueue[_hookMap.route.isDir] || [];
-
   let content = null;
   let data = {fileArray:[], ignore: []}
   _async.mapSeries(queue, (hook, next)=>{

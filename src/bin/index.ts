@@ -12,6 +12,7 @@ import * as _project from '../project';
 import * as _dev from './dev';
 import * as _list from './list'
 import _configFiledConstant from '../config-filed-constant';
+import * as _preview from './preview'
 //import * as colors from 'colors' 坑, 全应用引用， 其他module无须重复引用
 require('colors');
 /**
@@ -31,4 +32,5 @@ _info.commander(_commander);
 _config.commander(_commander);
 _dev.commander(_commander);
 _list.commander(_commander);
+_preview.commander(_commander)
 _commander.version(versionDesc).parse(process.argv);

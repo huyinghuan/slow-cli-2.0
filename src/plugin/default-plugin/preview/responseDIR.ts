@@ -8,7 +8,7 @@ function format(date:Date){
 }
 
 exports.registerPlugin = function(cli, options){
-  cli.registerHook('route:dir', (path, data, next)=>{
+  cli.registerHook('preview:dir', (path, data, next)=>{
     let realTemplateDir = _path.join(cli.cwd(),path);
 
     _fs.readdir(realTemplateDir, (error, files)=>{

@@ -11,14 +11,18 @@ import * as _path from 'path'
 import * as _fs from 'fs'
 
 function registerHook(hookType: string, pluginName: string){
-  return (hookName:string, callback:_allDefined.CallBack, priority?:number)=>{
-    if(hookName.indexOf(hookType) == 0 || hookType == 'all'){
-      priority = ~~priority != 0 ? ~~priority : 1;
-      _registerHook(hookName, callback, priority);
-      if(pluginName){
-        _log.success(`加载插件${pluginName}'s hook  ${hookName} 成功! priority:${priority}`.blue)
+  return (hookList:any, callback:_allDefined.CallBack, priority?:number)=>{
+    hookList = [].concat(hookList)
+    for(let i = 0; i <  hookList.length; i++){
+      let hookName = hookList[i]
+      if(hookName.indexOf(hookType) == 0 || hookType == 'all'){
+        priority = ~~priority != 0 ? ~~priority : 1;
+        _registerHook(hookName, callback, priority);
+        if(pluginName){
+          _log.success(`加载插件${pluginName}'s hook  ${hookName} 成功! priority:${priority}`.blue)
+        }
+        return
       }
-      return
     }
   }
 }
