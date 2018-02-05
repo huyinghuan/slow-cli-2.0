@@ -14,6 +14,7 @@ import _triggerBuildDoNothingHook from './triggerBuildDoNothingHook';
 import _triggerBuildEndHook from './triggerBuildEndHook';
 import _triggerBuildServerFilterHook from './triggerBuildServerFilterHook'
 import _triggerPreview from './triggerPreivew'
+import _triggerRouter from './triggerRouter'
 export {
   _triggerHttpCompilerHook as triggerHttpCompilerHook,
   _triggerHttpRouterHook as triggerHttpRouterHook,
@@ -29,5 +30,6 @@ export {
   _triggerBuildDoNothingHook as triggerBuildDoNothingHook,
   _triggerBuildEndHook as triggerBuildEndHook,
   _triggerBuildServerFilterHook as triggerBuildServerFilterHook,
-  _triggerPreview as triggerPreview
+  _triggerPreview as triggerPreview,
+  _triggerRouter as triggerRouter
 }

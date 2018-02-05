@@ -75,7 +75,7 @@ function privewServer() {
         });
     });
     //拦截GET请求，并且加载编译其他hooks
-    router.get('*', function (request, resp, next) {
+    router.all('*', function (request, resp, next) {
         let queue = [];
         let req = {
             path: request.path,

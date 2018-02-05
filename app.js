@@ -79,7 +79,7 @@ exports.default = () => {
         return;
     }
     //拦截GET请求，并且加载编译其他hooks
-    router.get('*', function (request, resp, next) {
+    router.all('*', function (request, resp, next) {
         let queue = [];
         let req = {
             path: request.path,
@@ -93,8 +93,13 @@ exports.default = () => {
             status: 404,
             realPath: realPath
         };
+        //转换/forward路径
+        queue.push((cb) => {
+            _hooks.triggerRouter("forward", req, data, cb);
+        });
         queue.push((cb) => {
             //route:didRequest
+            console.log(req.path, data.realPath);
             _hooks.triggerHttpCompilerHook(req, data, cb);
         });
         //TODO  min js,css, html, autoprefix
@@ -130,7 +135,7 @@ exports.default = () => {
         });
     });
     //如果其他编译hook没有完成编译，那么则使用默认文件发送
-    router.get('*', function (req, resp, next) {
+    router.all('*', function (req, resp, next) {
         _hooks.triggerHttpNoFoundHook(req, resp, (hasProcess) => {
             if (!hasProcess) {
                 resp.sendStatus(404);

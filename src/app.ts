@@ -81,7 +81,7 @@ export default ()=>{
   }
 
   //拦截GET请求，并且加载编译其他hooks
-  router.get('*', function(request, resp, next){
+  router.all('*', function(request, resp, next){
     let queue = [];
     let req = {
       path:  request.path,
@@ -95,9 +95,14 @@ export default ()=>{
       status: 404,
       realPath: realPath
     }
+    //转换/forward路径
+    queue.push((cb: Function)=>{
+      _hooks.triggerRouter("forward", req, data, cb)
+    })
 
     queue.push((cb:CompilerCallBack)=>{
       //route:didRequest
+      console.log(req.path, data.realPath)
       _hooks.triggerHttpCompilerHook(req, data, cb)
     });
 
@@ -138,7 +143,7 @@ export default ()=>{
   });
 
   //如果其他编译hook没有完成编译，那么则使用默认文件发送
-  router.get('*', function(req, resp, next){
+  router.all('*', function(req, resp, next){
     _hooks.triggerHttpNoFoundHook(req, resp, (hasProcess)=>{
       if(!hasProcess){
         resp.sendStatus(404);
