@@ -1,4 +1,6 @@
 ## 更新历史
+v2.6.7-preview-2
+    1. 增加 sr preview forward
 v2.6.7-preview
     1. 增加 sr start forward
 v2.6.6-preview

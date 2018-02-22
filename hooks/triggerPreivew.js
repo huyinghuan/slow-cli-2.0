@@ -42,8 +42,23 @@ function beforeResponse(req, data, responseContent, callback) {
         callback(error, responseContent);
     });
 }
+function forward(req, data, callback) {
+    let queue = _hookMap.HookQueue["preview:forward"] || [];
+    if (!queue.length) {
+        callback(null);
+        return;
+    }
+    _async.mapSeries(queue, (hook, next) => {
+        hook.fn(req, data, (error) => { next(error); });
+    }, (error) => {
+        callback(error);
+    });
+}
 function default_1(hookType, ...options) {
     switch (hookType) {
+        case "forward":
+            forward.apply(null, options);
+            break;
         case "notFound":
             _hookMap.route.notFound = "preview:notFound";
             triggerHttpNoFoundHook_1.default.apply(null, options);
