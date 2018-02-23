@@ -12,3 +12,5 @@ const prepareRuntimeEnv_1 = require("./prepareRuntimeEnv");
 exports.prepareRuntimeEnv = prepareRuntimeEnv_1.default;
 const preparePrerequisiteDir_1 = require("./preparePrerequisiteDir");
 exports.preparePrerequisiteDir = preparePrerequisiteDir_1.default;
+const setRunType_1 = require("./setRunType");
+exports.setRunType = setRunType_1.default;

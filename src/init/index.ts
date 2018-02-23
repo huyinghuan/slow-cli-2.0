@@ -8,12 +8,13 @@ import checkStartArgs from './checkStartArgs';
 import prepareUserEnv from './prepareUserEnv';
 import prepareRuntimeEnv from './prepareRuntimeEnv';
 import preparePrerequisiteDir from './preparePrerequisiteDir';
-
+import setRunType from './setRunType'
 export {
   generatorDefaultConfig as generatorDefaultConfig,
   checkBuildArgs as checkBuildArgs,
   checkStartArgs as checkStartArgs,
   prepareUserEnv as prepareUserEnv,
   prepareRuntimeEnv as prepareRuntimeEnv,
-  preparePrerequisiteDir as preparePrerequisiteDir
+  preparePrerequisiteDir as preparePrerequisiteDir,
+  setRunType as setRunType
 }

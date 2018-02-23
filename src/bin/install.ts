@@ -56,6 +56,7 @@ export function execute(plugins, program, finish){
     if(version == hadInstalledVersion && !program.force && !program.newest){
       return console.log(`${pluginType} ${padding(key, 20)} 版本 ${version} [✔]`.green)
     }
+    console.log(`${pluginType} ${padding(key, 20)} 版本: ${hadInstalledVersion} -> ${version}`.yellow)
     if(program.newest){
       version = "latest"
     }
@@ -68,6 +69,7 @@ export function execute(plugins, program, finish){
   if(pluginNameArr.length == 0){
     return console.log('所有依赖已全部安装。')
   }
+  console.log(`升级中,请稍后......\n\n`)
   _plugin.install(pluginNameArr, program.registry, saveAsProduct, finish)
 }
 /* istanbul ignore next  */

@@ -13,6 +13,7 @@ import * as _plugin from './plugin/index';
 import _log from './lib/log';
 import _formatContentLength from './lib/fortmatContentLength'
 import _getGitHash from './lib/getGitHash'
+import * as _init from './init/index'
 /**
  * 启动静态服务
  */
@@ -151,7 +152,15 @@ export function privewServer(){
 
 if(require.main == module){
   require('colors');
-  let port = process.argv[_.indexOf(process.argv, "-p") + 1] || 14488
+  let port = _.indexOf(process.argv, "-p") > -1 ? process.argv[_.indexOf(process.argv, "-p") + 1] : 14488
+  let workspace =  _.indexOf(process.argv, "-w") > -1 ? process.argv[_.indexOf(process.argv, "-w") + 1] : process.cwd()
+  let enviroment =  _.indexOf(process.argv, "-e") > -1 ? process.argv[_.indexOf(process.argv, "-e") + 1] : "production"
+  //读取用户自定义配置
+  _init.prepareUserEnv(workspace);
+  //读取运行时环境配置
+  _init.prepareRuntimeEnv(enviroment || "production")
+  _init.setRunType("preview")
   let app = privewServer()
+  console.log(`run on ${port} at ${workspace} as ${enviroment}`.green)
   app.listen(port)
 }

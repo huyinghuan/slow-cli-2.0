@@ -21,14 +21,18 @@ class ConstantFiled {
         this.pubModulesDir = `${this.infinity}-pubPath`;
         //存储全局变量
         this.globalVar = {
+            projectName: "",
             index: "index.html",
             autoindex: false,
             enviroment: "develop",
             port: 14422,
             buildConfig: {},
             pluginsConfig: {},
-            pubModulesDir: "node_modules"
+            pubModulesDir: "node_modules",
+            runType: "" //可选: tool, preview
         };
+        let CLIConfig = require(this.CLIConfigFile);
+        this.globalVar.projectName = CLIConfig.name;
     }
     getWorkspace() { return this.cwd; }
     setWorkspace(workspace) {

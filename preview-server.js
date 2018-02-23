@@ -12,6 +12,7 @@ const _plugin = require("./plugin/index");
 const log_1 = require("./lib/log");
 const fortmatContentLength_1 = require("./lib/fortmatContentLength");
 const getGitHash_1 = require("./lib/getGitHash");
+const _init = require("./init/index");
 /**
  * 启动静态服务
  */
@@ -144,7 +145,15 @@ function privewServer() {
 exports.privewServer = privewServer;
 if (require.main == module) {
     require('colors');
-    let port = process.argv[_.indexOf(process.argv, "-p") + 1] || 14488;
+    let port = _.indexOf(process.argv, "-p") > -1 ? process.argv[_.indexOf(process.argv, "-p") + 1] : 14488;
+    let workspace = _.indexOf(process.argv, "-w") > -1 ? process.argv[_.indexOf(process.argv, "-w") + 1] : process.cwd();
+    let enviroment = _.indexOf(process.argv, "-e") > -1 ? process.argv[_.indexOf(process.argv, "-e") + 1] : "production";
+    //读取用户自定义配置
+    _init.prepareUserEnv(workspace);
+    //读取运行时环境配置
+    _init.prepareRuntimeEnv(enviroment || "production");
+    _init.setRunType("preview");
     let app = privewServer();
+    console.log(`run on ${port} at ${workspace} as ${enviroment}`.green);
     app.listen(port);
 }

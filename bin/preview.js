@@ -14,6 +14,7 @@ function prepare(program) {
     _init.prepareUserEnv(program.workspace);
     //读取运行时环境配置
     _init.prepareRuntimeEnv(program.enviroment || "production");
+    _init.setRunType("preview");
     //运行时参数记录
     let userInputArgs = {};
     if (program.port) {

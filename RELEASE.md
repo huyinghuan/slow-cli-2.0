@@ -1,4 +1,7 @@
 ## 更新历史
+v2.6.4-preview-4
+    1. 修复preview 进程预览模式的bug
+
 v2.6.7-preview-2
     1. 修复 sr preview forward hook bug
     
