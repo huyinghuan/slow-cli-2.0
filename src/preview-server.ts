@@ -90,8 +90,9 @@ export function privewServer(){
       __gitHash: gitHash
     }
     queue.push((cb:Function)=>{
-      _hooks.triggerPreview('forword', req, data, cb)
+      _hooks.triggerPreview('forward', req, data, cb)
     })
+    
     queue.push((cb:CompilerCallBack)=>{
       _hooks.triggerPreview("compile", req, data, cb)
     });

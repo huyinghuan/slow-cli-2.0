@@ -91,7 +91,7 @@ function privewServer() {
             __gitHash: gitHash
         };
         queue.push((cb) => {
-            _hooks.triggerPreview('forword', req, data, cb);
+            _hooks.triggerPreview('forward', req, data, cb);
         });
         queue.push((cb) => {
             _hooks.triggerPreview("compile", req, data, cb);
