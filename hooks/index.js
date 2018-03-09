@@ -32,3 +32,5 @@ const triggerPreivew_1 = require("./triggerPreivew");
 exports.triggerPreview = triggerPreivew_1.default;
 const triggerRouter_1 = require("./triggerRouter");
 exports.triggerRouter = triggerRouter_1.default;
+const triggerPrecompile_1 = require("./triggerPrecompile");
+exports.triggerPrecompile = triggerPrecompile_1.default;

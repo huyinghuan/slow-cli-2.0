@@ -9,6 +9,7 @@ import prepareUserEnv from './prepareUserEnv';
 import prepareRuntimeEnv from './prepareRuntimeEnv';
 import preparePrerequisiteDir from './preparePrerequisiteDir';
 import setRunType from './setRunType'
+import addBuildIgnore from './addBuildIgnore'
 export {
   generatorDefaultConfig as generatorDefaultConfig,
   checkBuildArgs as checkBuildArgs,
@@ -16,5 +17,6 @@ export {
   prepareUserEnv as prepareUserEnv,
   prepareRuntimeEnv as prepareRuntimeEnv,
   preparePrerequisiteDir as preparePrerequisiteDir,
-  setRunType as setRunType
+  setRunType as setRunType,
+  addBuildIgnore as addBuildIgnore
 }

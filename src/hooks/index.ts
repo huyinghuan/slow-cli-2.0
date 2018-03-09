@@ -15,6 +15,7 @@ import _triggerBuildEndHook from './triggerBuildEndHook';
 import _triggerBuildServerFilterHook from './triggerBuildServerFilterHook'
 import _triggerPreview from './triggerPreivew'
 import _triggerRouter from './triggerRouter'
+import _triggerPrecompile from './triggerPrecompile'
 export {
   _triggerHttpCompilerHook as triggerHttpCompilerHook,
   _triggerHttpRouterHook as triggerHttpRouterHook,
@@ -31,5 +32,6 @@ export {
   _triggerBuildEndHook as triggerBuildEndHook,
   _triggerBuildServerFilterHook as triggerBuildServerFilterHook,
   _triggerPreview as triggerPreview,
-  _triggerRouter as triggerRouter
+  _triggerRouter as triggerRouter,
+  _triggerPrecompile as triggerPrecompile
 }

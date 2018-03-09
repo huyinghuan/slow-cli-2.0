@@ -14,3 +14,5 @@ const preparePrerequisiteDir_1 = require("./preparePrerequisiteDir");
 exports.preparePrerequisiteDir = preparePrerequisiteDir_1.default;
 const setRunType_1 = require("./setRunType");
 exports.setRunType = setRunType_1.default;
+const addBuildIgnore_1 = require("./addBuildIgnore");
+exports.addBuildIgnore = addBuildIgnore_1.default;
