@@ -12,10 +12,14 @@ function precompileFile(buildConfig, fileItem, content, finish){
   let outpufFilePath = _path.join(buildConfig.outdir, fileItem.relativeDir, fileItem.fileName)
   _fs.ensureFileSync(outpufFilePath)
   let queue = []
-  queue.push((cb)=>{
-    _hooks.triggerPrecompile('include', buildConfig, fileItem, content, (error, content)=>{
-      cb(error, content)
-    })
+  queue.push((next)=>{
+    _hooks.triggerPrecompile('include', buildConfig, fileItem, content, next)
+  })
+  queue.push((content, next)=>{
+    _hooks.triggerPrecompile('insert', buildConfig, fileItem, content, next)
+  })
+  queue.push((content, next)=>{
+    _hooks.triggerPrecompile('replace', buildConfig, fileItem, content, next)
   })
   _async.waterfall(queue, (error, content)=>{
     if(error){

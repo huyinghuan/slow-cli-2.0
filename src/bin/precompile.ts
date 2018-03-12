@@ -39,6 +39,7 @@ export function prepare(program){
 /* istanbul ignore next  */
 export function commander(_commander){
   _commander.command('precompile')
+    .alias("prebuild")
     .description('启动预编译')
     .option('-w, --workspace <value>', '指定工作目录')
     .option('-o, --outdir', '预编译输出路径')

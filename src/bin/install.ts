@@ -56,10 +56,10 @@ export function execute(plugins, program, finish){
     if(version == hadInstalledVersion && !program.force && !program.newest){
       return console.log(`${pluginType} ${padding(key, 20)} 版本 ${version} [✔]`.green)
     }
-    console.log(`${pluginType} ${padding(key, 20)} 版本: ${hadInstalledVersion} -> ${version}`.yellow)
     if(program.newest){
       version = "latest"
     }
+    console.log(`${pluginType} ${padding(key, 20)} 版本: ${hadInstalledVersion} -> ${version}`.yellow)
     //获取依赖的版本,如果有依赖版本则安装依赖版本
     if(versionDependencies[_plugin.getFullPluginName(key, false)]){
       key = `${key}@${version}`

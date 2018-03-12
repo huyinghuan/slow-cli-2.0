@@ -155,11 +155,13 @@ if(require.main == module){
   let port = _.indexOf(process.argv, "-p") > -1 ? process.argv[_.indexOf(process.argv, "-p") + 1] : 14488
   let workspace =  _.indexOf(process.argv, "-w") > -1 ? process.argv[_.indexOf(process.argv, "-w") + 1] : process.cwd()
   let enviroment =  _.indexOf(process.argv, "-e") > -1 ? process.argv[_.indexOf(process.argv, "-e") + 1] : "production"
+  let viewDir =  _.indexOf(process.argv, "-v") > -1 ? process.argv[_.indexOf(process.argv, "-v") + 1] : "prebuild"
   //读取用户自定义配置
   _init.prepareUserEnv(workspace);
   //读取运行时环境配置
   _init.prepareRuntimeEnv(enviroment || "production")
   _init.setRunType("preview")
+  _configFiledConstant.setBuildParams({outdir: viewDir})
   let app = privewServer()
   console.log(`run on ${port} at ${workspace} as ${enviroment}`.green)
   app.listen(port)

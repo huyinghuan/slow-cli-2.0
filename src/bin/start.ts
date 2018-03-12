@@ -58,7 +58,7 @@ export function prepare(program){
   if(program.additional){
       _configFiledConstant.setGlobal(program.additional)
   }
-
+  _init.setRunType("dev")
   //检查启动参数是否合法
   if(!_init.checkStartArgs()){
     process.exit(1)

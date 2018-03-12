@@ -16,7 +16,7 @@ export function prepare(program): boolean{
   //build 强制进行版本检查
   let checkCLIResult = _project.checkCLIVersion() 
   let checPluginResult = _plugin.checkPluginVersion();
-
+  _init.setRunType("build")
 
   //如没有强制build项目，那么如果cli版本检查没通过则结束build
   if(!program.force && !checkCLIResult){

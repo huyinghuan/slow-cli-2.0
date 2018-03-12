@@ -9,6 +9,9 @@ import * as _runtime from '../runtime-enviroment/index';
 import _configFiledConstant from '../config-filed-constant';
 import * as _path from 'path'
 import * as _fs from 'fs'
+import * as _project from '../project'
+
+const versionDesc = _project.getCLIVersion();
 
 function registerHook(hookType: string, pluginName: string){
   return (hookList:any, callback:_allDefined.CallBack, priority?:number)=>{
@@ -81,6 +84,7 @@ export default function loadPlugin(hookType:string, pluginName:string, pluginPat
     //默认权重 加载插件
     if(_.isFunction(plugin.registerPlugin)){
       plugin.registerPlugin({
+        version: versionDesc,
         registerHook: registerHook(hookType, pluginName),
         ext: _hookMap.HookExtQueue,
         options: _configFiledConstant.getGlobal(),

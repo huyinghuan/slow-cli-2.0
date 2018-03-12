@@ -15,6 +15,8 @@ function prepare(program) {
     //读取运行时环境配置
     _init.prepareRuntimeEnv(program.enviroment || "production");
     _init.setRunType("preview");
+    let viewDir = program.view || "prebuild";
+    config_filed_constant_1.default.setBuildParams({ outdir: viewDir });
     //运行时参数记录
     let userInputArgs = {};
     if (program.port) {
@@ -45,6 +47,7 @@ function commander(_commander) {
     _commander.command('preview')
         .description('启动http服务')
         .option('-w, --workspace <value>', '指定工作目录')
+        .option('-v, --viewdir <value>', "指定view目录")
         .option('-p, --port <n>', '指定运行端口')
         .option('-c, --check', '检测运行版本，和插件版本')
         .option('-e, --enviroment <value>', "运行时环境可选[develop, production，或其他] 默认production")

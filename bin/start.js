@@ -54,6 +54,7 @@ function prepare(program) {
     if (program.additional) {
         config_filed_constant_1.default.setGlobal(program.additional);
     }
+    _init.setRunType("dev");
     //检查启动参数是否合法
     if (!_init.checkStartArgs()) {
         process.exit(1);

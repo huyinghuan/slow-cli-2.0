@@ -65,4 +65,5 @@ export interface ProcessFile{
   fileName:string,
   filePath:string,
   relativeDir: string
+  relativeFilePath: string
 }
