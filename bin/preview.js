@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const _init = require("../init/index");
 const _project = require("../project");
 const _utils = require("../plugin/index");
-const _http = require("http");
 const _previewServer = require("../preview-server");
 const log_1 = require("../lib/log");
 const config_filed_constant_1 = require("../config-filed-constant");
@@ -58,8 +57,7 @@ function commander(_commander) {
         let app = _previewServer.privewServer();
         let port = program.port || config_filed_constant_1.default.getGlobal('port');
         reportLog_1.default("start", "success");
-        let server = _http.createServer(app);
-        server.on('error', (error) => {
+        app.on('error', (error) => {
             if (error.code == 'EADDRINUSE') {
                 console.log("端口冲突，请使用其它端口".red);
                 return process.exit(1);
@@ -68,7 +66,7 @@ function commander(_commander) {
             return process.exit(1);
         });
         console.log(`silky run on http://localhost:${port}`.green);
-        server.listen(port);
+        app.listen(port);
     });
 }
 exports.commander = commander;

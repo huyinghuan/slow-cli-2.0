@@ -6,82 +6,43 @@ import * as _async from 'async';
 import _triggerHttpResponseDirHook from './triggerHttpResponseDirHook'
 import _triggerHttpNoFoundHook from './triggerHttpNoFoundHook'
 
-function compile(req, data, callback){
+async function compile(req, data, callback){
   let queue = _hookMap.HookQueue["preview:compile"] || [];
-
   if(!queue.length){
-    callback(null, null)
     return
   }
   let content = null;
-  _async.mapSeries(queue, (hook, next)=>{
-    (hook as any).fn(req, data, content, (error, compileContent)=>{
-      content = compileContent;
-      next(error, null)
-    })
-  }, (error)=>{
-    callback(error, content)
-  })
+  for(let i = 0; i < queue.length; i++){
+    content = await (queue[i] as any).fn(req, data, content)
+  }
+  return content
 }
 
-function processCompile(req, data, responseContent, callback){
-  let queue = _hookMap.HookQueue["preview:processCompile"] || [];
-  _async.mapSeries(queue, (hook, next)=>{
-    (hook as any).fn(req, data, responseContent, (error, processContent)=>{
-      responseContent = processContent;
-      next(error, null)
-    })
-  }, (error)=>{
-    callback(error, responseContent)
-  })
-}
-
-function beforeResponse(req, data, responseContent, callback){
+async function beforeResponse(req, data, responseContent, callback){
   let queue = _hookMap.HookQueue["preview:beforeResponse"] || [];
-  _async.mapSeries(queue, (hook, next)=>{
-    (hook as any).fn(req, data, responseContent, (error, processContent)=>{
-      responseContent = processContent;
-      next(error, null)
-    })
-  }, (error)=>{
-    callback(error, responseContent)
-  })
+  for(let i = 0; i < queue.length; i++){
+    responseContent = await (queue[i] as any).fn(req, data, responseContent)
+  }
+  return responseContent
 }
 
-function forward(req, data, callback){
+async function forward(req, data){
   let queue = _hookMap.HookQueue["preview:forward"] || [];
   if(!queue.length){
-    callback(null)
     return
   }
-  _async.mapSeries(queue, (hook, next)=>{
-    (hook as any).fn(req, data, (error)=>{ next(error)})
-  }, (error)=>{
-    callback(error)
-  })
+  for(let i = 0; i < queue.length; i++){
+    await (queue[i] as any).fn(req, data)
+  }
 }
 
-export default function(hookType:string, ...options){
+export default async function(hookType:string, ...options){
   switch(hookType){
     case "forward":
-      forward.apply(null, options)
-      break
-    case "notFound":
-      _hookMap.route.notFound = "preview:notFound"
-      _triggerHttpNoFoundHook.apply(null, options)
-      break
-    case "dir":
-      _hookMap.route.isDir = "preview:dir"
-      _triggerHttpResponseDirHook.apply(null, options)
-      break
+      return forward.apply(null, options)
     case "compile":
-      compile.apply(null, options)
-      break
-    case "processCompile":
-      processCompile.apply(null, options)
-      break
+      return compile.apply(null, options)
     case "beforeResponse":
-      beforeResponse.apply(null, options)
-
+      return beforeResponse.apply(null, options)
   }
 }

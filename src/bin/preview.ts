@@ -3,8 +3,6 @@ import * as _path from 'path'
 import * as _init from '../init/index'
 import * as _project from '../project'
 import * as _utils from '../plugin/index'
-import * as _http from 'http'
-import * as _https from 'https'
 import * as _previewServer from '../preview-server'
 import _extraParamsParse from './extraParamsParse'
 import _log from '../lib/log';
@@ -66,10 +64,8 @@ export function commander(_commander){
       let app = _previewServer.privewServer()
       let port = program.port || _configFiledConstant.getGlobal('port')
       _reportLog("start", "success")
-
-      let server = _http.createServer(app)
       
-      server.on('error', (error) => {
+      app.on('error', (error) => {
         if((error as any).code == 'EADDRINUSE'){
           console.log("端口冲突，请使用其它端口".red);
           return process.exit(1)
@@ -78,7 +74,7 @@ export function commander(_commander){
         return process.exit(1)
       });
       console.log(`silky run on http://localhost:${port}`.green)
-      server.listen(port);
+      app.listen(port);
     })
 }
 
