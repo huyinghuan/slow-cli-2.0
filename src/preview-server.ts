@@ -2,8 +2,7 @@ import * as _http from 'http';
 import * as _async from 'async';
 import * as _fs from 'fs';
 import * as _path from 'path';
-import * as _url from 'url'
-import * as _querystring from 'querystring'
+
 import * as _ from 'lodash';
 import { CompilerCallBack } from './all';
 import * as _hooks from './hooks/index';
@@ -11,34 +10,9 @@ import * as _hooksMap from './hooks/map';
 import _getMime from './lib/getMime';
 import _configFiledConstant from './config-filed-constant';
 import * as _plugin from './plugin/index';
-import _log from './lib/log';
-import _formatContentLength from './lib/fortmatContentLength'
 import _getGitHash from './lib/getGitHash'
 import * as _init from './init/index'
-
-const showResponseTime = function(req, resp){
-  let startTime = Date.now()
-  resp.on('finish', ()=>{
-    let spellTime = Date.now() - startTime
-    let msg = `( ${req.url} ): ${spellTime} ms: [${resp.statusCode}] size:`
-    switch(resp.statusCode){
-      case 304 : _log.info(msg.grey); break;
-      case 401:
-      case 403:
-      case 404:
-      case 500:  _log.error(msg.red); break;
-      default:
-        _log.info(msg.gray, `${_formatContentLength((resp as any)._contentLength)}`);
-    }
-  })
-}
-
-const parseURL = function(url:string){
-  let urlObj = _url.parse(url)
-  urlObj.query = _querystring.parse(urlObj.query)
-  urlObj.path = urlObj.pathname
-  return urlObj
-}
+import * as _httpUtils from './http-utils'
 
 /**
  * 启动静态服务
@@ -49,8 +23,8 @@ export function privewServer(){
   let gitHash = _getGitHash()
 
   return _http.createServer(async (request, response)=>{
-    showResponseTime(request, response)
-    let requestData = parseURL(request.url)
+    _httpUtils.showResponseTime(request, response)
+    let requestData = _httpUtils.parseURL(request.url)
     //基本数据
     let req = {
       path:  requestData.path,

@@ -9,43 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const _http = require("http");
-const _url = require("url");
-const _querystring = require("querystring");
 const _ = require("lodash");
 const _hooks = require("./hooks/index");
 const getMime_1 = require("./lib/getMime");
 const config_filed_constant_1 = require("./config-filed-constant");
 const _plugin = require("./plugin/index");
-const log_1 = require("./lib/log");
-const fortmatContentLength_1 = require("./lib/fortmatContentLength");
 const getGitHash_1 = require("./lib/getGitHash");
 const _init = require("./init/index");
-const showResponseTime = function (req, resp) {
-    let startTime = Date.now();
-    resp.on('finish', () => {
-        let spellTime = Date.now() - startTime;
-        let msg = `( ${req.url} ): ${spellTime} ms: [${resp.statusCode}] size:`;
-        switch (resp.statusCode) {
-            case 304:
-                log_1.default.info(msg.grey);
-                break;
-            case 401:
-            case 403:
-            case 404:
-            case 500:
-                log_1.default.error(msg.red);
-                break;
-            default:
-                log_1.default.info(msg.gray, `${fortmatContentLength_1.default(resp._contentLength)}`);
-        }
-    });
-};
-const parseURL = function (url) {
-    let urlObj = _url.parse(url);
-    urlObj.query = _querystring.parse(urlObj.query);
-    urlObj.path = urlObj.pathname;
-    return urlObj;
-};
+const _httpUtils = require("./http-utils");
 /**
  * 启动静态服务
  */
@@ -54,8 +25,8 @@ function privewServer() {
     let globalCLIConfig = config_filed_constant_1.default.getGlobal();
     let gitHash = getGitHash_1.default();
     return _http.createServer((request, response) => __awaiter(this, void 0, void 0, function* () {
-        showResponseTime(request, response);
-        let requestData = parseURL(request.url);
+        _httpUtils.showResponseTime(request, response);
+        let requestData = _httpUtils.parseURL(request.url);
         //基本数据
         let req = {
             path: requestData.path,

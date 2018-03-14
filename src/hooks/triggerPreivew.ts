@@ -3,8 +3,6 @@ import * as _ from 'lodash';
 import * as _hookMap from './map';
 
 import * as _async from 'async';
-import _triggerHttpResponseDirHook from './triggerHttpResponseDirHook'
-import _triggerHttpNoFoundHook from './triggerHttpNoFoundHook'
 
 async function compile(req, data, callback){
   let queue = _hookMap.HookQueue["preview:compile"] || [];

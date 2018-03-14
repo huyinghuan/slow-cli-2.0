@@ -1,6 +1,6 @@
-import * as _allDefined from '../all';
+import * as _allDefined from '../../all';
 import * as _ from 'lodash';
-import * as _hookMap from './map';
+import * as _hookMap from '../map';
 import * as _async from 'async';
 import * as _hanlebars from 'handlebars'
 const htmlTemplate =
@@ -42,19 +42,13 @@ function getHtml(path, fileArray){
   });
 }
 
-export default function(path, callback){
-  let queue = _hookMap.HookQueue[_hookMap.route.isDir] || [];
+export default async function(path, callback){
+  let queue = _hookMap.HookQueue['route:dir'] || [];
   let content = null;
   let data = {fileArray:[], ignore: []}
-  _async.mapSeries(queue, (hook, next)=>{
-    (hook as any).fn(path, data, (error)=>{
-      next(error, null)
-    })
-  }, (error)=>{
-    if(error){
-      callback(error)
-    }else{
-      callback(null, getHtml(path, data.fileArray))
-    }
-  })
+  
+  for(let i = 0, len =  queue.length; i < len; i++){
+    await (queue[i] as any).fn(path, data)
+  }
+  return getHtml(path, data.fileArray)
 }
