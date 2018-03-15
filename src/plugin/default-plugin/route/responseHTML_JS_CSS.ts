@@ -17,18 +17,16 @@ function match(realPath):boolean{
 }
 
 exports.registerPlugin = function(cli, options){
-    cli.registerHook('route:didRequest', (req, data, content, cb)=>{
+    cli.registerHook('route:didRequest', async (req, data, content)=>{
       let realPath = data.realPath;
       let filePath = _path.join(cli.cwd(), realPath)
       if(!match(filePath)){
-        return cb(null, content)
+        return content
       }
       if(!_fs.existsSync(filePath)){
-        return cb(null, content)
+        return content
       }
       data.status = 200;
-      _fs.readFile(filePath, 'utf8', (error, fileContent)=>{
-        cb(error, fileContent)
-      })
+      return _fs.readFileSync(filePath, 'utf8')
   }, 0)
 }

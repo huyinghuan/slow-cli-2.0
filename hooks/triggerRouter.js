@@ -20,6 +20,7 @@ function forward(req, data) {
         for (let i = 0; i < queue.length; i++) {
             yield queue[i].fn(req, data);
         }
+        return;
     });
 }
 function didResponse(req) {
@@ -28,20 +29,18 @@ function didResponse(req) {
         hook.fn(req, next);
     }, () => { });
 }
-function didRequest(req, data, callback) {
-    let queue = _hookMap.HookQueue["route:didRequest"] || [];
-    if (!queue.length) {
-        callback(null, null);
-        return;
-    }
-    let content = null;
-    _async.mapSeries(queue, (hook, next) => {
-        hook.fn(req, data, content, (error, compileContent) => {
-            content = compileContent;
-            next(error, null);
-        });
-    }, (error) => {
-        callback(error, content);
+function didRequest(req, data) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let queue = _hookMap.HookQueue["route:didRequest"] || [];
+        if (!queue.length) {
+            callback(null, null);
+            return;
+        }
+        let content = null;
+        for (let i = 0; i < queue.length; i++) {
+            content = yield queue[i].fn(req, data, content);
+        }
+        return content;
     });
 }
 function routeInint(router) {
@@ -56,15 +55,13 @@ function routeInint(router) {
     }
     return false;
 }
-function willResponse(req, data, responseContent, callback) {
-    let queue = _hookMap.HookQueue[_hookMap.route.willResponse] || [];
-    _async.mapSeries(queue, (hook, next) => {
-        hook.fn(req, data, responseContent, (error, processContent) => {
-            responseContent = processContent;
-            next(error, null);
-        });
-    }, (error) => {
-        callback(error, responseContent);
+function willResponse(req, data, responseContent) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let queue = _hookMap.HookQueue['route:willResponse'] || [];
+        for (let i = 0, length = queue.length; i < length; i++) {
+            responseContent = yield queue[i].fn(req, data, responseContent);
+        }
+        return responseContent;
     });
 }
 function noFound(req, resp, cb) {
@@ -87,13 +84,11 @@ function default_1(hookType, ...options) {
             case "dir":
                 return responseDir_1.default.apply(null, options);
             case "didRequest":
-                didRequest.apply(null, options);
-                break;
+                return didRequest.apply(null, options);
             case "initial":
                 return routeInint.apply(null, options);
             case "willResponse":
-                willResponse.apply(null, options);
-                break;
+                return willResponse.apply(null, options);
             case "notFound":
                 return noFound.apply(null, options);
         }

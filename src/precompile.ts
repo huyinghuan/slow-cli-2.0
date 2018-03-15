@@ -8,31 +8,17 @@ import _log from './lib/log';
 import * as _fs from 'fs-extra';
 import * as _path from 'path';
 
-function precompileFile(buildConfig, fileItem, content, finish){
+async function precompileFile(buildConfig, fileItem, content, finish){
   let outpufFilePath = _path.join(buildConfig.outdir, fileItem.relativeDir, fileItem.fileName)
   _fs.ensureFileSync(outpufFilePath)
-  let queue = []
-  queue.push((next)=>{
-    _hooks.triggerPrecompile('include', buildConfig, fileItem, content, next)
-  })
-  queue.push((content, next)=>{
-    _hooks.triggerPrecompile('insert', buildConfig, fileItem, content, next)
-  })
-  queue.push((content, next)=>{
-    _hooks.triggerPrecompile('replace', buildConfig, fileItem, content, next)
-  })
-  _async.waterfall(queue, (error, content)=>{
-    if(error){
-      finish(error)
-    }else{
-      _fs.writeFileSync(outpufFilePath, content)
-      finish()
-    }
-  })
+  content = await _hooks.triggerPrecompile('include', buildConfig, fileItem, content)
+  content = await _hooks.triggerPrecompile('insert', buildConfig, fileItem, content)
+  content = await _hooks.triggerPrecompile('replace', buildConfig, fileItem, content)
+  _fs.writeFileSync(outpufFilePath, content)
 }
 
 
-export function compile(){
+export async function compile(){
   _plugin.scanPlugins('precompile')
   //获取所有待编译文件
   let fileQueue:Array<Object> = _getAllFileInProject(false);
@@ -51,19 +37,15 @@ export function compile(){
    _fs.ensureDirSync(buildConfig.outdir);
    //清空编译目录
    _fs.emptyDirSync(buildConfig.outdir);
-  _async.map(targetFileQueue, (item, cb)=>{
-    _fs.readFile(item.filePath, {encoding:"utf8"}, (error, content)=>{
-      if(error){
-        return cb(error)
-      }
-      precompileFile(buildConfig, item, content, cb)
-    })
-  }, (err:any, result)=>{
-    if(err){
-      console.log(err)
-    }else{
-      _log.info(`完成预编译文件:${result.length}个`)
+   let successCount = 0;
+   for(let i = 0, len = targetFileQueue.length; i < len; i++){
+    let content = _fs.readFileSync(targetFileQueue[i].filePath, {encoding:"utf8"})
+    try{
+      await precompileFile(buildConfig, targetFileQueue[i], content)
+      successCount = successCount + 1
+    }catch(e){
+      console.log(e)
     }
-  })
-  //_hooks.triggerPrecompile("")
+   }
+   _log.info(`完成预编译文件:${successCount}个`)
 }

@@ -1,9 +1,9 @@
 {
   "name": "silky-reborn",
-  "version": "2.6.7-preview-6",
+  "version": "3.0-beta",
   "description": "",
   "bin": {
-    "sr": "./bin/index.js"
+    "srb": "./bin/index.js"
   },
   "dependencies": {
     "async": "^2.1.2",

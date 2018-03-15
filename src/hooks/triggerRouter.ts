@@ -11,6 +11,7 @@ async function forward(req, data){
   for(let i = 0; i < queue.length; i++){
     await (queue[i] as any).fn(req, data)
   }
+  return
 }
 
 function didResponse(req){
@@ -20,21 +21,16 @@ function didResponse(req){
   }, ()=>{})
 }
 
-function didRequest(req, data, callback: _allDefined.CompilerCallBack){
+async function didRequest(req, data){
   let queue = _hookMap.HookQueue["route:didRequest"] || [];
   if(!queue.length){
-    callback(null, null)
-    return
+    return null
   }
   let content = null;
-  _async.mapSeries(queue, (hook, next)=>{
-    (hook as any).fn(req, data, content, (error, compileContent)=>{
-      content = compileContent;
-      next(error, null)
-    })
-  }, (error)=>{
-    callback(error, content)
-  })
+  for(let i = 0; i < queue.length; i++){
+    content = await (queue[i] as any).fn(req, data, content)
+  }
+  return content
 }
 
 function routeInint(router):boolean{
@@ -47,16 +43,12 @@ function routeInint(router):boolean{
   }
   return false
 }
-function willResponse(req, data, responseContent, callback: _allDefined.WillResponseCallBack){
-  let queue = _hookMap.HookQueue[_hookMap.route.willResponse] || [];
-  _async.mapSeries(queue, (hook, next)=>{
-    (hook as any).fn(req, data, responseContent, (error, processContent)=>{
-      responseContent = processContent;
-      next(error, null)
-    })
-  }, (error)=>{
-    callback(error, responseContent)
-  })
+async function willResponse(req, data, responseContent){
+  let queue = _hookMap.HookQueue['route:willResponse'] || [];
+  for(let i = 0, length = queue.length; i < length; i++){
+    responseContent = await (queue[i] as any).fn(req, data, responseContent)
+  }
+  return responseContent
 }
 
 async function noFound(req, resp, cb){
@@ -77,13 +69,11 @@ export default async function(hookType:string, ...options){
     case "dir":
       return _responseDir.apply(null, options)
     case "didRequest":
-      didRequest.apply(null, options)
-      break
+      return didRequest.apply(null, options)
     case "initial":
       return routeInint.apply(null, options)
     case "willResponse":
-      willResponse.apply(null, options)
-      break
+      return willResponse.apply(null, options)
     case "notFound":
       return noFound.apply(null, options)
   }

@@ -6,53 +6,37 @@ import * as _async from 'async';
 import _triggerHttpResponseDirHook from './triggerHttpResponseDirHook'
 import _triggerHttpNoFoundHook from './triggerHttpNoFoundHook'
 
-function doPrecompile(buildConfig, fileItem, content, finish){
+async function doPrecompile(buildConfig, fileItem, content){
   let queue = _hookMap.HookQueue["precompile:include"] || [];
-  var compileContent = ""
-  _async.mapSeries(queue, (hook, next)=>{
-    (hook as any).fn(buildConfig, content, (error, processContent)=>{
-      compileContent = processContent;
-      next(error, null)
-    })
-  }, (error)=>{
-    finish(error, compileContent)
-  })
+  for(let i = 0, length = queue.length; i < length; i++){
+    content = await (queue[i] as any).fn(buildConfig, content)
+  }
+  return content
 }
 
-function insertCompile(buildConfig, fileItem, content, finish){
+async function insertCompile(buildConfig, fileItem, content){
   let queue = _hookMap.HookQueue["precompile:insert"] || [];
-  _async.mapSeries(queue, (hook, next)=>{
-    (hook as any).fn(buildConfig, fileItem, content, (error, processContent)=>{
-      content = processContent;
-      next(error, null)
-    })
-  }, (error)=>{
-    finish(error, content)
-  })
+  for(let i = 0, length = queue.length; i < length; i++){
+    content = await (queue[i] as any).fn(buildConfig, fileItem, content)
+  }
+  return content
 }
 
-function replaceCompile(buildConfig, fileItem, content, finish){
+async function replaceCompile(buildConfig, fileItem, content){
   let queue = _hookMap.HookQueue["precompile:replace"] || [];
-  _async.mapSeries(queue, (hook, next)=>{
-    (hook as any).fn(buildConfig, content, (error, processContent)=>{
-      content = processContent;
-      next(error, null)
-    })
-  }, (error)=>{
-    finish(error, content)
-  })
+  for(let i = 0, length = queue.length; i < length; i++){
+    content = await (queue[i] as any).fn(buildConfig, content)
+  }
+  return content
 }
 
-export default function(hookType:string, ...options){
+export default async function(hookType:string, ...options){
   switch(hookType){
     case "include":
-      doPrecompile.apply(null, options)
-      break
+      return doPrecompile.apply(null, options)
     case "insert":
-      insertCompile.apply(null, options)
-      break
+      return insertCompile.apply(null, options)
     case "replace":
-      replaceCompile.apply(null, options)
-      break
+      return replaceCompile.apply(null, options)
   }
 }
