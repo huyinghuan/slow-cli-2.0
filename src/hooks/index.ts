@@ -9,6 +9,7 @@ import _triggerBuildServerFilterHook from './triggerBuildServerFilterHook'
 import _triggerPreview from './triggerPreivew'
 import _triggerRouter from './triggerRouter'
 import _triggerPrecompile from './triggerPrecompile'
+import _triggerBuild from './triggerBuild'
 export {
   triggerBuildInitHook as triggerBuildInitHook,
   _triggerBuildErrorHook as triggerBuildErrorHook,
@@ -20,5 +21,6 @@ export {
   _triggerBuildServerFilterHook as triggerBuildServerFilterHook,
   _triggerPreview as triggerPreview,
   _triggerRouter as triggerRouter,
-  _triggerPrecompile as triggerPrecompile
+  _triggerPrecompile as triggerPrecompile,
+  _triggerBuild as triggerBuild
 }

@@ -12,7 +12,7 @@ import _configFiledConstant from '../config-filed-constant';
  * 用于一次性编译
  * 编译完成后即推出进程
  * */
-export default function(prepareFn:Function, finish, needLoadPlugin?){
+export default async function(prepareFn:Function, finish, needLoadPlugin?){
   prepareFn();
   
   //加载插件
@@ -22,23 +22,12 @@ export default function(prepareFn:Function, finish, needLoadPlugin?){
   }
   let __starTime = Date.now();
   let queue = [];
-  let gitHash = null;
-  //build初始化HOOK
-  queue.push((cb)=>{_hook.triggerBuildInitHook(cb);});
-  queue.push((stop, cb)=>{
-    _getGitHash((error, hash)=>{
-      gitHash = hash
-      cb(error, stop)
-    })
-  })
-  _async.waterfall(queue, (error, stop)=>{
-    if(error){
-      _log.error(error);
-      _log.fail('build 初始化失败'.red);
-      _hook.triggerBuildErrorHook(error);
-      return;
+  try{
+    let gitHash =  _getGitHash();  
+    let stop = await _hook.triggerBuild("initial")
+    if(stop){
+      return
     }
-    if(stop){return}
     _executeProjectCompile(_configFiledConstant.getBuildConfig({gitHash:gitHash}), (error)=>{
       //编译成功
       if(!error){
@@ -51,5 +40,10 @@ export default function(prepareFn:Function, finish, needLoadPlugin?){
       }
       finish(error)
     })
-  })
+  }catch(e){
+    _log.error(e);
+    _log.fail('build 初始化失败');
+    _hook.triggerBuildErrorHook(e);
+  }
+  
 }

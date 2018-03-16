@@ -33,8 +33,7 @@ function didRequest(req, data) {
     return __awaiter(this, void 0, void 0, function* () {
         let queue = _hookMap.HookQueue["route:didRequest"] || [];
         if (!queue.length) {
-            callback(null, null);
-            return;
+            return null;
         }
         let content = null;
         for (let i = 0; i < queue.length; i++) {

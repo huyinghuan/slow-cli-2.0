@@ -3,7 +3,7 @@
   "version": "3.0-beta",
   "description": "",
   "bin": {
-    "srb": "./bin/index.js"
+    "srb": "./dist/bin/index.js"
   },
   "dependencies": {
     "async": "^2.1.2",

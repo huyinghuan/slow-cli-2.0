@@ -3,8 +3,6 @@ import * as _ from 'lodash';
 import * as _hookMap from './map';
 
 import * as _async from 'async';
-import _triggerHttpResponseDirHook from './triggerHttpResponseDirHook'
-import _triggerHttpNoFoundHook from './triggerHttpNoFoundHook'
 
 async function doPrecompile(buildConfig, fileItem, content){
   let queue = _hookMap.HookQueue["precompile:include"] || [];

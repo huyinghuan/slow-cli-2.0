@@ -1,3 +1,3 @@
 export default function ():string{
-  return require('../package').version;
+  return require('../../package').version;
 }
