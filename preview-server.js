@@ -46,14 +46,15 @@ const parseURL = function (url) {
     urlObj.path = urlObj.pathname;
     return urlObj;
 };
+var HEALTHCHECK = 200;
 /**
  * 启动静态服务
  */
-function privewServer(HEALTHCHECK) {
+function privewServer(healthCheck) {
     _plugin.scanPlugins('preview'); //加载插件
     let globalCLIConfig = config_filed_constant_1.default.getGlobal();
     let gitHash = getGitHash_1.default();
-    HEALTHCHECK = HEALTHCHECK || 200;
+    HEALTHCHECK = healthCheck || 200;
     return _http.createServer((request, response) => __awaiter(this, void 0, void 0, function* () {
         showResponseTime(request, response);
         let requestData = parseURL(request.url);

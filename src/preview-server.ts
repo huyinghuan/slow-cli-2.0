@@ -40,14 +40,15 @@ const parseURL = function(url:string){
   return urlObj
 }
 
+var HEALTHCHECK = 200;
 /**
  * 启动静态服务
  */
-export function privewServer(HEALTHCHECK?:number){
+export function privewServer(healthCheck?:number){
   _plugin.scanPlugins('preview');//加载插件
   let globalCLIConfig = _configFiledConstant.getGlobal()
   let gitHash = _getGitHash()
-  HEALTHCHECK = HEALTHCHECK || 200;
+  HEALTHCHECK = healthCheck || 200;
   return _http.createServer(async (request, response)=>{
     showResponseTime(request, response)
     let requestData = parseURL(request.url)
