@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const _path = require("path");
 const _ = require("lodash");
+const _fs = require("fs");
 /**
  * 仅用于记录文件位置
  */
@@ -31,8 +32,10 @@ class ConstantFiled {
             pubModulesDir: "node_modules",
             runType: "" //可选: tool, preview
         };
-        let CLIConfig = require(this.CLIConfigFile);
-        this.globalVar.projectName = CLIConfig.name;
+        if (_fs.existsSync(this.CLIConfigFile)) {
+            let CLIConfig = require(this.CLIConfigFile);
+            this.globalVar.projectName = CLIConfig.name;
+        }
     }
     getWorkspace() { return this.cwd; }
     setWorkspace(workspace) {

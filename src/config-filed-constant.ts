@@ -1,6 +1,7 @@
 import * as _os from 'os';
 import * as _path from 'path';
 import * as _ from 'lodash';
+import * as _fs from 'fs'
 /**
  * 仅用于记录文件位置
  */
@@ -31,8 +32,10 @@ class ConstantFiled {
     runType: "" //可选: tool, preview
   };
   constructor(){
-    let CLIConfig = require(this.CLIConfigFile)
-    this.globalVar.projectName = CLIConfig.name
+    if(_fs.existsSync(this.CLIConfigFile)){
+      let CLIConfig = require(this.CLIConfigFile)
+      this.globalVar.projectName = CLIConfig.name
+    }
   }
   getWorkspace(){return this.cwd}
   setWorkspace(workspace){
