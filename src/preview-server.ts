@@ -68,6 +68,7 @@ export function privewServer(healthCheck?:string){
           response.statusCode = 401
           response.end("不允许远程更新系统状态!!")
         }
+        return
       }
     }
 

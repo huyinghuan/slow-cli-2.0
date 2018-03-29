@@ -77,6 +77,7 @@ function privewServer(healthCheck) {
                     response.statusCode = 401;
                     response.end("不允许远程更新系统状态!!");
                 }
+                return;
             }
         }
         //基本数据
