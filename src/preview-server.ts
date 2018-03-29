@@ -40,29 +40,29 @@ const parseURL = function(url:string){
   return urlObj
 }
 
-var HEALTHCHECK = 200;
 /**
  * 启动静态服务
  */
-export function privewServer(healthCheck?:number){
+export function privewServer(healthCheck?:string){
+  _fs.writeFileSync("server-status.dat", healthCheck || 200, "utf8")
   _plugin.scanPlugins('preview');//加载插件
   let globalCLIConfig = _configFiledConstant.getGlobal()
   let gitHash = _getGitHash()
-  HEALTHCHECK = healthCheck || 200;
   return _http.createServer(async (request, response)=>{
     showResponseTime(request, response)
     let requestData = parseURL(request.url)
     if(requestData.path == "/__health_check"){
       if(request.method == "GET"){
-        response.statusCode = HEALTHCHECK;
+        response.statusCode = ~~_fs.readFileSync("server-status.dat", "utf8");
         response.end()
         return
       }else if(request.method == "PUT"){
         let ip  = request.headers['x-forwarded-for'] || request.connection.remoteAddress
         //只允许本地更新的不允许远程更新状态
         if(ip.indexOf("127.0.0.1")!=-1 || ip =="::1"){
-          HEALTHCHECK = requestData.query["status"] || 200;
-          response.end("更新当前系统状态为:"+HEALTHCHECK)
+          let status = requestData.query["status"] || 200;
+          _fs.writeFileSync("server-status.dat", status || 200, "utf8")
+          response.end("更新当前系统状态为:"+status)
           response.end()
         }else{
           response.statusCode = 401

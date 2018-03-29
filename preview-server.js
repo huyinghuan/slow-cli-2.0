@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const _http = require("http");
+const _fs = require("fs");
 const _url = require("url");
 const _querystring = require("querystring");
 const _ = require("lodash");
@@ -46,21 +47,20 @@ const parseURL = function (url) {
     urlObj.path = urlObj.pathname;
     return urlObj;
 };
-var HEALTHCHECK = 200;
 /**
  * 启动静态服务
  */
 function privewServer(healthCheck) {
+    _fs.writeFileSync("server-status.dat", healthCheck || 200, "utf8");
     _plugin.scanPlugins('preview'); //加载插件
     let globalCLIConfig = config_filed_constant_1.default.getGlobal();
     let gitHash = getGitHash_1.default();
-    HEALTHCHECK = healthCheck || 200;
     return _http.createServer((request, response) => __awaiter(this, void 0, void 0, function* () {
         showResponseTime(request, response);
         let requestData = parseURL(request.url);
         if (requestData.path == "/__health_check") {
             if (request.method == "GET") {
-                response.statusCode = HEALTHCHECK;
+                response.statusCode = ~~_fs.readFileSync("server-status.dat", "utf8");
                 response.end();
                 return;
             }
@@ -68,8 +68,9 @@ function privewServer(healthCheck) {
                 let ip = request.headers['x-forwarded-for'] || request.connection.remoteAddress;
                 //只允许本地更新的不允许远程更新状态
                 if (ip.indexOf("127.0.0.1") != -1 || ip == "::1") {
-                    HEALTHCHECK = requestData.query["status"] || 200;
-                    response.end("更新当前系统状态为:" + HEALTHCHECK);
+                    let status = requestData.query["status"] || 200;
+                    _fs.writeFileSync("server-status.dat", status || 200, "utf8");
+                    response.end("更新当前系统状态为:" + status);
                     response.end();
                 }
                 else {
