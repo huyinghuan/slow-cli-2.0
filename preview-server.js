@@ -49,13 +49,34 @@ const parseURL = function (url) {
 /**
  * 启动静态服务
  */
-function privewServer() {
+function privewServer(HEALTHCHECK) {
     _plugin.scanPlugins('preview'); //加载插件
     let globalCLIConfig = config_filed_constant_1.default.getGlobal();
     let gitHash = getGitHash_1.default();
+    HEALTHCHECK = HEALTHCHECK || 200;
     return _http.createServer((request, response) => __awaiter(this, void 0, void 0, function* () {
         showResponseTime(request, response);
         let requestData = parseURL(request.url);
+        if (requestData.path == "/__health_check") {
+            if (request.method == "GET") {
+                response.statusCode = HEALTHCHECK;
+                response.end();
+                return;
+            }
+            else if (request.method == "PUT") {
+                let ip = request.headers['x-forwarded-for'] || request.connection.remoteAddress;
+                //只允许本地更新的不允许远程更新状态
+                if (ip.indexOf("127.0.0.1") != -1 || ip == "::1") {
+                    HEALTHCHECK = requestData.query["status"] || 200;
+                    response.end("更新当前系统状态为:" + HEALTHCHECK);
+                    response.end();
+                }
+                else {
+                    response.statusCode = 401;
+                    response.end("不允许远程更新系统状态!!");
+                }
+            }
+        }
         //基本数据
         let req = {
             path: requestData.path,
@@ -91,13 +112,14 @@ if (require.main == module) {
     let workspace = _.indexOf(process.argv, "-w") > -1 ? process.argv[_.indexOf(process.argv, "-w") + 1] : process.cwd();
     let enviroment = _.indexOf(process.argv, "-e") > -1 ? process.argv[_.indexOf(process.argv, "-e") + 1] : "production";
     let viewDir = _.indexOf(process.argv, "-v") > -1 ? process.argv[_.indexOf(process.argv, "-v") + 1] : "prebuild";
+    let HEALTHCHCK = _.indexOf(process.argv, "-c") > -1 ? ~~process.argv[_.indexOf(process.argv, "-c") + 1] : 200;
     //读取用户自定义配置
     _init.prepareUserEnv(workspace);
     //读取运行时环境配置
     _init.prepareRuntimeEnv(enviroment || "production");
     _init.setRunType("preview");
     config_filed_constant_1.default.setBuildParams({ outdir: viewDir });
-    let app = privewServer();
+    let app = privewServer(HEALTHCHCK);
     console.log(`run on ${port} at ${workspace} as ${enviroment}`.green);
     app.listen(port);
 }
