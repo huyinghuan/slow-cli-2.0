@@ -44,7 +44,14 @@ const parseURL = function(url:string){
  * 启动静态服务
  */
 export function privewServer(healthCheck?:string){
-  _fs.writeFileSync("server-status.dat", healthCheck || 200, "utf8")
+  if(healthCheck){
+    _fs.writeFileSync("server-status.dat", healthCheck, "utf8")
+  }else{
+    if(!_fs.existsSync("server-status.dat")){
+      _fs.writeFileSync("server-status.dat", 200, "utf8")
+    }
+  }
+  
   _plugin.scanPlugins('preview');//加载插件
   let globalCLIConfig = _configFiledConstant.getGlobal()
   let gitHash = _getGitHash()
@@ -53,7 +60,8 @@ export function privewServer(healthCheck?:string){
     let requestData = parseURL(request.url)
     if(requestData.path == "/__health_check"){
       if(request.method == "GET"){
-        response.statusCode = ~~_fs.readFileSync("server-status.dat", "utf8");
+        let recordStatus =  ~~_fs.readFileSync("server-status.dat", "utf8")
+        response.statusCode = recordStatus || 500;
         response.end()
         return
       }else if(request.method == "PUT"){
@@ -107,14 +115,14 @@ if(require.main == module){
   let workspace =  _.indexOf(process.argv, "-w") > -1 ? process.argv[_.indexOf(process.argv, "-w") + 1] : process.cwd()
   let enviroment =  _.indexOf(process.argv, "-e") > -1 ? process.argv[_.indexOf(process.argv, "-e") + 1] : "production"
   let viewDir =  _.indexOf(process.argv, "-v") > -1 ? process.argv[_.indexOf(process.argv, "-v") + 1] : "prebuild"
-  let HEALTHCHCK = _.indexOf(process.argv, "-c") > -1 ? ~~process.argv[_.indexOf(process.argv, "-c") + 1] : 200
+  let healthCheck = _.indexOf(process.argv, "-c") > -1 ? process.argv[_.indexOf(process.argv, "-c") + 1] : ""
   //读取用户自定义配置
   _init.prepareUserEnv(workspace);
   //读取运行时环境配置
   _init.prepareRuntimeEnv(enviroment || "production")
   _init.setRunType("preview")
   _configFiledConstant.setBuildParams({outdir: viewDir})
-  let app = privewServer(HEALTHCHCK)
+  let app = privewServer(healthCheck)
   console.log(`run on ${port} at ${workspace} as ${enviroment}`.green)
   app.listen(port)
 }
