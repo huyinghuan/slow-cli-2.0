@@ -13,32 +13,33 @@ const log_1 = require("../lib/log");
 const config_filed_constant_1 = require("../config-filed-constant");
 const checkLatestCLIVersion_1 = require("../lib/checkLatestCLIVersion");
 const reportLog_1 = require("../lib/reportLog");
-const _plugin = require("../plugin/index");
-const unregisterHooks_1 = require("../hooks/unregisterHooks");
-function watchConfig(program) {
-    let workspace = config_filed_constant_1.default.getWorkspace();
-    let packageJsonFilePath = _path.join(workspace, "package.json");
-    _fs.watch(packageJsonFilePath, function (eventType, filename) {
-        if (eventType == "rename" && filename != "package.json") {
-            log_1.default.error("package.json be delete！ can not reload config".red);
-            return;
-        }
-        //Reload config
-        prepare(program);
-        unregisterHooks_1.default();
-        _plugin.scanPlugins('route');
-    });
-    let configDir = _path.join(workspace, ".silky");
-    if (!_fs.existsSync(configDir)) {
-        return;
+/*
+function watchConfig(program){
+  let workspace = _configFiledConstant.getWorkspace()
+  let packageJsonFilePath = _path.join(workspace, "package.json")
+  _fs.watch(packageJsonFilePath, function(eventType, filename){
+    if(eventType == "rename" && filename != "package.json"){
+      _log.error("package.json be delete！ can not reload config".red)
+      return
     }
-    _fs.watch(configDir, { recursive: true }, function () {
-        //ReloadConfig
-        prepare(program);
-        unregisterHooks_1.default();
-        _plugin.scanPlugins('route');
-    });
+    //Reload config
+    prepare(program)
+    _unregisterHooks()
+    _plugin.scanPlugins('route');
+  })
+  let configDir = _path.join(workspace, ".silky")
+  if (!_fs.existsSync(configDir)){
+    return
+  }
+  _fs.watch(configDir,  {recursive: true}, function(){
+    //ReloadConfig
+     prepare(program)
+     _unregisterHooks()
+     _plugin.scanPlugins('route');
+  })
+
 }
+*/
 function prepare(program) {
     //读取用户自定义配置
     _init.prepareUserEnv(program.workspace, program.noConfig);
@@ -96,9 +97,6 @@ function commander(_commander) {
             console.log(error);
             return process.exit(1);
         });
-        if (!program.noConfig) {
-            watchConfig(program);
-        }
         console.log(`silky run on http://localhost:${port}`.green);
         server.listen(port);
     });
@@ -129,9 +127,6 @@ function commander(_commander) {
             console.log(error);
             return process.exit(1);
         });
-        if (!program.noConfig) {
-            watchConfig(program);
-        }
         httpsServer.listen(port);
         console.log(`silky run on https://localhost:${port}`.green);
     });

@@ -2,10 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const _fs = require("fs-extra");
 const config_filed_constant_1 = require("./config-filed-constant");
-const getCLIVersion_1 = require("./lib/getCLIVersion");
-exports.getCLIVersion = getCLIVersion_1.default;
-const checkCLIVersion_1 = require("./lib/checkCLIVersion");
-exports.checkCLIVersion = checkCLIVersion_1.default;
+const cli = require("./cli");
 const _ = require("lodash");
 const _path = require("path");
 //获取package.json某个字段的值
@@ -35,9 +32,9 @@ function updateProjectPackageJSON(params) {
 }
 exports.updateProjectPackageJSON = updateProjectPackageJSON;
 function updateProjectCLIVersion(version) {
-    version = version || getCLIVersion_1.default();
+    version = version || cli.getVersion();
     let params = {};
-    params[config_filed_constant_1.default.get().pluginVersionField] = version;
+    params["silky-version"] = version;
     updateProjectPackageJSON(params);
 }
 exports.updateProjectCLIVersion = updateProjectCLIVersion;

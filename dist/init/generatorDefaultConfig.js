@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const _project = require("../project");
-const config_filed_constant_1 = require("../config-filed-constant");
+const _cli = require("../cli");
 /**
  * 用户写入到项目目录下的package.json文件中。
  * 必须包含的信息
@@ -13,20 +13,20 @@ const config_filed_constant_1 = require("../config-filed-constant");
  * cli-build:       default:{} build配置
  */
 function default_1() {
-    let result = {};
-    result.name = _project.getProjectDirectoryName();
-    result.version = '1.0';
-    result.dependencies = {};
-    let configFiledConstant = config_filed_constant_1.default.get();
-    result[configFiledConstant.pluginVersionField] = _project.getCLIVersion();
-    result[configFiledConstant.pluginConfigField] = {};
-    result[configFiledConstant.infinity] = {
-        port: 14422, index: 'index.html', autoindex: true
-    };
-    result[configFiledConstant.pubModulesDir] = "node_modules";
-    result[configFiledConstant.buildField] = {
-        outdir: './build',
-        ignore: ["node_modules", "(\\/\\.[^/]+)$"],
+    let result = {
+        name: _project.getProjectDirectoryName(),
+        version: '1.0',
+        dependencies: {},
+        silky: {
+            port: 14422, index: 'index.html', autoindex: true
+        },
+        "silky-version": _cli.getVersion(),
+        "silky-plugin": {},
+        "silky-build": {
+            outdir: './build',
+            ignore: ["node_modules", "(\\/\\.[^/]+)$", "prebuild"],
+        },
+        "silky-pubPath": "node_modules"
     };
     return result;
 }

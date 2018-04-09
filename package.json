@@ -6,7 +6,6 @@
     "srb": "./dist/bin/index.js"
   },
   "dependencies": {
-    "async": "^2.1.2",
     "colors": "^1.1.2",
     "commander": "^2.9.0",
     "cross-spawn": "^5.1.0",

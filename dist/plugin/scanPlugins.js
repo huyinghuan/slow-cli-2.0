@@ -51,12 +51,17 @@ function scanPlugins(hookType) {
             return;
         }
         //插件扩展
-        if (/^sp\-.+(\-ext)$/.test(key)) {
+        if (/^sp\-.+$/.test(key)) {
+            log_1.default.error(`无法兼容插件${key}, 请安装srp版插件`);
+            process.exit(1);
+        }
+        //插件扩展
+        if (/^srp\-.+(\-ext)$/.test(key)) {
             pluginExts.push(key);
             return;
         }
         //插件
-        if (/^sp-.+/.test(key)) {
+        if (/^srp-.+/.test(key)) {
             plugins.push(key);
             return;
         }

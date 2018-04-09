@@ -9,7 +9,7 @@ const _build = require("./build");
 const _install = require("./install");
 const _info = require("./info");
 const _config = require("./config");
-const _project = require("../project");
+const _cli = require("../cli");
 const _dev = require("./dev");
 const _list = require("./list");
 const config_filed_constant_1 = require("../config-filed-constant");
@@ -20,7 +20,7 @@ require('colors');
 /**
  * 全局变量，保存配置数据
  */
-const versionDesc = _project.getCLIVersion();
+const versionDesc = _cli.getVersion();
 console.log(`${config_filed_constant_1.default.get().infinity} version is ${versionDesc}`.green);
 _start.commander(_commander);
 _init.commander(_commander);

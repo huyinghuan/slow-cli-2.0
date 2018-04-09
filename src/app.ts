@@ -1,6 +1,5 @@
 import * as _express from 'express';
 import * as _http from 'http';
-import * as _async from 'async';
 import * as _fs from 'fs';
 import * as _path from 'path';
 import _configFiledConstant from './config-filed-constant';
@@ -28,7 +27,6 @@ export default ()=>{
       return
     }
     let requestData = _httpUtils.parseURL(request.url)
-
     //拦截文件夹请求
     let isDir = await _httpUtils.isDir(requestData.path)
     if(isDir){
@@ -44,7 +42,8 @@ export default ()=>{
     //基本数据
     let req = {
       path:  requestData.path,
-      query: requestData.query
+      query: requestData.query,
+      __request: request
     }
 
     //拦截GET请求，并且加载编译其他hooks
@@ -57,7 +56,7 @@ export default ()=>{
       realPath: realPath
     }
     try{
-       //路径转发
+      //路径转发
       await _hooks.triggerRouter("forward", req, data)
       let content = await _hooks.triggerRouter("didRequest", req, data)
       content = await _hooks.triggerRouter("willResponse", req, data, content)
@@ -75,7 +74,6 @@ export default ()=>{
       return
     }
    
-    
     //404 nofound
     let hasProcess = await _hooks.triggerRouter("notFound", req, response)
     if(!hasProcess){

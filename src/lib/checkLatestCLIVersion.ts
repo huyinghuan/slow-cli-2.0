@@ -1,11 +1,11 @@
 import * as _request from 'request'
 import _publicConfig from '../public'
-import _getCLIVersion from './getCLIVersion'
+import * as _cli from '../cli'
 import _log from './log'
 export default function(){
     let latestQueryURLPrivate = _publicConfig.private_npm_registry + "/silky-reborn/latest"
     let latestQueryURLPublic = "https://registry.npm.taobao.org/silky-reborn/latest"
-    let nowVersion = _getCLIVersion()
+    let nowVersion = _cli.getVersion()
 
     _request(latestQueryURLPrivate, (err, httpResponse, body)=>{
         if(!err && httpResponse.statusCode == 200){

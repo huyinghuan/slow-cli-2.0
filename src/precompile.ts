@@ -1,14 +1,13 @@
 import * as _hooks from './hooks/index';
 import * as _plugin from './plugin/index';
 import _getAllFileInProject from './lib/getAllFileInProject';
-import * as _async from 'async';
 import _getGitHash from './lib/getGitHash';
 import _configFiledConstant from './config-filed-constant';
 import _log from './lib/log';
 import * as _fs from 'fs-extra';
 import * as _path from 'path';
 
-async function precompileFile(buildConfig, fileItem, content, finish){
+async function precompileFile(buildConfig, fileItem, content){
   let outpufFilePath = _path.join(buildConfig.outdir, fileItem.relativeDir, fileItem.fileName)
   _fs.ensureFileSync(outpufFilePath)
   content = await _hooks.triggerPrecompile('include', buildConfig, fileItem, content)

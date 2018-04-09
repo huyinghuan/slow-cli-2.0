@@ -36,7 +36,7 @@ const htmlTemplate = `
       </body>
     </html>
   `;
-const template = _hanlebars.compile(htmlTemplate);
+const template = _hanlebars.create().compile(htmlTemplate);
 function getHtml(path, fileArray) {
     if (fileArray.length < 2) {
         return null;

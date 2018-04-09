@@ -1,7 +1,5 @@
-import * as _allDefined from '../../all';
-import * as _ from 'lodash';
+
 import * as _hookMap from '../map';
-import * as _async from 'async';
 import * as _hanlebars from 'handlebars'
 const htmlTemplate =
   `
@@ -30,7 +28,8 @@ const htmlTemplate =
       </body>
     </html>
   `
-const template = _hanlebars.compile(htmlTemplate);
+  
+const template = _hanlebars.create().compile(htmlTemplate);
 
 function getHtml(path, fileArray){
   if(fileArray.length < 2){

@@ -1,5 +1,5 @@
 import * as _project from '../project';
-import _configFiledConstant from '../config-filed-constant';
+import * as _cli from '../cli'
 /**
  * 用户写入到项目目录下的package.json文件中。
  * 必须包含的信息
@@ -11,20 +11,21 @@ import _configFiledConstant from '../config-filed-constant';
  * cli-build:       default:{} build配置
  */
 export default function(){
-  let result:any = {};
-  result.name = _project.getProjectDirectoryName();
-  result.version = '1.0';
-  result.dependencies = {};
-  let configFiledConstant = _configFiledConstant.get()
-  result[configFiledConstant.pluginVersionField] = _project.getCLIVersion();
-  result[configFiledConstant.pluginConfigField] = {};
-  result[configFiledConstant.infinity] = {
-    port: 14422, index: 'index.html', autoindex: true
+  let result:any = {
+    name: _project.getProjectDirectoryName(),
+    version: '1.0',
+    dependencies:{},
+    silky:{
+      port: 14422, index: 'index.html', autoindex: true
+    },
+    "silky-version": _cli.getVersion(),
+    "silky-plugin":{},
+    "silky-build":{
+      outdir: './build',
+      ignore: ["node_modules", "(\\/\\.[^/]+)$", "prebuild"],
+    },
+    "silky-pubPath":"node_modules"
   };
-  result[configFiledConstant.pubModulesDir] = "node_modules"
-  result[configFiledConstant.buildField] = {
-    outdir: './build',
-    ignore: ["node_modules", "(\\/\\.[^/]+)$"],
-  };
+
   return result;
 }

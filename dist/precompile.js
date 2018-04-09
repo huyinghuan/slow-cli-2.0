@@ -16,7 +16,7 @@ const config_filed_constant_1 = require("./config-filed-constant");
 const log_1 = require("./lib/log");
 const _fs = require("fs-extra");
 const _path = require("path");
-function precompileFile(buildConfig, fileItem, content, finish) {
+function precompileFile(buildConfig, fileItem, content) {
     return __awaiter(this, void 0, void 0, function* () {
         let outpufFilePath = _path.join(buildConfig.outdir, fileItem.relativeDir, fileItem.fileName);
         _fs.ensureFileSync(outpufFilePath);

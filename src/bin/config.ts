@@ -2,7 +2,6 @@
 import * as _project from '../project';
 import * as _fs from 'fs-extra';
 import * as _path from 'path';
-import * as _async from 'async';
 import * as _request from 'request';
 import * as _crossSpawn from 'cross-spawn'
 import _getMD5 from '../lib/getMD5';

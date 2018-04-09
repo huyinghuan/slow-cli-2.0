@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const _path = require("path");
 const _ = require("lodash");
+const _fs = require("fs");
 /**
  * 仅用于记录文件位置
  */
@@ -10,15 +11,15 @@ class ConstantFiled {
         this.cwd = process.cwd();
         this.configServer = "";
         this.infinity = 'silky';
-        this.pluginConfigField = `${this.infinity}-plugin`; //silky-plugin
-        this.pluginVersionField = `${this.infinity}-version`; //silky-version
+        this.pluginConfigField = `silky-plugin`; //silky-plugin
+        this.pluginVersionField = `silky-version`; //silky-version
         this.pluginDir = _path.join(this.cwd, 'node_modules'); //插件目录
         this.CLIConfigFile = _path.join(this.cwd, 'package.json'); //配置文件
-        this.buildField = `${this.infinity}-build`; //build 相关配置】//silky-build
-        this.environmentRootDir = _path.join(this.cwd, `.${this.infinity}`);
+        this.buildField = `silky-build`; //build 相关配置】//silky-build
+        this.environmentRootDir = _path.join(this.cwd, `.silky`);
         this.prerequisiteEnvironment = ['production', 'develop', 'normal'];
-        this.normalEnviromentDir = _path.join(this.cwd, `.${this.infinity}`, 'normal');
-        this.pubModulesDir = `${this.infinity}-pubPath`;
+        this.normalEnviromentDir = _path.join(this.cwd, `.silky`, 'normal');
+        this.pubModulesDir = `silky-pubPath`;
         //存储全局变量
         this.globalVar = {
             projectName: "",
@@ -31,8 +32,10 @@ class ConstantFiled {
             pubModulesDir: "node_modules",
             runType: "" //可选: tool, preview
         };
-        let CLIConfig = require(this.CLIConfigFile);
-        this.globalVar.projectName = CLIConfig.name;
+        if (_fs.existsSync(this.CLIConfigFile)) {
+            let CLIConfig = require(this.CLIConfigFile);
+            this.globalVar.projectName = CLIConfig.name;
+        }
     }
     getWorkspace() { return this.cwd; }
     setWorkspace(workspace) {
@@ -43,9 +46,10 @@ class ConstantFiled {
     }
     update() {
         this.pluginDir = _path.join(this.cwd, 'node_modules'); //插件目录
-        this.CLIConfigFile = _path.join(this.cwd, 'package.json'); //配置文件
-        this.environmentRootDir = _path.join(this.cwd, `.${this.infinity}`);
-        this.normalEnviromentDir = _path.join(this.cwd, `.${this.infinity}`, 'normal');
+        //配置文件
+        this.CLIConfigFile = _path.join(this.cwd, 'package.json');
+        this.environmentRootDir = _path.join(this.cwd, `.silky`);
+        this.normalEnviromentDir = _path.join(this.cwd, `.silky`, 'normal');
     }
     get() {
         return {

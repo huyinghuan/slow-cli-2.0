@@ -1,6 +1,7 @@
 import * as _os from 'os';
 import * as _path from 'path';
 import * as _ from 'lodash';
+import * as _fs from 'fs'
 /**
  * 仅用于记录文件位置
  */
@@ -9,15 +10,15 @@ class ConstantFiled {
   private cwd = process.cwd();
   private configServer = "";
   private infinity = 'silky';
-  private pluginConfigField = `${this.infinity}-plugin`;//silky-plugin
-  private pluginVersionField = `${this.infinity}-version`;//silky-version
+  private pluginConfigField = `silky-plugin`;//silky-plugin
+  private pluginVersionField = `silky-version`;//silky-version
   private pluginDir = _path.join(this.cwd, 'node_modules'); //插件目录
   private CLIConfigFile = _path.join(this.cwd, 'package.json');//配置文件
-  private buildField = `${this.infinity}-build`; //build 相关配置】//silky-build
-  private environmentRootDir = _path.join(this.cwd, `.${this.infinity}`);
+  private buildField = `silky-build`; //build 相关配置】//silky-build
+  private environmentRootDir = _path.join(this.cwd, `.silky`);
   private prerequisiteEnvironment = ['production', 'develop', 'normal'];
-  private normalEnviromentDir = _path.join(this.cwd, `.${this.infinity}`, 'normal');
-  private pubModulesDir = `${this.infinity}-pubPath`
+  private normalEnviromentDir = _path.join(this.cwd, `.silky`, 'normal');
+  private pubModulesDir = `silky-pubPath`
   //存储全局变量
   private globalVar:any = {
     projectName: "",
@@ -31,8 +32,10 @@ class ConstantFiled {
     runType: "" //可选: tool, preview
   };
   constructor(){
-    let CLIConfig = require(this.CLIConfigFile)
-    this.globalVar.projectName = CLIConfig.name
+    if(_fs.existsSync(this.CLIConfigFile)){
+      let CLIConfig = require(this.CLIConfigFile)
+      this.globalVar.projectName = CLIConfig.name
+    }
   }
   getWorkspace(){return this.cwd}
   setWorkspace(workspace){
@@ -42,9 +45,10 @@ class ConstantFiled {
   }
   update(){
     this.pluginDir = _path.join(this.cwd, 'node_modules'); //插件目录
-    this.CLIConfigFile = _path.join(this.cwd, 'package.json');//配置文件
-    this.environmentRootDir = _path.join(this.cwd, `.${this.infinity}`);
-    this.normalEnviromentDir = _path.join(this.cwd, `.${this.infinity}`, 'normal')
+    //配置文件
+    this.CLIConfigFile = _path.join(this.cwd, 'package.json');
+    this.environmentRootDir = _path.join(this.cwd, `.silky`);
+    this.normalEnviromentDir = _path.join(this.cwd, `.silky`, 'normal')
   }
   get(){
     return {

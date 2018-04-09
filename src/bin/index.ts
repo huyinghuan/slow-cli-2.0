@@ -8,7 +8,7 @@ import * as _build from './build';
 import * as _install from './install';
 import * as _info from './info';
 import * as _config from './config';
-import * as _project from '../project';
+import * as _cli from '../cli';
 import * as _dev from './dev';
 import * as _list from './list'
 import _configFiledConstant from '../config-filed-constant';
@@ -20,8 +20,7 @@ require('colors');
  * 全局变量，保存配置数据
  */
 
-const versionDesc = _project.getCLIVersion();
-
+const versionDesc = _cli.getVersion();
 console.log(`${_configFiledConstant.get().infinity} version is ${versionDesc}`.green)
 
 _start.commander(_commander);

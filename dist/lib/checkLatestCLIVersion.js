@@ -2,12 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const _request = require("request");
 const public_1 = require("../public");
-const getCLIVersion_1 = require("./getCLIVersion");
+const _cli = require("../cli");
 const log_1 = require("./log");
 function default_1() {
     let latestQueryURLPrivate = public_1.default.private_npm_registry + "/silky-reborn/latest";
     let latestQueryURLPublic = "https://registry.npm.taobao.org/silky-reborn/latest";
-    let nowVersion = getCLIVersion_1.default();
+    let nowVersion = _cli.getVersion();
     _request(latestQueryURLPrivate, (err, httpResponse, body) => {
         if (!err && httpResponse.statusCode == 200) {
             body = JSON.parse(body);

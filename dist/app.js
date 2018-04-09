@@ -43,7 +43,8 @@ exports.default = () => {
         //基本数据
         let req = {
             path: requestData.path,
-            query: requestData.query
+            query: requestData.query,
+            __request: request
         };
         //拦截GET请求，并且加载编译其他hooks
         let realPath = requestData.path;

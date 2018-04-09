@@ -42,13 +42,13 @@ function didRequest(req, data) {
         return content;
     });
 }
-function routeInint(router) {
-    let queue = _hookMap.HookQueue[_hookMap.route.initial];
+function routeInint(request, response) {
+    let queue = _hookMap.HookQueue["route:initial"];
     if (!queue) {
         return false;
     }
     for (let i = 0, length = queue.length; i < length; i++) {
-        if (queue[i].fn(router)) {
+        if (queue[i].fn(request, response)) {
             return true;
         }
     }

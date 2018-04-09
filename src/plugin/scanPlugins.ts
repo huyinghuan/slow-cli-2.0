@@ -1,5 +1,4 @@
 import * as _path from 'path';
-import * as _async from 'async';
 import _configFiledConstant from '../config-filed-constant';
 import _getFullPluginName from './getFullPluginName';
 import * as _plugin from '../plugin/index';
@@ -53,12 +52,17 @@ export default function scanPlugins(hookType:string){
       return;
     }
     //插件扩展
-    if(/^sp\-.+(\-ext)$/.test(key)){
+    if(/^sp\-.+$/.test(key)){
+      _log.error(`无法兼容插件${key}, 请安装srp版插件`)
+      process.exit(1)
+    }
+    //插件扩展
+    if(/^srp\-.+(\-ext)$/.test(key)){
       pluginExts.push(key)
       return
     }
     //插件
-    if(/^sp-.+/.test(key)){
+    if(/^srp-.+/.test(key)){
       plugins.push(key)
       return
     }

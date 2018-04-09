@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const _project = require("../project");
 const _fs = require("fs-extra");
 const _path = require("path");
-const _async = require("async");
 const _request = require("request");
 const _crossSpawn = require("cross-spawn");
 const getMD5_1 = require("../lib/getMD5");

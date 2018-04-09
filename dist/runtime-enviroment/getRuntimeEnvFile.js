@@ -14,6 +14,7 @@ function getBaseVar(base) {
     if (base.$data && _.isFunction(base.$data)) {
         return base.$data({
             projectName: _project.getProjectPackageJSONField("name"),
+            projectVersion: _project.getProjectPackageJSONField("version"),
             gitHash: getGitHash_1.default()
         });
     }

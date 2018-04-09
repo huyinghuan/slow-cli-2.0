@@ -2,8 +2,6 @@ import * as _allDefined from '../all';
 import * as _ from 'lodash';
 import * as _hookMap from './map';
 
-import * as _async from 'async';
-
 async function compile(req, data, callback){
   let queue = _hookMap.HookQueue["preview:compile"] || [];
   if(!queue.length){

@@ -1,6 +1,5 @@
 import * as _path from 'path';
 import * as _fs from 'fs-extra';
-import * as _async from 'async'
 
 import * as _hook from '../hooks/index';
 import * as _plugin from '../plugin/index';

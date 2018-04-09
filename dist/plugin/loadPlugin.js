@@ -10,8 +10,10 @@ const _runtime = require("../runtime-enviroment/index");
 const config_filed_constant_1 = require("../config-filed-constant");
 const _path = require("path");
 const _fs = require("fs");
+const _cli = require("../cli");
 const _project = require("../project");
-const versionDesc = _project.getCLIVersion();
+const getGitHash_1 = require("../lib/getGitHash");
+const versionDesc = _cli.getVersion();
 function registerHook(hookType, pluginName) {
     return (hookList, callback, priority) => {
         hookList = [].concat(hookList);
@@ -81,6 +83,9 @@ function loadPlugin(hookType, pluginName, pluginPath, options) {
         if (_.isFunction(plugin.registerPlugin)) {
             plugin.registerPlugin({
                 version: versionDesc,
+                projectName: _project.getProjectPackageJSONField('name'),
+                projectVersion: _project.getProjectPackageJSONField('version'),
+                projectHash: getGitHash_1.default(),
                 registerHook: registerHook(hookType, pluginName),
                 ext: _hookMap.HookExtQueue,
                 options: config_filed_constant_1.default.getGlobal(),

@@ -1,7 +1,6 @@
 import * as _fs from 'fs-extra';
 import _configFiledConstant from './config-filed-constant';
-import getCLIVersion from './lib/getCLIVersion';
-import checkCLIVersion from './lib/checkCLIVersion';
+import * as cli from './cli'
 import * as _ from 'lodash'
 import * as _path from 'path';
 
@@ -31,9 +30,9 @@ export function updateProjectPackageJSON(params){
 }
 
 export function updateProjectCLIVersion(version?:string){
-   version = version || getCLIVersion()
+   version = version || cli.getVersion()
    let params = {}
-   params[_configFiledConstant.get().pluginVersionField] = version
+   params["silky-version"] = version
    updateProjectPackageJSON(params)
 }
 
@@ -41,6 +40,3 @@ export function updateProjectCLIVersion(version?:string){
 export function getProjectDirectoryName():string{
   return _configFiledConstant.getWorkspace().split(_path.sep).pop();
 }
-
-export {getCLIVersion as getCLIVersion}
-export {checkCLIVersion as checkCLIVersion}

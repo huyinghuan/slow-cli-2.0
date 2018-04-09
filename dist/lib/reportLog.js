@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const _request = require("request");
-const getCLIVersion_1 = require("./getCLIVersion");
+const _cli = require("../cli");
 const _os = require("os");
 const _project = require("../project");
 function default_1(type = 'start', status) {
-    let nowVersion = getCLIVersion_1.default();
+    let nowVersion = _cli.getVersion();
     let url = "https://silky.mytools.bid/api/log";
     _request({ url: url, method: "POST", json: {
             silky_version: nowVersion,

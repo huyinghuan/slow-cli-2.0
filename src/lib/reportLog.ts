@@ -1,10 +1,10 @@
 import * as _request from 'request'
-import _getCLIVersion from './getCLIVersion'
+import * as _cli from '../cli'
 import * as _os from 'os'
 import * as _path from 'path'
 import * as _project from '../project'
 export default function(type:string = 'start', status:string){
-    let nowVersion = _getCLIVersion()
+    let nowVersion = _cli.getVersion()
     let url = "https://silky.mytools.bid/api/log";
     _request({url:url,method: "POST",json:{
         silky_version: nowVersion,

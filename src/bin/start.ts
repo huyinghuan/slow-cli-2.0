@@ -14,6 +14,7 @@ import _reportLog from '../lib/reportLog';
 import * as _plugin from '../plugin/index'
 import _unregisterHooks from '../hooks/unregisterHooks'
 
+/*
 function watchConfig(program){
   let workspace = _configFiledConstant.getWorkspace()
   let packageJsonFilePath = _path.join(workspace, "package.json")
@@ -39,7 +40,7 @@ function watchConfig(program){
   })
 
 }
-
+*/
 
 export function prepare(program){
   //读取用户自定义配置
@@ -90,9 +91,7 @@ export function commander(_commander){
       let app = _app()
       let port = program.port || _configFiledConstant.getGlobal('port')
       _reportLog("start", "success")
-
       let server = _http.createServer(app)
-      
       server.on('error', (error) => {
         if((error as any).code == 'EADDRINUSE'){
           console.log("端口冲突，请使用其它端口".red);
@@ -101,9 +100,6 @@ export function commander(_commander){
         console.log(error);
         return process.exit(1)
       });
-      if(!program.noConfig){
-        watchConfig(program)
-      }
       console.log(`silky run on http://localhost:${port}`.green)
       server.listen(port);
     })
@@ -134,10 +130,6 @@ export function commander(_commander){
         console.log(error);
         return process.exit(1)
       });
-
-      if(!program.noConfig){
-        watchConfig(program)
-      }
       httpsServer.listen(port)
       console.log(`silky run on https://localhost:${port}`.green)
     })
