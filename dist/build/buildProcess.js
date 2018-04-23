@@ -18,9 +18,8 @@ const config_filed_constant_1 = require("../config-filed-constant");
  * 用于一次性编译
  * 编译完成后即推出进程
  * */
-function default_1(prepareFn, finish, needLoadPlugin) {
+function default_1(needLoadPlugin) {
     return __awaiter(this, void 0, void 0, function* () {
-        prepareFn();
         //加载插件
         /* istanbul ignore if */
         if (needLoadPlugin != false) {
@@ -45,7 +44,6 @@ function default_1(prepareFn, finish, needLoadPlugin) {
                     log_1.default.error("build fail".red);
                     _hook.triggerBuildErrorHook(error);
                 }
-                finish(error);
             });
         }
         catch (e) {

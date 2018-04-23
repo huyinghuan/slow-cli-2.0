@@ -11,9 +11,7 @@ import _configFiledConstant from '../config-filed-constant';
  * 用于一次性编译
  * 编译完成后即推出进程
  * */
-export default async function(prepareFn:Function, finish, needLoadPlugin?){
-  prepareFn();
-  
+export default async function(needLoadPlugin?){
   //加载插件
   /* istanbul ignore if */
   if(needLoadPlugin != false){
@@ -37,7 +35,6 @@ export default async function(prepareFn:Function, finish, needLoadPlugin?){
         _log.error("build fail".red);
         _hook.triggerBuildErrorHook(error);
       }
-      finish(error)
     })
   }catch(e){
     _log.error(e);

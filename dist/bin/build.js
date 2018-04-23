@@ -1,4 +1,12 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const _init = require("../init/index");
 const _build = require("../build/index");
@@ -50,34 +58,42 @@ function getBuildServer(program) {
     });
 }
 exports.getBuildServer = getBuildServer;
-function execute(program, finish) {
-    /* istanbul ignore if  */
-    if (program.httpServer) {
-        let app = getBuildServer(program);
-        let port = program.port || 14423;
-        app.listen(port);
-        reportLog_1.default("build", "server");
-        console.log(`Build Server listen at port ${port}`.green);
-    }
-    else if (program.singleFile) {
-        reportLog_1.default("build", "single");
-        _build.buildSingleFile(function () {
-            if (prepare(program)) {
-                finish("初始化配置失败");
-            }
-        }, program.singleFile, finish);
-    }
-    else {
+function execute(program) {
+    return __awaiter(this, void 0, void 0, function* () {
+        /* istanbul ignore if  */
         reportLog_1.default("build", "process");
         if (program.update) {
             _project.updateProjectCLIVersion();
         }
-        _build.buildProcess(function () {
-            if (prepare(program)) {
-                finish("初始化配置失败");
-            }
-        }, finish);
-    }
+        if (prepare(program)) {
+            throw new Error("初始化配置失败");
+        }
+        return _build.buildProcess();
+        // if(program.httpServer){
+        //   let app = getBuildServer(program)
+        //   let port = program.port || 14423
+        //   app.listen(port);
+        //   _reportLog("build", "server")
+        //   console.log(`Build Server listen at port ${port}`.green)
+        // }else if(program.singleFile){
+        //   _reportLog("build", "single")
+        //   _build.buildSingleFile(function(){
+        //     if(prepare(program)){
+        //       finish("初始化配置失败")
+        //     }
+        //   }, program.singleFile, finish)
+        // }else{
+        //   _reportLog("build", "process")
+        //   if(program.update){
+        //     _project.updateProjectCLIVersion()
+        //   }
+        //   _build.buildProcess(function(){
+        //     if(prepare(program)){
+        //       finish("初始化配置失败")
+        //     }
+        //   }, finish)
+        // }
+    });
 }
 exports.execute = execute;
 /* istanbul ignore next  */
@@ -95,8 +111,11 @@ function commander(_commander) {
         .option('-s, --httpServer', '作为http server启动')
         .option('-p, --port <value>', '仅当存在-s选项时，该配置起作用，用来指定http server端口，默认为 14423')
         .allowUnknownOption()
-        .action((program) => {
-        execute(program, (error) => {
+        .action((program) => __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield execute(program);
+        }
+        catch (error) {
             if (error) {
                 log_1.default.error(error);
                 process.exit(1);
@@ -104,7 +123,7 @@ function commander(_commander) {
             else {
                 process.exit(0);
             }
-        });
-    });
+        }
+    }));
 }
 exports.commander = commander;

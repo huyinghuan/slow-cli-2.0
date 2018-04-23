@@ -57,32 +57,40 @@ export function getBuildServer(program){
   })
 }
 
-export function execute(program, finish?){
+export async function execute(program){
   /* istanbul ignore if  */
-  if(program.httpServer){
-    let app = getBuildServer(program)
-    let port = program.port || 14423
-    app.listen(port);
-    _reportLog("build", "server")
-    console.log(`Build Server listen at port ${port}`.green)
-  }else if(program.singleFile){
-    _reportLog("build", "single")
-    _build.buildSingleFile(function(){
-      if(prepare(program)){
-        finish("初始化配置失败")
-      }
-    }, program.singleFile, finish)
-  }else{
-    _reportLog("build", "process")
-    if(program.update){
-      _project.updateProjectCLIVersion()
-    }
-    _build.buildProcess(function(){
-      if(prepare(program)){
-        finish("初始化配置失败")
-      }
-    }, finish)
+  _reportLog("build", "process")
+  if(program.update){
+    _project.updateProjectCLIVersion()
   }
+  if(prepare(program)){
+    throw new Error("初始化配置失败")
+  }
+  return _build.buildProcess()
+  // if(program.httpServer){
+  //   let app = getBuildServer(program)
+  //   let port = program.port || 14423
+  //   app.listen(port);
+  //   _reportLog("build", "server")
+  //   console.log(`Build Server listen at port ${port}`.green)
+  // }else if(program.singleFile){
+  //   _reportLog("build", "single")
+  //   _build.buildSingleFile(function(){
+  //     if(prepare(program)){
+  //       finish("初始化配置失败")
+  //     }
+  //   }, program.singleFile, finish)
+  // }else{
+  //   _reportLog("build", "process")
+  //   if(program.update){
+  //     _project.updateProjectCLIVersion()
+  //   }
+  //   _build.buildProcess(function(){
+  //     if(prepare(program)){
+  //       finish("初始化配置失败")
+  //     }
+  //   }, finish)
+  // }
 }
 
 /* istanbul ignore next  */
@@ -100,15 +108,17 @@ export function commander(_commander){
     .option('-s, --httpServer', '作为http server启动')
     .option('-p, --port <value>', '仅当存在-s选项时，该配置起作用，用来指定http server端口，默认为 14423')
     .allowUnknownOption()
-    .action((program)=>{
-      execute(program, (error)=>{
+    .action(async (program)=>{
+      try{
+        await execute(program)
+      }catch(error){
         if(error){
           _log.error(error)
           process.exit(1)
         }else{
           process.exit(0)
         }
-      })
+      }
     })
 }
 

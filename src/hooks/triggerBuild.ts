@@ -25,10 +25,23 @@ async function handleError(){
   }
 }
 
+async function willBuild(buildConfig){
+  let queue = _hookMap.HookQueue["build:willBuild"] || [];
+  if(!queue.length){
+    return
+  }
+  for(let i = 0, len = queue.length; i < len; i++){
+    let hook = queue[i]
+    await hook.fn(buildConfig)
+  }
+}
+
 export default async function(hookType:string, ...options){
   switch(hookType){
-    case "initial":
+    case "willBuild":
       return initial.apply(null, options)
+    case "initial":
+      return willBuild.apply(null, options)
     case "error":
       return handleError.apply(null, options)
   }

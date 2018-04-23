@@ -34,11 +34,25 @@ function handleError() {
         };
     });
 }
+function willBuild(buildConfig) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let queue = _hookMap.HookQueue["build:willBuild"] || [];
+        if (!queue.length) {
+            return;
+        }
+        for (let i = 0, len = queue.length; i < len; i++) {
+            let hook = queue[i];
+            yield hook.fn(buildConfig);
+        }
+    });
+}
 function default_1(hookType, ...options) {
     return __awaiter(this, void 0, void 0, function* () {
         switch (hookType) {
-            case "initial":
+            case "willBuild":
                 return initial.apply(null, options);
+            case "initial":
+                return willBuild.apply(null, options);
             case "error":
                 return handleError.apply(null, options);
         }

@@ -10,9 +10,8 @@ import * as _ from 'lodash'
 import _configFiledConstant from '../config-filed-constant';
 /**
  * @params: buildConfig <Object> 编译参数
- * @params: finish <Function> 回调函数， 接收一个参数
 */
-export default function(buildConfig, finish){
+export default async function(buildConfig){
   let queue = [];
   
   //额外需要编译的文件
@@ -20,10 +19,8 @@ export default function(buildConfig, finish){
   //编译完成后需要删除掉冗余文件
   buildConfig.__del = [];
   //将要编译了
-  queue.push((next)=>{
-    _hook.triggerBuildWillDoHook(buildConfig, next)
-  })
-
+  _hook.triggerBuild("willBuild", buildConfig)
+  
   //处理文件队列 （doCompile，didCompile，doNothing) in there
   queue.push((buildConfig, next)=>{
     _configFiledConstant.setBuildParams(buildConfig)
