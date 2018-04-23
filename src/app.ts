@@ -96,8 +96,9 @@ export default ()=>{
       realPath: realPath
     }
     //转换/forward路径
-    queue.push((cb: Function)=>{
-      _hooks.triggerRouter("forward", req, data, cb)
+    queue.push(async (cb: Function)=>{
+      await _hooks.triggerRouter("forward", req, data)
+      cb()
     })
 
     queue.push((cb:CompilerCallBack)=>{
