@@ -8,14 +8,14 @@ import _configFiledConstant from '../config-filed-constant';
 /**
  * 编译单个文件
  */
-export default function (buildConfig, filepath, finish){
+export default async function (buildConfig, filepath){
   let _workspace = _configFiledConstant.getWorkspace();
   //确保编译目录存在
   _fs.ensureDirSync(buildConfig.outdir);
   _fs.emptyDirSync(buildConfig.outdir);
   let realPath = _path.join(_workspace, filepath);
   if(!_fs.existsSync(realPath) || realPath.indexOf(_workspace) == -1){
-    return finish(new Error('编译文件在项目中找不到'))
+    throw new Error('编译文件在项目中找不到')
   }
   let fileName =  _path.parse(realPath).base
 
@@ -31,40 +31,21 @@ export default function (buildConfig, filepath, finish){
     ignore: false
   }
   //compileFile(buildConfig, fileData, finish)
-  let queue = [];
-  queue.push((next)=>{
-    _compileFile(buildConfig, fileData, (error)=>{
-      next(error)
-    })
-  })
+  await  _compileFile(buildConfig, fileData)
+
   //编译额外的文件
-  queue.push((next)=>{
-    _async.map(buildConfig.__extra, (fileData, cb)=>{
-      _compileFile(buildConfig, fileData, cb)
-    }, (error)=>{
-      next(error)
-    })
-  })
+ let queue = [];
+  /**/
+  //处理额外的文件， 比如html中提取出来的js src， css link等文件合并
+  buildConfig.__extra.forEach(fileData => {
+    queue.push(_compileFile(buildConfig, fileData))
+  });
+  await Promise.all(queue)
 
   //删除标记文件
-  queue.push((next)=>{
-    try{
-      buildConfig.__del.forEach((filepath)=>{
-        _fs.removeSync(filepath);
-        _log.info(`remove ${filepath}`)
-      })
-      next(null)
-    }catch(e){
-      next(e)
-    }
+  buildConfig.__del.forEach((filepath)=>{
+    _fs.removeSync(filepath);
+    _log.info(`remove ${filepath}`)
   })
-
-  _async.waterfall(queue, (error)=>{
-    if(error){
-      finish(error)
-    }else{
-      console.log("编译完成")
-      finish(null)
-    }
-  })
+  console.log("编译完成")
 }

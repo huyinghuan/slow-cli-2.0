@@ -19,27 +19,12 @@ export default async function(needLoadPlugin?){
   }
   let __starTime = Date.now();
   let queue = [];
-  try{
-    let gitHash =  _getGitHash();  
-    let stop = await _hook.triggerBuild("initial")
-    if(stop){
-      return
-    }
-    _executeProjectCompile(_configFiledConstant.getBuildConfig({gitHash:gitHash}), (error)=>{
-      //编译成功
-      if(!error){
-        console.log("build success".green)
-        console.log(`编译用时: ${Date.now() - __starTime}ms`)
-      }else{
-        _log.error(error);
-        _log.error("build fail".red);
-        _hook.triggerBuildErrorHook(error);
-      }
-    })
-  }catch(e){
-    _log.error(e);
-    _log.fail('build 初始化失败');
-    _hook.triggerBuildErrorHook(e);
+  let gitHash =  _getGitHash();  
+  let stop = await _hook.triggerBuild("initial")
+  if(stop){
+    return
   }
-  
+  await _executeProjectCompile(_configFiledConstant.getBuildConfig({gitHash:gitHash}))
+  console.log("build success".green)
+  console.log(`编译用时: ${Date.now() - __starTime}ms`)
 }

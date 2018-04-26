@@ -7,25 +7,19 @@ import * as _hook from '../hooks/index';
 import * as _plugin from '../plugin/index';
 import _log from '../lib/log';
 
-export default function(prepareFn, filepath, finish){
-    prepareFn();
+export default async function(filepath){
      //加载插件
     _plugin.scanPlugins('build');
     
-    let queue = [];
-    queue.push((next)=>{
-        _hook.triggerBuildInitHook((error, stop)=>{next(error)})
+    let stop = await _hook.triggerBuild("initial")
+    if(stop){
+      return
+    }
+    let gitHash =  _getGitHash();  
+    let buildConfig = _configFiledConstant.getBuildConfig({
+      gitHash:gitHash,
+      __extra: [],//额外需要编译的文件
+      __del: [] //编译完成后需要删除掉冗余文件
     })
-    queue.push((next)=>{
-      _getGitHash(next)
-    })
-    queue.push((gitHash, next)=>{
-      let buildConfig = _configFiledConstant.getBuildConfig({
-        gitHash:gitHash,
-        __extra: [],//额外需要编译的文件
-        __del: [] //编译完成后需要删除掉冗余文件
-      });
-      _excuteFileCompile(buildConfig, filepath, next)
-    })
-    _async.waterfall(queue,finish)
+    await _excuteFileCompile(buildConfig, filepath)
 }

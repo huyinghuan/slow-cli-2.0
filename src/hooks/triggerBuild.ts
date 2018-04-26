@@ -36,6 +36,55 @@ async function willBuild(buildConfig){
   }
 }
 
+async function doCompile(buildConfig, data){
+  let queue = _hookMap.HookQueue["build:doCompile"] || [];
+  if(!queue.length){
+    return
+  }
+  let content = null
+  for(let i = 0, len = queue.length; i < len; i++){
+    let hook = queue[i]
+    content = await hook.fn(buildConfig, data, content)
+  }
+  return content
+}
+//didCompile
+async function didCompile(buildConfig, data, content){
+  let queue = _hookMap.HookQueue["build:didCompile"] || [];
+  if(!queue.length){
+    return
+  }
+  for(let i = 0, len = queue.length; i < len; i++){
+    let hook = queue[i]
+    content = await hook.fn(buildConfig, data, content)
+  }
+  return content
+}
+
+//didCompile
+async function doNothing(buildConfig, data){
+  let queue = _hookMap.HookQueue["build:doNothing"] || [];
+  if(!queue.length){
+    return
+  }
+  for(let i = 0, len = queue.length; i < len; i++){
+    let hook = queue[i]
+    await hook.fn(buildConfig, data)
+  }
+}
+
+//didCompile
+async function end(buildConfig){
+  let queue = _hookMap.HookQueue["build:end"] || [];
+  if(!queue.length){
+    return
+  }
+  for(let i = 0, len = queue.length; i < len; i++){
+    let hook = queue[i]
+    await hook.fn(buildConfig)
+  }
+}
+
 export default async function(hookType:string, ...options){
   switch(hookType){
     case "willBuild":
@@ -44,5 +93,13 @@ export default async function(hookType:string, ...options){
       return willBuild.apply(null, options)
     case "error":
       return handleError.apply(null, options)
+    case "doCompile":
+      return doCompile.apply(null, options)
+    case "didCompile":
+      return didCompile.apply(null, options)
+    case "doNothing":
+      return doNothing.apply(null, options)
+    case "end":
+      return end.apply(null,options)
   }
 }

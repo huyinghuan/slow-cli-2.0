@@ -1,6 +1,7 @@
 import * as _init from '../init/index'
 import * as _build from '../build/index';
 import * as _project from '../project';
+import * as _cli from '../cli'
 import * as _plugin from '../plugin/index'
 import * as _path from 'path';
 import _extraParamsParse from './extraParamsParse';
@@ -14,7 +15,7 @@ export function prepare(program): boolean{
 
   _init.prepareRuntimeEnv(program.enviroment || "production")
   //build 强制进行版本检查
-  let checkCLIResult = _project.checkCLIVersion() 
+  let checkCLIResult = _cli.checkVersion() 
   let checPluginResult = _plugin.checkPluginVersion();
   _init.setRunType("build")
 
@@ -50,12 +51,6 @@ export function prepare(program): boolean{
   return false
 }
 
-//单独提出来时为了方便单元测试
-export function getBuildServer(program){
-  return _build.buildServer(function(errHandle){
-    errHandle(prepare(program))
-  })
-}
 
 export async function execute(program){
   /* istanbul ignore if  */
