@@ -1,4 +1,3 @@
-import * as _async from 'async';
 import * as _project from '../project';
 import _executeCommand from '../lib/executeCommand';
 import * as _spawn from 'cross-spawn'
@@ -17,7 +16,24 @@ function logSuccessInfo(installSuccessPlugnList: Array<string>){
     })
 }
 
-function installPlugin(beInstallPluginList, registry, saveAsProduct, cb){
+function npmInstall(registry, pluginName ){
+  return new Promise((reslove, reject)=>{
+    let child = _spawn('npm', ["install", "--registry", registry].concat(pluginName).concat(["--save","--save-exact"]), { stdio: 'inherit' })
+    child.on('exit', function (code) {
+      if(code == 0){
+        _log.success(`安装插件${pluginName}成功`.green)
+        reslove(true)
+      }else{
+        reslove(false)
+      }
+    });
+    child.on('error', function(e){
+      reject(e)
+    })
+  })
+}
+
+async function installPlugin(beInstallPluginList, registry){
   if(registry == "taobao"){
     registry = "https://registry.npm.taobao.org"
   }
@@ -28,49 +44,39 @@ function installPlugin(beInstallPluginList, registry, saveAsProduct, cb){
   registry = registry || _project.getProjectPackageJSONField('__registry') || _publicConfig.private_npm_registry;
   let installSuccessPlugnList  = []
   let installFailPlugnList  = []
-  _async.mapSeries(beInstallPluginList, (pluginName, doNext)=>{
-    let saveInfo = ["--save-dev","--save-exact"]
-    //所有非内容处理插件（即不以sp-开始的库，全部保存到正式依赖）
-    if((pluginName as string).indexOf("sp-") != 0 || saveAsProduct){
-      saveInfo = ["--save", "--save-exact"]
-    }
+
+  beInstallPluginList.forEach(async (pluginName)=> {
     if((pluginName as string).indexOf('@') == -1){
       pluginName = pluginName+"@latest"
     }
-    let child = _spawn('npm', ["install", "--registry", registry].concat(pluginName).concat(saveInfo), { stdio: 'inherit' })
-    child.on('exit', function (code) {
-        if(code == 0){
-          _log.success(`安装插件${pluginName}成功`.green)
-          installSuccessPlugnList.push(pluginName)
-          doNext(null, null)
-        }else{
-          installFailPlugnList.push(pluginName)
-          doNext(null, null)
-        }
-    });
-    child.on('error', function(e){
-      console.log(e)
-      installFailPlugnList.push(pluginName)
-      doNext(null, null)
-    })
-  }, (err)=>{
-    if(installSuccessPlugnList.length > 1){
-      logSuccessInfo(installSuccessPlugnList)
-    }
-    if(installFailPlugnList.length){
-      cb(`\n安装插件${installFailPlugnList}失败`.red, installSuccessPlugnList)
+    let success = await npmInstall(registry, pluginName)
+    if(success){
+      installSuccessPlugnList.push(pluginName)
     }else{
-      cb(null, installSuccessPlugnList)
+      installFailPlugnList.push(pluginName)
     }
-  })
+  });
+
+  if(installSuccessPlugnList.length > 1){
+    logSuccessInfo(installSuccessPlugnList)
+  }
+  if(installFailPlugnList.length){
+    return {
+      err: `\n安装插件${installFailPlugnList}失败`,
+      list: installSuccessPlugnList
+    }
+  }
+  return {
+    list: installSuccessPlugnList
+  }
 }
 
-export default function(pluginList, registry, saveAsProduct, finish){
+export default async function(pluginList, registry){
   let beInstallPluginList = [];
   pluginList.forEach((pluginName)=>{
     beInstallPluginList.push(_getFullPluginName(pluginName, true))
   })
 
-  installPlugin(beInstallPluginList, registry, saveAsProduct, finish)
+  return installPlugin(beInstallPluginList, registry)
 }
 

@@ -1,5 +1,4 @@
 import * as _fs from 'fs-extra';
-import * as _async from 'async';
 import * as _hook from '../hooks/index';
 import _log from '../lib/log';
 /**

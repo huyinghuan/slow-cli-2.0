@@ -1,5 +1,4 @@
 import * as _hookMap from './map';
-import * as _async from 'async';
 import _responseDir from './route/responseDir'
 import * as _allDefined from '../all'
 
@@ -14,11 +13,11 @@ async function forward(req, data){
   return
 }
 
-function didResponse(req){
+async function didResponse(req){
   let queue = _hookMap.HookQueue["route:didResponse"] || [];
-  _async.mapSeries(queue, (hook, next)=>{
-    (hook as any).fn(req, next)
-  }, ()=>{})
+  for(let i = 0; i < queue.length; i++){
+    await (queue[i] as any).fn(req)
+  }
 }
 
 async function didRequest(req, data){
@@ -52,7 +51,7 @@ async function willResponse(req, data, responseContent){
 }
 
 async function noFound(req, resp, cb){
-  let queue = _hookMap.HookQueue[_hookMap.route.notFound] || [];
+  let queue = _hookMap.HookQueue["route:notFound"] || [];
   if(queue.length == 0){
     return false
   }

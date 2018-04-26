@@ -1,4 +1,3 @@
-import * as _async from 'async';
 import * as _fs from 'fs-extra';
 
 import _getAllFileInProject from '../lib/getAllFileInProject';

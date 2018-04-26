@@ -1,6 +1,5 @@
 import * as _path from 'path';
 import * as _fs from 'fs-extra';
-import * as _async from 'async'
 import _compileFile from './compileFile'
 import _log from '../lib/log';
 

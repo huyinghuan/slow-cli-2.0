@@ -1,7 +1,6 @@
 import _configFiledConstant from '../config-filed-constant';
 import _getGitHash from '../lib/getGitHash';
 import _excuteFileCompile from './excuteFileCompile'
-import * as _async from 'async';
 
 import * as _hook from '../hooks/index';
 import * as _plugin from '../plugin/index';

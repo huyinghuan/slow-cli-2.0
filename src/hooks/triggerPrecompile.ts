@@ -2,8 +2,6 @@ import * as _allDefined from '../all';
 import * as _ from 'lodash';
 import * as _hookMap from './map';
 
-import * as _async from 'async';
-
 async function doPrecompile(buildConfig, fileItem, content){
   let queue = _hookMap.HookQueue["precompile:include"] || [];
   for(let i = 0, length = queue.length; i < length; i++){

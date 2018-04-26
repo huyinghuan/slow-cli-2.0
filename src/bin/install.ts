@@ -13,24 +13,25 @@ import * as _path from 'path';
 import padding from '../lib/padding'
 import * as _child from 'child_process';
 
-export function execute(plugins, program, finish){
+export async function execute(plugins, program){
   //读取用户自定义配置
   _init.prepareUserEnv(program.workspace);
 
   let packageJSON = _project.getProjectPackageJSON();
-  let saveAsProduct = program.save
   if(plugins.length){ //指定了插件名称就安装插件
     //写入到package.json
-    _plugin.install(plugins, program.registry, saveAsProduct, (error, installSuccessPlugnList)=>{
-      let pluginConfig = {}
-      installSuccessPlugnList.forEach((pluginName)=>{
-        pluginName = _plugin.getFullPluginName(pluginName, false)
-        pluginConfig[pluginName] = _plugin.getPluginConfig(pluginName)
-      })
-      _plugin.writePluginConfigToConfigFile(pluginConfig)
-      finish(error)
-    })
-    return
+    let result:any = await _plugin.install(plugins, program.registry)
+    if(result.list.length){
+        let pluginConfig = {}
+        result.list.forEach((pluginName)=>{
+          pluginName = _plugin.getFullPluginName(pluginName, false)
+          pluginConfig[pluginName] = _plugin.getPluginConfig(pluginName)
+        })
+        _plugin.writePluginConfigToConfigFile(pluginConfig)
+    }
+    if(result.err){
+      throw new Error(result.err)
+    }
   }
   //没有指定，安装所有
   let pluginConfig = _configFiledConstant.getPluginConfig();
@@ -50,7 +51,7 @@ export function execute(plugins, program, finish){
     let version = versionDependencies[_plugin.getFullPluginName(key, false)];
     let hadInstalledVersion = _plugin.getInstalledPluginVersion(_plugin.getFullPluginName(key, false));
     let pluginType = "插件"
-    if(key.indexOf("sp-")==-1){
+    if(key.indexOf("srp-")==-1){
       pluginType = "组件"
     }
     if(version == hadInstalledVersion && !program.force && !program.newest){
@@ -70,7 +71,10 @@ export function execute(plugins, program, finish){
     return console.log('所有依赖已全部安装。')
   }
   console.log(`升级中,请稍后......\n\n`)
-  _plugin.install(pluginNameArr, program.registry, saveAsProduct, finish)
+  let result:any = _plugin.install(pluginNameArr, program.registry)
+  if(result.err){
+    throw new Error(result.err)
+  }
 }
 /* istanbul ignore next  */
 export function commander(_commander){
@@ -81,22 +85,15 @@ export function commander(_commander){
     .option('-l, --log <value>', 'log日志,( 0[defaul]: show all; 1: show error, fail; 2: show error, fail, warn)',(value)=>{_log.setLevel(value)})
     .option('-f, --force', '强制重新安装')
     .option('-r, --registry <value>',  "指定插件的仓库地址")
-    .option('-s, --save', '以产品模式安装插件，用于开发js css lib 库')
-    .action((plugins, program)=>{
+    .action(async (plugins, program)=>{
       //检查npm版本，低于5.0爆错 //
       let npmVersion = String(_child.execSync("npm --version")).replace(/\s/g,"")
       if (parseInt(npmVersion)<5){
         console.error(`当前npm版本是:${npmVersion}, 请使用 'npm install -g npm@latest' 升级npm到 5.x版本`)
         process.exit(1)
       }
-      execute(plugins, program,  (error)=>{
-        if(error){
-          _log.error(error);
-        }else{
-          _log.success("安装插件完成！".green)
-        }
-        
-      })
+      await execute(plugins, program)
+      _log.success("安装插件完成！".green)
     })
 
   _commander.command('uninstall [plugins...]')
