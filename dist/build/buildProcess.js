@@ -11,7 +11,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const _hook = require("../hooks/index");
 const _plugin = require("../plugin/index");
 const getGitHash_1 = require("../lib/getGitHash");
-const log_1 = require("../lib/log");
 const executeProjectCompile_1 = require("./executeProjectCompile");
 const config_filed_constant_1 = require("../config-filed-constant");
 /**
@@ -27,30 +26,14 @@ function default_1(needLoadPlugin) {
         }
         let __starTime = Date.now();
         let queue = [];
-        try {
-            let gitHash = getGitHash_1.default();
-            let stop = yield _hook.triggerBuild("initial");
-            if (stop) {
-                return;
-            }
-            executeProjectCompile_1.default(config_filed_constant_1.default.getBuildConfig({ gitHash: gitHash }), (error) => {
-                //编译成功
-                if (!error) {
-                    console.log("build success".green);
-                    console.log(`编译用时: ${Date.now() - __starTime}ms`);
-                }
-                else {
-                    log_1.default.error(error);
-                    log_1.default.error("build fail".red);
-                    _hook.triggerBuildErrorHook(error);
-                }
-            });
+        let gitHash = getGitHash_1.default();
+        let stop = yield _hook.triggerBuild("initial");
+        if (stop) {
+            return;
         }
-        catch (e) {
-            log_1.default.error(e);
-            log_1.default.fail('build 初始化失败');
-            _hook.triggerBuildErrorHook(e);
-        }
+        yield executeProjectCompile_1.default(config_filed_constant_1.default.getBuildConfig({ gitHash: gitHash }));
+        console.log("build success".green);
+        console.log(`编译用时: ${Date.now() - __starTime}ms`);
     });
 }
 exports.default = default_1;

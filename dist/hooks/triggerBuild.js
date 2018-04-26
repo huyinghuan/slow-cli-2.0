@@ -46,6 +46,60 @@ function willBuild(buildConfig) {
         }
     });
 }
+function doCompile(buildConfig, data) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let queue = _hookMap.HookQueue["build:doCompile"] || [];
+        if (!queue.length) {
+            return;
+        }
+        let content = null;
+        for (let i = 0, len = queue.length; i < len; i++) {
+            let hook = queue[i];
+            content = yield hook.fn(buildConfig, data, content);
+        }
+        return content;
+    });
+}
+//didCompile
+function didCompile(buildConfig, data, content) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let queue = _hookMap.HookQueue["build:didCompile"] || [];
+        if (!queue.length) {
+            return;
+        }
+        for (let i = 0, len = queue.length; i < len; i++) {
+            let hook = queue[i];
+            content = yield hook.fn(buildConfig, data, content);
+        }
+        return content;
+    });
+}
+//didCompile
+function doNothing(buildConfig, data) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let queue = _hookMap.HookQueue["build:doNothing"] || [];
+        if (!queue.length) {
+            return;
+        }
+        for (let i = 0, len = queue.length; i < len; i++) {
+            let hook = queue[i];
+            yield hook.fn(buildConfig, data);
+        }
+    });
+}
+//didCompile
+function end(buildConfig) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let queue = _hookMap.HookQueue["build:end"] || [];
+        if (!queue.length) {
+            return;
+        }
+        for (let i = 0, len = queue.length; i < len; i++) {
+            let hook = queue[i];
+            yield hook.fn(buildConfig);
+        }
+    });
+}
 function default_1(hookType, ...options) {
     return __awaiter(this, void 0, void 0, function* () {
         switch (hookType) {
@@ -55,6 +109,14 @@ function default_1(hookType, ...options) {
                 return willBuild.apply(null, options);
             case "error":
                 return handleError.apply(null, options);
+            case "doCompile":
+                return doCompile.apply(null, options);
+            case "didCompile":
+                return didCompile.apply(null, options);
+            case "doNothing":
+                return doNothing.apply(null, options);
+            case "end":
+                return end.apply(null, options);
         }
     });
 }

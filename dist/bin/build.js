@@ -11,6 +11,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const _init = require("../init/index");
 const _build = require("../build/index");
 const _project = require("../project");
+const _cli = require("../cli");
 const _plugin = require("../plugin/index");
 const extraParamsParse_1 = require("./extraParamsParse");
 const log_1 = require("../lib/log");
@@ -22,7 +23,7 @@ function prepare(program) {
     _init.prepareUserEnv(program.workspace);
     _init.prepareRuntimeEnv(program.enviroment || "production");
     //build 强制进行版本检查
-    let checkCLIResult = _project.checkCLIVersion();
+    let checkCLIResult = _cli.checkVersion();
     let checPluginResult = _plugin.checkPluginVersion();
     _init.setRunType("build");
     //如没有强制build项目，那么如果cli版本检查没通过则结束build
@@ -51,13 +52,6 @@ function prepare(program) {
     return false;
 }
 exports.prepare = prepare;
-//单独提出来时为了方便单元测试
-function getBuildServer(program) {
-    return _build.buildServer(function (errHandle) {
-        errHandle(prepare(program));
-    });
-}
-exports.getBuildServer = getBuildServer;
 function execute(program) {
     return __awaiter(this, void 0, void 0, function* () {
         /* istanbul ignore if  */
