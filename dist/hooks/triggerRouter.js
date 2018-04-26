@@ -9,7 +9,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const _hookMap = require("./map");
-const _async = require("async");
 const responseDir_1 = require("./route/responseDir");
 function forward(req, data) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -24,10 +23,12 @@ function forward(req, data) {
     });
 }
 function didResponse(req) {
-    let queue = _hookMap.HookQueue["route:didResponse"] || [];
-    _async.mapSeries(queue, (hook, next) => {
-        hook.fn(req, next);
-    }, () => { });
+    return __awaiter(this, void 0, void 0, function* () {
+        let queue = _hookMap.HookQueue["route:didResponse"] || [];
+        for (let i = 0; i < queue.length; i++) {
+            yield queue[i].fn(req);
+        }
+    });
 }
 function didRequest(req, data) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -65,7 +66,7 @@ function willResponse(req, data, responseContent) {
 }
 function noFound(req, resp, cb) {
     return __awaiter(this, void 0, void 0, function* () {
-        let queue = _hookMap.HookQueue[_hookMap.route.notFound] || [];
+        let queue = _hookMap.HookQueue["route:notFound"] || [];
         if (queue.length == 0) {
             return false;
         }
