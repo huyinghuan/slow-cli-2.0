@@ -3,7 +3,6 @@ import * as _http from 'http';
 import * as _fs from 'fs';
 import * as _path from 'path';
 import _configFiledConstant from './config-filed-constant';
-import { CompilerCallBack } from './all';
 import * as _hooks from './hooks/index';
 import * as _hooksMap from './hooks/map';
 import _getMime from './lib/getMime';

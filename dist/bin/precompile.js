@@ -1,11 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const _init = require("../init/index");
-const _project = require("../project");
+const _cli = require("../cli");
 const _utils = require("../plugin/index");
 const log_1 = require("../lib/log");
 const config_filed_constant_1 = require("../config-filed-constant");
-const checkLatestCLIVersion_1 = require("../lib/checkLatestCLIVersion");
 const _precompile = require("../precompile");
 function prepare(program) {
     //读取用户自定义配置
@@ -21,11 +20,11 @@ function prepare(program) {
         process.exit(1);
     }
     ;
-    checkLatestCLIVersion_1.default();
+    _cli.checkLatestVersion();
     if (program.check) {
         //检查cli 版本
         // 检查插件版本
-        if (!_utils.checkPluginVersion() || !_project.checkCLIVersion()) {
+        if (!_utils.checkPluginVersion() || !_cli.checkVersion()) {
             process.exit(1);
         }
     }

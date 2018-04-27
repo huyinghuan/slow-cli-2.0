@@ -1,7 +1,7 @@
 import * as _fs from 'fs'
 import * as _path from 'path'
 import * as _init from '../init/index'
-import * as _project from '../project'
+import * as _cli from '../cli'
 import * as _utils from '../plugin/index'
 import * as _http from 'http'
 import * as _https from 'https'
@@ -9,38 +9,9 @@ import _app from '../app'
 import _extraParamsParse from './extraParamsParse'
 import _log from '../lib/log';
 import _configFiledConstant from '../config-filed-constant';
-import _checkLatestCLIVersion from '../lib/checkLatestCLIVersion';
 import _reportLog from '../lib/reportLog';
 import * as _plugin from '../plugin/index'
 import _unregisterHooks from '../hooks/unregisterHooks'
-
-/*
-function watchConfig(program){
-  let workspace = _configFiledConstant.getWorkspace()
-  let packageJsonFilePath = _path.join(workspace, "package.json")
-  _fs.watch(packageJsonFilePath, function(eventType, filename){
-    if(eventType == "rename" && filename != "package.json"){
-      _log.error("package.json be delete！ can not reload config".red)
-      return
-    }
-    //Reload config
-    prepare(program)
-    _unregisterHooks()
-    _plugin.scanPlugins('route');
-  })
-  let configDir = _path.join(workspace, ".silky")
-  if (!_fs.existsSync(configDir)){
-    return
-  }
-  _fs.watch(configDir,  {recursive: true}, function(){
-    //ReloadConfig
-     prepare(program)
-     _unregisterHooks()
-     _plugin.scanPlugins('route');
-  })
-
-}
-*/
 
 export function prepare(program){
   //读取用户自定义配置
@@ -64,11 +35,11 @@ export function prepare(program){
   if(!_init.checkStartArgs()){
     process.exit(1)
   };
-  _checkLatestCLIVersion()
+  _cli.checkLatestVersion()
   if(program.check){
     //检查cli 版本
     // 检查插件版本
-    if(!_utils.checkPluginVersion() || ! _project.checkCLIVersion()){
+    if(!_utils.checkPluginVersion() || ! _cli.checkVersion()){
       process.exit(1)
     }
   }

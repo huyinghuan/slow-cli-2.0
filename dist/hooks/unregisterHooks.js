@@ -16,7 +16,7 @@ function default_1() {
     let pluginConfig = config_filed_constant_1.default.getPluginConfig();
     let pluginNameList = [];
     Object.keys(pluginConfig).forEach((key) => {
-        if (key.indexOf('sp') == 0) {
+        if (key.indexOf('srp') == 0) {
             pluginNameList.push(key);
         }
     });

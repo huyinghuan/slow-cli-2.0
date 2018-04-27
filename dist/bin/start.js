@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const _fs = require("fs");
 const _path = require("path");
 const _init = require("../init/index");
-const _project = require("../project");
+const _cli = require("../cli");
 const _utils = require("../plugin/index");
 const _http = require("http");
 const _https = require("https");
@@ -11,35 +11,7 @@ const app_1 = require("../app");
 const extraParamsParse_1 = require("./extraParamsParse");
 const log_1 = require("../lib/log");
 const config_filed_constant_1 = require("../config-filed-constant");
-const checkLatestCLIVersion_1 = require("../lib/checkLatestCLIVersion");
 const reportLog_1 = require("../lib/reportLog");
-/*
-function watchConfig(program){
-  let workspace = _configFiledConstant.getWorkspace()
-  let packageJsonFilePath = _path.join(workspace, "package.json")
-  _fs.watch(packageJsonFilePath, function(eventType, filename){
-    if(eventType == "rename" && filename != "package.json"){
-      _log.error("package.json be delete！ can not reload config".red)
-      return
-    }
-    //Reload config
-    prepare(program)
-    _unregisterHooks()
-    _plugin.scanPlugins('route');
-  })
-  let configDir = _path.join(workspace, ".silky")
-  if (!_fs.existsSync(configDir)){
-    return
-  }
-  _fs.watch(configDir,  {recursive: true}, function(){
-    //ReloadConfig
-     prepare(program)
-     _unregisterHooks()
-     _plugin.scanPlugins('route');
-  })
-
-}
-*/
 function prepare(program) {
     //读取用户自定义配置
     _init.prepareUserEnv(program.workspace, program.noConfig);
@@ -61,11 +33,11 @@ function prepare(program) {
         process.exit(1);
     }
     ;
-    checkLatestCLIVersion_1.default();
+    _cli.checkLatestVersion();
     if (program.check) {
         //检查cli 版本
         // 检查插件版本
-        if (!_utils.checkPluginVersion() || !_project.checkCLIVersion()) {
+        if (!_utils.checkPluginVersion() || !_cli.checkVersion()) {
             process.exit(1);
         }
     }

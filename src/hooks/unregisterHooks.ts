@@ -17,7 +17,7 @@ export default function(){
     let pluginConfig = _configFiledConstant.getPluginConfig()
     let pluginNameList = []
     Object.keys(pluginConfig).forEach((key)=>{
-        if(key.indexOf('sp') == 0){
+        if(key.indexOf('srp') == 0){
             pluginNameList.push(key)
         }
     })
