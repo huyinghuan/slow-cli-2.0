@@ -17,7 +17,7 @@ const extraParamsParse_1 = require("./extraParamsParse");
 const log_1 = require("../lib/log");
 const config_filed_constant_1 = require("../config-filed-constant");
 const reportLog_1 = require("../lib/reportLog");
-/**环境变量初始化 ,是否存在错误，true 存在，false不存在*/
+/**环境变量初始化*/
 function prepare(program) {
     //读取用户自定义配置
     _init.prepareUserEnv(program.workspace);
@@ -28,11 +28,11 @@ function prepare(program) {
     _init.setRunType("build");
     //如没有强制build项目，那么如果cli版本检查没通过则结束build
     if (!program.force && !checkCLIResult) {
-        return true;
+        throw new Error('silky 版本检查错误， 如需继续编译，请尝试 -f 参数');
     }
     //强制build对plugin无效
     if (!checPluginResult) {
-        return true;
+        throw new Error('插件版本正确，请安装或者更新插件');
     }
     //运行时参数记录
     let userInputArgs = {};
@@ -45,11 +45,7 @@ function prepare(program) {
     if (program.additional) {
         config_filed_constant_1.default.setBuildParams(program.additional);
     }
-    //检查编译参数
-    if (!_init.checkBuildArgs()) {
-        return true;
-    }
-    return false;
+    _init.checkBuildArgs();
 }
 exports.prepare = prepare;
 function execute(program) {
@@ -59,9 +55,7 @@ function execute(program) {
         if (program.update) {
             _project.updateProjectCLIVersion();
         }
-        if (prepare(program)) {
-            throw new Error("初始化配置失败");
-        }
+        prepare(program);
         return _build.buildProcess();
         // if(program.httpServer){
         //   let app = getBuildServer(program)

@@ -31,13 +31,10 @@ function default_1(buildConfig) {
         //获取所有待编译文件
         let fileQueue = getAllFileInProject_1.default(false);
         //编译文件
-        compileFileQueue_1.default(buildConfig, fileQueue);
-        let queue = [];
+        yield compileFileQueue_1.default(buildConfig, fileQueue);
         /**/
         //处理额外的文件， 比如html中提取出来的js src， css link等文件合并
-        buildConfig.__extra.forEach(fileData => {
-            queue.push(compileFile_1.default(buildConfig, fileData));
-        });
+        let queue = buildConfig.__extra.map((fileData) => { return compileFile_1.default(buildConfig, fileData); });
         yield Promise.all(queue);
         //删除标记文件
         buildConfig.__del.forEach((filepath) => {

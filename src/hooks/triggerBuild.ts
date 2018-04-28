@@ -88,9 +88,9 @@ async function end(buildConfig){
 export default async function(hookType:string, ...options){
   switch(hookType){
     case "willBuild":
-      return initial.apply(null, options)
-    case "initial":
       return willBuild.apply(null, options)
+    case "initial":
+      return initial.apply(null, options)
     case "error":
       return handleError.apply(null, options)
     case "doCompile":
@@ -101,5 +101,7 @@ export default async function(hookType:string, ...options){
       return doNothing.apply(null, options)
     case "end":
       return end.apply(null,options)
+    default:
+      throw new Error(`不识别插件类型:${hookType}`)
   }
 }

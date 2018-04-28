@@ -1,6 +1,6 @@
 {
-  "name": "silky-reborn",
-  "version": "3.0-beta",
+  "name": "silky3",
+  "version": "1.0-beta",
   "description": "",
   "bin": {
     "srb": "./dist/bin/index.js"

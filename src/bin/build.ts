@@ -8,8 +8,8 @@ import _extraParamsParse from './extraParamsParse';
 import _log from '../lib/log'
 import _configFiledConstant from '../config-filed-constant';
 import _reportLog from '../lib/reportLog';
-/**环境变量初始化 ,是否存在错误，true 存在，false不存在*/
-export function prepare(program): boolean{
+/**环境变量初始化*/
+export function prepare(program){
   //读取用户自定义配置
   _init.prepareUserEnv(program.workspace);
 
@@ -21,12 +21,12 @@ export function prepare(program): boolean{
 
   //如没有强制build项目，那么如果cli版本检查没通过则结束build
   if(!program.force && !checkCLIResult){
-    return true
+    throw new Error('silky 版本检查错误， 如需继续编译，请尝试 -f 参数')
   }
 
   //强制build对plugin无效
   if(!checPluginResult){
-    return true
+    throw new Error('插件版本正确，请安装或者更新插件')
   }
 
   //运行时参数记录
@@ -43,12 +43,7 @@ export function prepare(program): boolean{
   if(program.additional){
     _configFiledConstant.setBuildParams(program.additional)
   }
-
-  //检查编译参数
-  if(!_init.checkBuildArgs()){
-    return true
-  }
-  return false
+  _init.checkBuildArgs()
 }
 
 
@@ -58,9 +53,9 @@ export async function execute(program){
   if(program.update){
     _project.updateProjectCLIVersion()
   }
-  if(prepare(program)){
-    throw new Error("初始化配置失败")
-  }
+  
+  prepare(program)
+
   return _build.buildProcess()
   // if(program.httpServer){
   //   let app = getBuildServer(program)

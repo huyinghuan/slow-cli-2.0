@@ -24,15 +24,13 @@ export default async function(buildConfig){
   let fileQueue:Array<Object> = _getAllFileInProject(false);
 
   //编译文件
-  _compileFileQueue(buildConfig, fileQueue)
+  await _compileFileQueue(buildConfig, fileQueue)
 
-  let queue = [];
   /**/
   //处理额外的文件， 比如html中提取出来的js src， css link等文件合并
-  buildConfig.__extra.forEach(fileData => {
-    queue.push(_compileFile(buildConfig, fileData))
-  });
+  let queue = buildConfig.__extra.map((fileData)=>{return _compileFile(buildConfig, fileData)})
   await Promise.all(queue)
+
   //删除标记文件
   buildConfig.__del.forEach((filepath)=>{
     _fs.removeSync(filepath);

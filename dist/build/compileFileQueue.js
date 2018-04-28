@@ -19,8 +19,7 @@ function default_1(buildConfig, fileQueue) {
         _fs.ensureDirSync(buildConfig.outdir);
         //清空编译目录
         _fs.emptyDirSync(buildConfig.outdir);
-        let queue = [];
-        fileQueue.forEach((fileItem) => {
+        let queue = fileQueue.map((fileItem) => {
             let data = {
                 inputFilePath: fileItem.filePath,
                 outputFilePath: _path.join(buildConfig.outdir, fileItem.relativeDir, fileItem.fileName),
@@ -32,7 +31,7 @@ function default_1(buildConfig, fileQueue) {
                 appendFile: false,
                 ignore: false
             };
-            queue.push(compileFile_1.default(buildConfig, data));
+            return compileFile_1.default(buildConfig, data);
         });
         yield Promise.all(queue);
         return buildConfig;

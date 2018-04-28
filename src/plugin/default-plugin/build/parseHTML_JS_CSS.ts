@@ -1,12 +1,19 @@
 import * as _fs from 'fs'
 exports.registerPlugin = function(cli, options){
-    cli.registerHook('build:doCompile', (buildConfig, data, content, cb)=>{
+    cli.registerHook('build:doCompile', (buildConfig, data, content)=>{
       let inputFilePath = data.inputFilePath;
       if(!/((\.html)|(\.js)|(\.css))$/.test(inputFilePath)){
-        return cb(null, content)
+        return content
       }
-      _fs.readFile(inputFilePath, 'utf8', (err, result)=>{
-        cb(err, result)
-      });
+      return new Promise((resolve, reject)=>{
+        _fs.readFile(inputFilePath, 'utf8', (err, result)=>{
+          if(err){
+            reject(err)
+          }else{
+            resolve(result)
+          }
+        });
+      })
+     
   }, 0)
 }
