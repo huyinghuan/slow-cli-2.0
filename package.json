@@ -1,6 +1,6 @@
 {
   "name": "silky3",
-  "version": "1.0-beta",
+  "version": "1.0.0-beta",
   "description": "",
   "bin": {
     "srb": "./dist/bin/index.js"
