@@ -107,8 +107,6 @@ exports.default = () => {
             cb();
         }));
         queue.push((cb) => {
-            //route:didRequest
-            console.log(req.path, data.realPath);
             _hooks.triggerHttpCompilerHook(req, data, cb);
         });
         //TODO  min js,css, html, autoprefix

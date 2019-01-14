@@ -102,8 +102,6 @@ export default ()=>{
     })
 
     queue.push((cb:CompilerCallBack)=>{
-      //route:didRequest
-      console.log(req.path, data.realPath)
       _hooks.triggerHttpCompilerHook(req, data, cb)
     });
 
