@@ -25,7 +25,7 @@ export function showResponseTime(req, resp){
 }
 
 export function  parseURL(url:string){
-  let urlObj = _url.parse(url)
+  let urlObj:any = _url.parse(url)
   urlObj.query = _querystring.parse(urlObj.query)
   urlObj.path = urlObj.pathname
   return urlObj
