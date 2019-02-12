@@ -113,7 +113,7 @@ function privewServer(healthCheck) {
         }
         let contentType = data.ContentType || getMime_1.default(data.realPath);
         if (contentType == "text/html") {
-            contentType = contentType + ";utf-8";
+            contentType = contentType + ";charset=utf-8";
         }
         response.setHeader('Content-Type', contentType);
         response.write(content, "utf8");
