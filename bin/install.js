@@ -13,7 +13,7 @@ function execute(plugins, program, finish) {
     _init.prepareUserEnv(program.workspace);
     let packageJSON = _project.getProjectPackageJSON();
     let saveAsProduct = program.save;
-    if (plugins.length) {
+    if (plugins.length) { //指定了插件名称就安装插件
         //写入到package.json
         _plugin.install(plugins, program.registry, saveAsProduct, (error, installSuccessPlugnList) => {
             let pluginConfig = {};

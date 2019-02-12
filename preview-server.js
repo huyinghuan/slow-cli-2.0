@@ -111,7 +111,11 @@ function privewServer(healthCheck) {
             response.end();
             return;
         }
-        response.setHeader('Content-Type', data.ContentType || getMime_1.default(data.realPath));
+        let contentType = data.ContentType || getMime_1.default(data.realPath);
+        if (contentType == "text/html") {
+            contentType = contentType + ";utf-8";
+        }
+        response.setHeader('Content-Type', contentType);
         response.write(content, "utf8");
         response.end();
     }));
