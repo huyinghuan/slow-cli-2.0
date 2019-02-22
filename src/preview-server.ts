@@ -34,7 +34,7 @@ const showResponseTime = function(req, resp){
 }
 
 const parseURL = function(url:string){
-  let urlObj = _url.parse(url)
+  let urlObj:any = _url.parse(url)
   urlObj.query = _querystring.parse(urlObj.query)
   urlObj.path = urlObj.pathname
   return urlObj
@@ -43,30 +43,40 @@ const parseURL = function(url:string){
 /**
  * 启动静态服务
  */
-export function privewServer(HEALTHCHECK?:number){
+export function privewServer(healthCheck?:string){
+  if(healthCheck){
+    _fs.writeFileSync("server-status.dat", healthCheck, "utf8")
+  }else{
+    if(!_fs.existsSync("server-status.dat")){
+      _fs.writeFileSync("server-status.dat", 200, "utf8")
+    }
+  }
+  
   _plugin.scanPlugins('preview');//加载插件
   let globalCLIConfig = _configFiledConstant.getGlobal()
   let gitHash = _getGitHash()
-  HEALTHCHECK = HEALTHCHECK || 200;
   return _http.createServer(async (request, response)=>{
     showResponseTime(request, response)
     let requestData = parseURL(request.url)
     if(requestData.path == "/__health_check"){
       if(request.method == "GET"){
-        response.statusCode = HEALTHCHECK;
+        let recordStatus =  ~~_fs.readFileSync("server-status.dat", "utf8")
+        response.statusCode = recordStatus || 500;
         response.end()
         return
       }else if(request.method == "PUT"){
         let ip  = request.headers['x-forwarded-for'] || request.connection.remoteAddress
         //只允许本地更新的不允许远程更新状态
         if(ip.indexOf("127.0.0.1")!=-1 || ip =="::1"){
-          HEALTHCHECK = requestData.query["status"] || 200;
-          response.end("更新当前系统状态为:"+HEALTHCHECK)
+          let status = requestData.query["status"] || 200;
+          _fs.writeFileSync("server-status.dat", status || 200, "utf8")
+          response.end("更新当前系统状态为:"+status)
           response.end()
         }else{
           response.statusCode = 401
           response.end("不允许远程更新系统状态!!")
         }
+        return
       }
     }
 
@@ -93,7 +103,11 @@ export function privewServer(HEALTHCHECK?:number){
       response.end()
       return
     }
-    response.setHeader('Content-Type', data.ContentType || _getMime(data.realPath))
+    let contentType = data.ContentType || _getMime(data.realPath)
+    if(contentType == "text/html"){
+      contentType = contentType+";charset=utf-8"
+    }
+    response.setHeader('Content-Type', contentType)
     response.write(content, "utf8")
     response.end()
   })
@@ -105,14 +119,14 @@ if(require.main == module){
   let workspace =  _.indexOf(process.argv, "-w") > -1 ? process.argv[_.indexOf(process.argv, "-w") + 1] : process.cwd()
   let enviroment =  _.indexOf(process.argv, "-e") > -1 ? process.argv[_.indexOf(process.argv, "-e") + 1] : "production"
   let viewDir =  _.indexOf(process.argv, "-v") > -1 ? process.argv[_.indexOf(process.argv, "-v") + 1] : "prebuild"
-  let HEALTHCHCK = _.indexOf(process.argv, "-c") > -1 ? ~~process.argv[_.indexOf(process.argv, "-c") + 1] : 200
+  let healthCheck = _.indexOf(process.argv, "-c") > -1 ? process.argv[_.indexOf(process.argv, "-c") + 1] : ""
   //读取用户自定义配置
   _init.prepareUserEnv(workspace);
   //读取运行时环境配置
   _init.prepareRuntimeEnv(enviroment || "production")
   _init.setRunType("preview")
   _configFiledConstant.setBuildParams({outdir: viewDir})
-  let app = privewServer(HEALTHCHCK)
+  let app = privewServer(healthCheck)
   console.log(`run on ${port} at ${workspace} as ${enviroment}`.green)
   app.listen(port)
 }

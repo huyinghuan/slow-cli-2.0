@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const _http = require("http");
+const _fs = require("fs");
 const _url = require("url");
 const _querystring = require("querystring");
 const _ = require("lodash");
@@ -49,17 +50,25 @@ const parseURL = function (url) {
 /**
  * 启动静态服务
  */
-function privewServer(HEALTHCHECK) {
+function privewServer(healthCheck) {
+    if (healthCheck) {
+        _fs.writeFileSync("server-status.dat", healthCheck, "utf8");
+    }
+    else {
+        if (!_fs.existsSync("server-status.dat")) {
+            _fs.writeFileSync("server-status.dat", 200, "utf8");
+        }
+    }
     _plugin.scanPlugins('preview'); //加载插件
     let globalCLIConfig = config_filed_constant_1.default.getGlobal();
     let gitHash = getGitHash_1.default();
-    HEALTHCHECK = HEALTHCHECK || 200;
     return _http.createServer((request, response) => __awaiter(this, void 0, void 0, function* () {
         showResponseTime(request, response);
         let requestData = parseURL(request.url);
         if (requestData.path == "/__health_check") {
             if (request.method == "GET") {
-                response.statusCode = HEALTHCHECK;
+                let recordStatus = ~~_fs.readFileSync("server-status.dat", "utf8");
+                response.statusCode = recordStatus || 500;
                 response.end();
                 return;
             }
@@ -67,14 +76,16 @@ function privewServer(HEALTHCHECK) {
                 let ip = request.headers['x-forwarded-for'] || request.connection.remoteAddress;
                 //只允许本地更新的不允许远程更新状态
                 if (ip.indexOf("127.0.0.1") != -1 || ip == "::1") {
-                    HEALTHCHECK = requestData.query["status"] || 200;
-                    response.end("更新当前系统状态为:" + HEALTHCHECK);
+                    let status = requestData.query["status"] || 200;
+                    _fs.writeFileSync("server-status.dat", status || 200, "utf8");
+                    response.end("更新当前系统状态为:" + status);
                     response.end();
                 }
                 else {
                     response.statusCode = 401;
                     response.end("不允许远程更新系统状态!!");
                 }
+                return;
             }
         }
         //基本数据
@@ -100,7 +111,11 @@ function privewServer(HEALTHCHECK) {
             response.end();
             return;
         }
-        response.setHeader('Content-Type', data.ContentType || getMime_1.default(data.realPath));
+        let contentType = data.ContentType || getMime_1.default(data.realPath);
+        if (contentType == "text/html") {
+            contentType = contentType + ";charset=utf-8";
+        }
+        response.setHeader('Content-Type', contentType);
         response.write(content, "utf8");
         response.end();
     }));
@@ -112,14 +127,14 @@ if (require.main == module) {
     let workspace = _.indexOf(process.argv, "-w") > -1 ? process.argv[_.indexOf(process.argv, "-w") + 1] : process.cwd();
     let enviroment = _.indexOf(process.argv, "-e") > -1 ? process.argv[_.indexOf(process.argv, "-e") + 1] : "production";
     let viewDir = _.indexOf(process.argv, "-v") > -1 ? process.argv[_.indexOf(process.argv, "-v") + 1] : "prebuild";
-    let HEALTHCHCK = _.indexOf(process.argv, "-c") > -1 ? ~~process.argv[_.indexOf(process.argv, "-c") + 1] : 200;
+    let healthCheck = _.indexOf(process.argv, "-c") > -1 ? process.argv[_.indexOf(process.argv, "-c") + 1] : "";
     //读取用户自定义配置
     _init.prepareUserEnv(workspace);
     //读取运行时环境配置
     _init.prepareRuntimeEnv(enviroment || "production");
     _init.setRunType("preview");
     config_filed_constant_1.default.setBuildParams({ outdir: viewDir });
-    let app = privewServer(HEALTHCHCK);
+    let app = privewServer(healthCheck);
     console.log(`run on ${port} at ${workspace} as ${enviroment}`.green);
     app.listen(port);
 }

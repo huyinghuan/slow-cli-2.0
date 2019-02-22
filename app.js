@@ -1,4 +1,12 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const _express = require("express");
 const _async = require("async");
@@ -94,12 +102,11 @@ exports.default = () => {
             realPath: realPath
         };
         //转换/forward路径
+        queue.push((cb) => __awaiter(this, void 0, void 0, function* () {
+            yield _hooks.triggerRouter("forward", req, data);
+            cb();
+        }));
         queue.push((cb) => {
-            _hooks.triggerRouter("forward", req, data, cb);
-        });
-        queue.push((cb) => {
-            //route:didRequest
-            console.log(req.path, data.realPath);
             _hooks.triggerHttpCompilerHook(req, data, cb);
         });
         //TODO  min js,css, html, autoprefix

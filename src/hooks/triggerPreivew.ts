@@ -36,6 +36,16 @@ async function forward(req, data){
   }
 }
 
+async function projectUpdate(){
+  let queue = _hookMap.HookQueue["preview:project:update"] || [];
+  if(!queue.length){
+    return
+  }
+  for(let i = 0; i < queue.length; i++){
+    await (queue[i] as any).fn()
+  }
+}
+
 export default async function(hookType:string, ...options){
   switch(hookType){
     case "forward":
@@ -44,5 +54,7 @@ export default async function(hookType:string, ...options){
       return compile.apply(null, options)
     case "beforeResponse":
       return beforeResponse.apply(null, options)
+    case "project:update":
+      return projectUpdate()
   }
 }
